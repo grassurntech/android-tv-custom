@@ -4,10 +4,30 @@ This file is the **table of contents** for the project. It stays short: it point
 
 ---
 
+## Rule: This is a public, open-source repo (non-negotiable)
+
+Anyone can fork this repo and run it on their own TV. Every change must be safe to publish and easy to fork.
+
+1. **No secrets in git, ever.** That covers API keys, tokens, passwords, signing keystores and credentials, in code, docs, tests, examples or commit messages.
+2. **All config lives in env.** Read config from `.env`, which is git-ignored. Document every variable in [.env.example](.env.example) with a safe placeholder. Never hardcode IPs, names, paths, serials or account IDs.
+3. **No personal data.** Users' photos, names and TV or network details stay in git-ignored local files. Sample assets must be licensed for public use.
+4. **Guardrails stay on.** These are `.gitignore`, the pre-commit hook, the CI secret scan and the `.claude/settings.json` deny rules. Never use `--no-verify`. Never read `.env`.
+5. **If a secret leaks,** rotate it first, then purge it from history. Deleting it in a new commit is not enough.
+6. **Keep it fork-friendly.** A fresh clone plus `.env` plus the documented steps must work. Nothing may depend on Grassurn-only accounts or services.
+7. **Follow public-repo hygiene.** Work on branches, then open PRs into `main` using the template checklist. Keep README, CONTRIBUTING and SECURITY current. Pin dependency versions.
+
+Details: [docs/SECURITY.md](docs/SECURITY.md), [CONTRIBUTING.md](CONTRIBUTING.md).
+
+---
+
 ## Table of Contents
 
 | Area | File | Read when… |
 |---|---|---|
+| Project overview | [README.md](README.md) | Explaining what this is, or changing setup steps |
+| License | [LICENSE](LICENSE) | MIT. Check before adding third-party code or assets (must be MIT-compatible) |
+| Contributing | [CONTRIBUTING.md](CONTRIBUTING.md) | Changing the contribution workflow |
+| Config template | [.env.example](.env.example) | Adding or changing any config value |
 | System map | [ARCHITECTURE.md](ARCHITECTURE.md) | Touching components, data flow, or module boundaries |
 | Design principles | [docs/DESIGN.md](docs/DESIGN.md) | Making design/pattern decisions |
 | Frontend / TV UI | [docs/FRONTEND.md](docs/FRONTEND.md) | Building UI, focus/remote navigation, perf budgets |
@@ -15,7 +35,7 @@ This file is the **table of contents** for the project. It stays short: it point
 | Product sense | [docs/PRODUCT_SENSE.md](docs/PRODUCT_SENSE.md) | Making product trade-offs |
 | Quality grades | [docs/QUALITY_SCORE.md](docs/QUALITY_SCORE.md) | Assessing or improving an area's quality |
 | Reliability | [docs/RELIABILITY.md](docs/RELIABILITY.md) | Perf targets, failure modes, monitoring |
-| Security | [docs/SECURITY.md](docs/SECURITY.md) | Auth, secrets, anything user-data related |
+| Security | [docs/SECURITY.md](docs/SECURITY.md) | Secrets, config, TV safety, anything user-data related |
 
 ### `docs/design-docs/`
 - [index.md](docs/design-docs/index.md) — catalog of design docs + status
@@ -57,4 +77,4 @@ Run this every time a PR is successfully committed and pushed. Do not skip it, a
 
 ## Status
 
-Project scaffold created 2026-11-18. No code yet. Repo: `grassurntech/android-tv-custom` (remote `origin` via SSH), default branch `main`.
+Project scaffold created 2026-11-18. No code yet. Repo: `grassurntech/android-tv-custom` (remote `origin` via SSH), default branch `main`. Public, open source. Product design in progress (ad/junk removal + custom home screen).
