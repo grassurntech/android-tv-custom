@@ -7,7 +7,23 @@
       "Read(./**/*.jks)",
       "Read(./**/*.keystore)",
       "Read(./**/keystore.properties)",
-      "Read(./**/signing.properties)"
+      "Read(./**/signing.properties)",
+      "Read(./photos/**)",
+      "Read(./screenshots/**)",
+      "Read(./user-content/**)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/tv-safety.py\""
+          }
+        ]
+      }
     ]
   }
 }

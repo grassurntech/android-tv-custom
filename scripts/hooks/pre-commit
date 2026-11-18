@@ -7,10 +7,10 @@ staged=$(git diff --cached --name-only --diff-filter=ACMR)
 
 # 1. Files that must never be committed, whatever they contain.
 blocked=$(printf '%s\n' "$staged" \
-  | grep -E '(^|/)\.env($|\.)|\.(jks|keystore|p12|pem|key)$|(^|/)(local|keystore|signing)\.properties$' \
+  | grep -E '(^|/)\.env($|\.)|\.(jks|keystore|p12|pem|key)$|(^|/)(local|keystore|signing)\.properties$|(^|/)(photos|backups|screenshots|user-content)/' \
   | grep -vE '(^|/)\.env\.example$')
 if [ -n "$blocked" ]; then
-  echo "✋ Commit blocked. These files must never be committed to a public repo:"
+  echo "✋ Commit blocked. These files must never be committed to a public repo (secrets, or users' photos/backups/screenshots):"
   printf '   %s\n' $blocked
   echo "   Unstage with: git restore --staged <file>"
   exit 1

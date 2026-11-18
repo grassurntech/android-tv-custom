@@ -1,0 +1,11 @@
+# Packages that must NEVER be opened, launched or interacted with, even to look.
+# Factory and service-menu apps can change panel calibration, region or firmware settings.
+*factory*
+*servicemenu*
+*service.menu*
+*service_menu*
+*hiddenmenu*
+*engineermode*
+*engineeringmode*
+*designmenu*
+*.mmitest*

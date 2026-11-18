@@ -11,9 +11,13 @@ keystore.properties
 local.properties
 signing.properties
 
-# ── Personal content (your photos, names, device details) ──────
+# ── Personal content: stays on your computer, never committed ──
 /photos/
 /user-content/
+/backups/
+/screenshots/
+*.screencap.png
+getprop*.txt
 *.local.json
 
 # ── Android / Gradle build output ──────────────────────────────

@@ -1,0 +1,58 @@
+# Packages that must NEVER be disabled. Anything that makes it a TV, or keeps it usable.
+# One glob pattern per line (fnmatch). Matching is case-insensitive.
+# Used by .claude/hooks/tv-safety.py, and must be used by any product script that disables packages.
+# Seed list: verify on a real device with `dumpsys package <name>` and add TCL-specific names as found.
+
+# ── Android core ────────────────────────────────────────────────
+android
+com.android.systemui
+com.android.shell
+com.android.providers.*
+com.android.externalstorage
+com.android.packageinstaller
+com.google.android.packageinstaller
+com.android.permissioncontroller
+com.google.android.permissioncontroller
+com.android.networkstack*
+com.google.android.networkstack*
+com.android.wifi*
+com.android.server.*
+com.android.webview
+com.google.android.webview
+com.android.keychain
+com.android.location*
+*setupwizard*
+*setupwraith*
+
+# ── Settings ────────────────────────────────────────────────────
+com.android.settings
+com.android.tv.settings
+*settings*
+
+# ── Play Store & Play Services ──────────────────────────────────
+com.android.vending
+com.google.android.gms
+com.google.android.gsf
+com.google.android.gsf.*
+
+# ── HDMI inputs & tuner ─────────────────────────────────────────
+com.android.tv
+*tvinput*
+*tv.input*
+*hdmi*
+*tuner*
+*livetv*
+*.tvservice*
+*cec*
+
+# ── Remote & Bluetooth pairing ──────────────────────────────────
+com.android.bluetooth
+*bluetooth*
+*remote*
+*.rcu*
+*pairing*
+
+# ── On-screen keyboard ──────────────────────────────────────────
+*inputmethod*
+*keyboard*
+*.ime*

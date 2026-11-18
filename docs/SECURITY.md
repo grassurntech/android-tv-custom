@@ -15,16 +15,24 @@ This is a **public, forkable** repo. Treat everything committed as published to 
 ## Guardrails (keep all of these on)
 | Layer | What it does |
 |---|---|
-| `.gitignore` | Keeps `.env`, keystores, build output and personal content out of git |
-| `scripts/hooks/pre-commit` | Blocks secret files from being committed, and runs gitleaks if installed |
-| `.github/workflows/secret-scan.yml` | Scans the full history with gitleaks on every push and PR |
-| `.claude/settings.json` | Stops Claude Code from reading `.env` and keystore files |
+| `.gitignore` | Keeps `.env`, keystores, build output, photos, backups and screenshots out of git |
+| `scripts/hooks/pre-commit` | Blocks secret files and user photos/backups/screenshots from being committed, and runs gitleaks if installed |
+| `.github/workflows/secret-scan.yml` | Scans the full history with gitleaks on every push and PR, and fails if user content is tracked |
+| `.claude/settings.json` | Stops Claude Code from reading `.env`, keystores, photos and screenshots |
+| `.claude/hooks/tv-safety.py` | Blocks unsafe TV commands before they run (see below) |
 | GitHub secret scanning + push protection | Enable in repo **Settings → Code security** (free for public repos) |
 
 ## TV safety
-- Every change made to a user's TV must be **reversible**, with the restore command documented next to it.
-- ADB over the network gives full control of the TV. The docs must tell users to switch off network debugging after setup.
-- Never ship anything that sends user data off the TV. No telemetry, no analytics.
+The rules live in `CLAUDE.md` under "Rule: TV safety". They bind every script in this repo, not only Claude.
+- **Disable, never uninstall:** `pm disable-user --user 0 <package>`, one at a time, always undoable with `pm enable`. No root, no flashing, no `pm clear/hide/suspend`.
+- **Back up first:** save the full package list (`packages-all.txt`), the already-disabled list, `getprop` and settings to `backups/` before the first change, and keep a running log of everything turned off.
+- **Protected packages** ([config/protected-packages.txt](../config/protected-packages.txt)) are never disabled. **Factory/service-menu apps** ([config/forbidden-packages.txt](../config/forbidden-packages.txt)) are never opened.
+- **Unknown package?** Run `dumpsys package <name>` and ask the user before touching it.
+- **TV refuses?** Stop and report it. No retry loops.
+- ADB over the network gives full control of the TV, so the docs must tell users to switch off network debugging after setup.
+- Never ship anything that sends user data off the TV or computer. No telemetry, no analytics.
+
+**What `tv-safety.py` blocks:** uninstall, `pm clear/hide/suspend`, plain `pm disable`, root/`su`, fastboot and bootloader/recovery reboots, wipes, disabling more than one package or using loops, disabling a protected package, disabling before a backup exists, launching factory/service-menu apps, and uploading `photos/`, `backups/` or `screenshots/`. It only sees commands Claude runs directly, so product scripts must enforce the same checks.
 
 ## If a secret is committed
 1. **Rotate or revoke it first.** Assume it is already compromised.
