@@ -57,4 +57,4 @@ Run this every time a PR is successfully committed and pushed. Do not skip it, a
 
 ## Status
 
-Project scaffold created 2026-11-18. No code yet. Git initialized on `main` (no remote yet).
+Project scaffold created 2026-11-18. No code yet. Repo: `grassurntech/android-tv-custom` (remote `origin` via SSH), default branch `main`.
