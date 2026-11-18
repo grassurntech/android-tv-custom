@@ -1,0 +1,46 @@
+# ── Secrets & local config (NEVER commit) ──────────────────────
+.env
+.env.*
+!.env.example
+*.jks
+*.keystore
+*.p12
+*.pem
+*.key
+keystore.properties
+local.properties
+signing.properties
+
+# ── Personal content: stays on your computer, never committed ──
+/photos/
+/user-content/
+/backups/
+/screenshots/
+*.screencap.png
+getprop*.txt
+*.local.json
+
+# ── Android / Gradle build output ──────────────────────────────
+.gradle/
+build/
+captures/
+*.apk
+*.aab
+*.ap_
+*.dex
+.externalNativeBuild/
+.cxx/
+
+# ── IDE / OS ───────────────────────────────────────────────────
+.idea/
+*.iml
+.vscode/
+.DS_Store
+Thumbs.db
+
+# ── Claude Code personal settings (shared settings.json IS committed)
+.claude/settings.local.json
+
+# ── Logs ───────────────────────────────────────────────────────
+*.log
+logs/

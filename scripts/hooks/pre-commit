@@ -1,0 +1,31 @@
+#!/bin/sh
+# Pre-commit guardrail: blocks secrets and local config from entering this PUBLIC repo.
+# Enable once per clone:  git config core.hooksPath scripts/hooks
+# Never bypass with --no-verify.
+
+staged=$(git diff --cached --name-only --diff-filter=ACMR)
+
+# 1. Files that must never be committed, whatever they contain.
+blocked=$(printf '%s\n' "$staged" \
+  | grep -E '(^|/)\.env($|\.)|\.(jks|keystore|p12|pem|key)$|(^|/)(local|keystore|signing)\.properties$|(^|/)(photos|backups|screenshots|user-content)/' \
+  | grep -vE '(^|/)\.env\.example$')
+if [ -n "$blocked" ]; then
+  echo "✋ Commit blocked. These files must never be committed to a public repo (secrets, or users' photos/backups/screenshots):"
+  printf '   %s\n' $blocked
+  echo "   Unstage with: git restore --staged <file>"
+  exit 1
+fi
+
+# 2. Secret patterns inside staged changes.
+if command -v gitleaks >/dev/null 2>&1; then
+  if ! gitleaks protect --staged --redact --no-banner; then
+    echo "✋ Commit blocked: gitleaks found what looks like a secret (output above)."
+    echo "   Move it to .env. If it's a false positive, add its fingerprint to .gitleaksignore."
+    exit 1
+  fi
+else
+  echo "⚠️  gitleaks not installed: skipped the secret-pattern scan (CI still runs it)."
+  echo "   Install: https://github.com/gitleaks/gitleaks#installing"
+fi
+
+exit 0
