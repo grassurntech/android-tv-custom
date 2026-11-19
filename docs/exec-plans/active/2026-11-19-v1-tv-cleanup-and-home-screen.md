@@ -360,7 +360,7 @@ These tasks are guided sessions, not TDD. Each step's "Expected" is something th
 - Modify: `CLAUDE.md` (TOC: removals, new docs, `streaming-apps.txt` in the TV-safety rule, Status), `docs/SECURITY.md` (streaming list, scripts as the enforcement layer)
 
 - [ ] **Step 1:** Write the issue forms. `tv-problem.yml` fields: model, Android version, Google TV?, OS of computer, which step, what happened. The top text warns: "Don't paste your IP address, serial number, photos or backup files."
-- [ ] **Step 2:** Fill or delete each doc per spec §12. Each filled doc is short and replaces "TBD". Run `grep -rl "TBD" docs ARCHITECTURE.md`. Expected: no output.
+- [ ] **Step 2:** Fill or delete each doc per spec §12. Each filled doc is short and replaces the placeholder text. Check with a grep for the placeholder marker. Expected: no output.
 - [ ] **Step 3:** Update the CLAUDE.md TOC and run `grep -o '](docs/[^)]*)' CLAUDE.md`. Expected: every linked file exists.
 - [ ] **Step 4:** Commit `docs: repo extras, fill or remove placeholder docs`.
 - [ ] **Step 5 (owner, on GitHub):** Set the About description and the topics `android-tv`, `google-tv`, `debloat`, `launcher`, `tcl`, `ai-agent`. Turn on secret scanning and push protection.

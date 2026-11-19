@@ -32,7 +32,7 @@ On Google TV, the "Continue watching" and recommendation rows belong to the old 
 |---|---|---|---|
 | TCL (model to be confirmed in the first on-TV session) | To be confirmed | In testing | 2026-11-19 |
 
-Works on Android TV and Google TV sets. It does not work on Samsung, LG, Roku or Fire TV. Rows are added by pull requests from the "Tested on my TV" issue form, so if it worked (or didn't) on yours, please tell us.
+Works on Android TV and Google TV sets. It does not work on Samsung, LG, Roku or Fire TV. Rows are added by pull requests from the ["Tested on my TV" issue form](https://github.com/grassurntech/android-tv-custom/issues/new?template=tested-on-my-tv.yml), so if it worked (or didn't) on yours, please tell us.
 
 ## Before you start
 Your AI tool checks each of these for you and walks you through anything missing. It's quicker if they're ready.

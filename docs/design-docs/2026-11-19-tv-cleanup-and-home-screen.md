@@ -149,7 +149,7 @@ Someone who finds the repo should know within seconds what it does, whether it w
 - `CODE_OF_CONDUCT.md` (Contributor Covenant).
 - GitHub **About** box: description, topics (`android-tv`, `google-tv`, `debloat`, `launcher`, `tcl`, `ai-agent`), MIT licence. Set in GitHub's settings, not in a file.
 - A tagged **`v1.0` release** once the Mac run works end-to-end on our TV. `PROMPT.md` names the release it belongs to.
-- **Placeholder docs:** before v1, every doc either has real content or is removed. No "TBD" stubs are left on the public page. See §12.
+- **Placeholder docs:** before v1, every doc either has real content or is removed. No placeholder stubs are left on the public page. See §12.
 
 ## 12. Placeholder docs before v1
 
