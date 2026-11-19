@@ -2,7 +2,7 @@
 # This is the only way product code may disable a package; every safety check lives here.
 # Exit: 0 done (or already off), 2 bad arguments, 3 setup missing, 10 protected, 11 streaming app,
 #       12 forbidden, 13 no usable backup, 14 not in the backup, 20 TV refused, 21 unreachable,
-#       22 unauthorized.
+#       22 unauthorized. (3 also covers an undo log that can't be written, checked before any change.)
 Set-StrictMode -Version 2
 $ErrorActionPreference = 'Stop'
 Import-Module (Join-Path $PSScriptRoot 'lib/TvEnv.psm1') -Force
@@ -94,7 +94,10 @@ function Invoke-Adb([string[]]$Cmd) {
     $ErrorActionPreference = 'Continue'
     $out = & $global:ADB -s $global:SERIAL shell @Cmd 2>&1
     $script:AdbRc = $LASTEXITCODE
-    return @($out | ForEach-Object { $_.ToString() })
+    # foreach, not a pipeline: empty output ($null) must not reach ToString() on 5.1.
+    $lines = @()
+    foreach ($o in $out) { if ($null -ne $o) { $lines += $o.ToString() } }
+    return $lines
 }
 
 # Returns 0 if $Name is disabled, 1 if not, 2 if the TV could not answer.
@@ -118,6 +121,19 @@ if ($state -ne 1) {
     exit 20
 }
 
+# 7b. The undo log must be writable BEFORE we change anything (open for append, then close).
+# A log we just created for this check is removed again so a refusal leaves no stray file.
+$logFile = Join-Path $backup 'disabled-by-us.txt'
+$logExisted = Test-Path -LiteralPath $logFile
+try {
+    $fs = New-Object System.IO.FileStream($logFile, [System.IO.FileMode]::Append, [System.IO.FileAccess]::Write)
+    $fs.Dispose()
+} catch {
+    Write-Err "Can't write the undo log $logFile. Nothing was changed. Stopping."
+    exit 3
+}
+if (-not $logExisted) { Remove-Item -LiteralPath $logFile -Force -ErrorAction SilentlyContinue }
+
 # 8. The one and only change. No retries.
 $null = Invoke-Adb @('pm', 'disable-user', '--user', '0', $pkg)
 
@@ -132,12 +148,11 @@ if ($state -ne 0) {
     exit 20
 }
 $stamp = (Get-Date).ToUniversalTime().ToString("yyyy-MM-dd'T'HH:mm:ss'Z'", [System.Globalization.CultureInfo]::InvariantCulture)
-$logFile = Join-Path $backup 'disabled-by-us.txt'
 try {
     # UTF-8 without BOM, LF line ending: byte-identical to the shell version.
     [System.IO.File]::AppendAllText($logFile, "$pkg`t$stamp`n", (New-Object System.Text.UTF8Encoding($false)))
 } catch {
-    Write-Err "$pkg is off, but the undo log $logFile could not be written. Re-enable it with: adb shell pm enable $pkg"
+    Write-Err "The TV DID turn off $pkg, but the undo log $logFile could not be written. To turn it back on, run: adb -s $($global:SERIAL) shell pm enable $pkg"
     exit 20
 }
 Write-Output "Turned off $pkg"

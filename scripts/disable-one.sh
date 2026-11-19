@@ -3,7 +3,7 @@
 # This is the only way product code may disable a package; every safety check lives here.
 # Exit: 0 done (or already off), 2 bad arguments, 3 setup missing, 10 protected, 11 streaming app,
 #       12 forbidden, 13 no usable backup, 14 not in the backup, 20 TV refused, 21 unreachable,
-#       22 unauthorized.
+#       22 unauthorized. (3 also covers an undo log that can't be written, checked before any change.)
 export LC_ALL=C
 . "$(dirname "$0")/lib/tv-env.sh"
 
@@ -109,6 +109,17 @@ if [ "$rc" -ne 0 ] && [ "$rc" -ne 1 ]; then
   exit 20
 fi
 
+# 7b. The undo log must be writable BEFORE we change anything (open for append, then close).
+# A log we just created for this check is removed again so a refusal leaves no stray file.
+log="$backup/disabled-by-us.txt"
+log_existed=0
+[ -e "$log" ] && log_existed=1
+if ! { : >> "$log"; } 2>/dev/null; then
+  echo "Can't write the undo log $log. Nothing was changed. Stopping." >&2
+  exit 3
+fi
+[ "$log_existed" -eq 0 ] && rm -f "$log"
+
 # 8. The one and only change. No retries.
 tv_shell pm disable-user --user 0 "$pkg" >/dev/null 2>&1
 
@@ -122,8 +133,8 @@ if [ "$rc" -ne 0 ]; then
   echo "The TV refused to turn off $pkg. Nothing was changed. Stopping." >&2
   exit 20
 fi
-if ! printf '%s\t%s\n' "$pkg" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$backup/disabled-by-us.txt"; then
-  echo "$pkg is off, but the undo log $backup/disabled-by-us.txt could not be written. Re-enable it with: adb shell pm enable $pkg" >&2
+if ! printf '%s\t%s\n' "$pkg" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$log"; then
+  echo "The TV DID turn off $pkg, but the undo log $log could not be written. To turn it back on, run: adb -s $SERIAL shell pm enable $pkg" >&2
   exit 20
 fi
 echo "Turned off $pkg"
