@@ -30,7 +30,9 @@ def find_bash():
 
 
 def find_powershell():
-    return shutil.which("powershell") if IS_WINDOWS else shutil.which("pwsh")
+    if IS_WINDOWS:
+        return shutil.which("pwsh") or shutil.which("powershell")
+    return shutil.which("pwsh")
 
 
 def implementations():
@@ -47,7 +49,7 @@ def write_shim(bindir, name, python_argv_line, stdout="", exit_code=None):
     """Create a command shim: POSIX sh (or .cmd on Windows). Stubs log to $FAKE_BIN_LOG."""
     if python_argv_line is not None:  # the adb shim
         if IS_WINDOWS:
-            (bindir / f"{name}.cmd").write_text(f'@echo off\r\n{python_argv_line} %*\r\n')
+            (bindir / f"{name}.cmd").write_text(f'@echo off\r\n{python_argv_line} %*\r\n', newline="")
         else:
             path = bindir / name
             path.write_text(f'#!/bin/sh\nexec {python_argv_line} "$@"\n')
@@ -57,7 +59,7 @@ def write_shim(bindir, name, python_argv_line, stdout="", exit_code=None):
     out.write_text(stdout)
     if IS_WINDOWS:
         (bindir / f"{name}.cmd").write_text(
-            f'@echo off\r\necho {name} %*>>"%FAKE_BIN_LOG%"\r\ntype "{out}"\r\nexit /b {exit_code}\r\n')
+            f'@echo off\r\necho {name} %* >>"%FAKE_BIN_LOG%"\r\ntype "{out}"\r\nexit /b {exit_code}\r\n', newline="")
     else:
         path = bindir / name
         path.write_text(f'#!/bin/sh\necho "{name} $*" >> "$FAKE_BIN_LOG"\ncat {shlex.quote(str(out))}\nexit {exit_code}\n')
@@ -81,12 +83,12 @@ def run_case(case, impl_name, ext, argv_prefix, tmp):
     for rel, text in case.get("files", {}).items():
         target = repo / rel
         target.parent.mkdir(parents=True, exist_ok=True)
-        target.write_text(text)
+        target.write_text(text, encoding="utf-8", newline="\n")
         if rel.endswith(".sh"):
             target.chmod(target.stat().st_mode | 0o111)
 
-    bindir = tmp / "shims"
-    bindir.mkdir()
+    bindir = tmp / "fake bin" / "shims"  # a space in the path catches unquoted $ADB
+    bindir.mkdir(parents=True)
     write_shim(bindir, "adb", f'"{sys.executable}" "{FAKE_ADB}"')
     for name, spec in case.get("bin", {}).items():
         write_shim(bindir, name, None, spec.get("stdout", ""), spec.get("exit", 0))
