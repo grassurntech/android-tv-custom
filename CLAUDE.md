@@ -55,6 +55,7 @@ Details: [docs/SECURITY.md](docs/SECURITY.md), [CONTRIBUTING.md](CONTRIBUTING.md
 ### `docs/design-docs/`
 - [index.md](docs/design-docs/index.md) — catalog of design docs + status
 - [core-beliefs.md](docs/design-docs/core-beliefs.md) — non-negotiable principles
+- [2026-11-19-tv-cleanup-and-home-screen.md](docs/design-docs/2026-11-19-tv-cleanup-and-home-screen.md) — main product design (accepted)
 
 ### `docs/exec-plans/`
 - `active/` — plans in progress (one file per plan)
