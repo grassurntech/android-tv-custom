@@ -62,7 +62,8 @@ You are helping someone who does not write code. Follow this prompt exactly, pha
    loop, and never look for another way to do the same thing.
 6. **Never read `.env`.** The scripts read it themselves. You may create it once (Phase 2), never open it.
 7. **Privacy.** Photos, backups, screenshots, `.env` and `user-content/` stay on this computer. Never upload them,
-   never paste their contents anywhere online, and never commit them to git.
+   never paste their contents anywhere online, and never commit them to git. The one exception is `SHARE.md`, a
+   short excerpt you write yourself (see the stop rule). Never open or edit anything in `user-content/` yourself.
 8. If a safety hook or guard on this computer blocks a command, do not work around it. Stop and tell the owner.
 
 ### The Home check (never skip it)
@@ -77,14 +78,20 @@ its last line is what Home is now.
   as `android`, or nothing), run `restore --home-only` immediately, before anything else. Explain to the owner
   after it finishes, then do the Home check again. In Phase 5, before any Home record exists, offer
   `restore --packages-only` instead (the clean-up is the only change so far) and run it once the owner says yes.
+  If the owner declines it while Home is wrong, follow the stop rule.
 - Never reboot while Home is anything else. On some TVs a restart on the setup wizard's recovery screen forced
   a factory reset.
 - **The stop rule.** If Home is still wrong after that restore, or `restore` ends with any code other than 0, or
   the TV can't be reached for the Home check: stop, and run nothing else on the TV. **Say:** "Please leave the TV
-  switched on. Don't unplug it or restart it." Write into `SUMMARY.md` in the backup folder what happened, the
-  backup folder's name and what the Home check last showed. Then tell the owner how to get help: open an issue
-  on the project's GitHub page (the Issues tab) and paste `SUMMARY.md`, leaving out the TV's IP address, serial
-  number and any photos.
+  switched on. Don't unplug it or restart it." Write two files into the backup folder. If no backup folder exists
+  yet, use a new `backups/no-backup-<YYYY-MM-DD_HHMMSS>/` (`backups/` stays on this computer); never write them
+  to the project folder itself.
+  - `SUMMARY.md`, for the owner only: what happened, the backup folder's name and what the Home check last showed.
+  - `SHARE.md`, the only thing that may ever be shared: the TV model, the Android version, which step stopped and
+    the exit code or message. Nothing else: no IP address, serial number, folder path, names or photos.
+
+  Then tell the owner how to get help: open an issue on the project's GitHub page (the Issues tab) and paste
+  `SHARE.md`. Never paste `SUMMARY.md` or anything else from a backup.
 
 ### Direct adb commands you may run
 
@@ -307,8 +314,13 @@ On Windows, ask the owner to export them as JPEG.
 `.venv/bin/python scripts/make_theme.py --photos "<folder>" --name "<name>" --apps <p1>,<p2>,<p3>,<p4> --clock <12|24> --out user-content/theme`
 (Windows: `.venv\Scripts\python scripts\make_theme.py` with the same options). It resizes the photos and strips
 their location data into `user-content/theme`. Exit 2 here usually means no usable photo: ask for another folder.
-Running it again rewrites `config.json`, so any keys you add below (`stock_home_redirect`, `app_keys`,
-`live_tv_package`, `power_on_home`, `boot_to_live_tv`) must be added again.
+Never open or edit anything in `user-content/` yourself: every later setting is a `make_theme` flag,
+`--stock-home-redirect <package>`, `--app-key <code>:<package>` (once per button), `--live-tv-package <package>`,
+`--power-on home` or `--power-on live-tv`, and `--key-filter true|false`. `make_theme` rebuilds the theme from
+scratch every time, so each run must carry the full set of flags decided so far. Keep that list in your notes
+(and later in `SUMMARY.md`). Whenever a step below adds a setting, re-run this command with the whole list plus
+the new flag. If the matching example sets `key_filter`, add `--key-filter` with its value (TCL Google TV
+examples use `false`).
 
 **6.3 Pick the Home path.** Use the stock launcher you noted in Phase 3.
 
@@ -322,8 +334,9 @@ Running it again rewrites `config.json`, so any keys you add below (`stock_home_
 On the Google TV path, explain the key-repeat trade-off first. **Say:** "On your TV, the new home screen needs a small helper to answer the
 Home button. On some TVs, TCL especially, it has a side effect: holding a button stops repeating, so holding
 volume up moves it one step per press. Shall I go ahead?" If no, skip to Phase 7: the clean-up stays. If yes,
-**say:** "Hold volume up for two seconds and tell me if it keeps going up," note the answer, and add
-`"stock_home_redirect": "<the stock launcher package>"` to `user-content/theme/config.json`.
+**say:** "Hold volume up for two seconds and tell me if it keeps going up," note the answer, and re-run
+`make_theme` with your flags plus `--stock-home-redirect <the stock launcher package>` (this sets
+`stock_home_redirect` to the stock launcher).
 
 **6.4 Build the app.** **Say:** "Now I'm building your home screen app. The first time takes 10 to 20 minutes."
 Run `build-launcher`. It signs the app with the owner's own key in `user-content/keystore/`.
@@ -363,8 +376,9 @@ restarting the TV once more," and run `reboot`. When it's back, run `connect` an
 2. If all work, skip to 6.11. For each dead button, find its code in the matching example or
    `vendor/cleanyourtv/docs/devices/` notes. If it's not there, start `shell getevent -lt -c 20` and have the
    owner press that button three times right away. It stops by itself after 20 events.
-3. Add the `app_keys` entries (for example `"4062:com.netflix.ninja"`) to `user-content/theme/config.json` and
-   run `push-theme`. On the Google TV path the helper is already on, so that's all.
+3. Re-run `make_theme` with your flags plus one `--app-key <code>:<package>` per button (for example
+   `--app-key 4062:com.netflix.ninja`; each becomes an `app_keys` entry), then run `push-theme`. On the Google TV
+   path the helper is already on, so that's all.
 4. On other TVs a helper is needed first. Explain the trade-off from 6.3 and ask. If yes, run `install-launcher`
    with `INPUT_KEY_SERVICE=1`, do the Home check, then `push-theme`. Ask the owner to hold volume up before and
    after. If no, leave the helpers off and note which buttons don't work.
@@ -372,14 +386,15 @@ restarting the TV once more," and run `reboot`. When it's back, run `connect` an
 
 **6.11 What the TV opens at power-on.** Read `shell logcat -b events -d` and look at the
 `wm_set_resumed_activity` lines from the restart in 6.9. If the TV opened its Live TV app by itself, that line
-names its package (for example `com.tcl.tv`). Add `"live_tv_package": "<that package>"` to the theme, then ask:
+names its package (for example `com.tcl.tv`). Add `--live-tv-package <that package>` (it sets `live_tv_package`)
+to your flags, then ask:
 **Say:** "When you turn the TV on, would you like to land on your new home screen, or on live TV?"
 
-- Home: add `"power_on_home": true`. It needs `HOME_KEY_SERVICE=1`: on other TVs, explain the trade-off from 6.3,
-  then run `install-launcher` with it (plus any switch already on) and do the Home check.
-- Live TV: add `"boot_to_live_tv": true`.
-- Never set both. Run `push-theme`, do the Home check, then ask the owner to switch the TV off and on with the
-  remote and say what appears.
+- Home: add `--power-on home` (it sets `power_on_home`). It needs `HOME_KEY_SERVICE=1`: on other TVs, explain the
+  trade-off from 6.3, then run `install-launcher` with it (plus any switch already on) and do the Home check.
+- Live TV: add `--power-on live-tv` (it sets `boot_to_live_tv`).
+- Never set both. Re-run `make_theme` with the full flag list, run `push-theme`, do the Home check, then ask the
+  owner to switch the TV off and on with the remote and say what appears.
 
 **End of phase:** **Say:** "Your new home screen is set up. <What works, which buttons work, the power-on
 choice.> Last step: I'll write down everything I did and close the connection." Wait for yes.
@@ -392,8 +407,8 @@ choice.> Last step: I'll write down everything I did and close the connection." 
      itself; any special-case app from exit code 20 with the script's message
    - the home screen: photos, name, apps, clock, which remote helpers are on and what that costs, the power-on choice
    - "Keep the `user-content/` folder. Its `keystore` is needed to update your home screen later."
-   - how to change the photos later: run `make_theme` again with a new folder, add back the extra keys you set
-     in Phase 6 (list them here), then `push-theme`
+   - how to change the photos later: run `make_theme` again with a new folder and every flag from Phase 6 (write
+     the full command here), then `push-theme`
    - how to undo, for the owner's computer only. First, turn debugging back on (Phase 2's steps). If the TV's IP
      changed, the owner fixes the `TV_IP=` line of `.env` in a text editor themselves. Open Terminal (Mac: press Cmd+Space, type
      Terminal) or PowerShell (Windows: Start menu, type PowerShell), type `cd "<full path of the project
@@ -403,12 +418,14 @@ choice.> Last step: I'll write down everything I did and close the connection." 
      `powershell -NoProfile -ExecutionPolicy Bypass -File scripts\restore.ps1`, adding `--home-only` or
      `--packages-only` the same way.
    - how to bring back one app without a computer: Settings → Apps → See all apps → the app → Enable.
-2. Do the Home check (you can't once debugging is off). Then close the connection. **Say:** "Last thing on the TV: open Settings → System → Developer options and turn
+2. Do the Home check first; only if it passes, go on (you can't check once debugging is off). If it fails,
+   follow the Home check rules instead. Then close the connection. **Say:** "Last thing on the TV: open Settings → System → Developer options and turn
    off Network debugging (and Wireless debugging if you see it). Would you like to keep USB debugging on? Most
    people turn it off too. You can always switch it back on to undo things later." Also suggest "Revoke USB
    debugging authorisations" in the same menu.
 3. Confirm it's off: run `connect`. It must end with 21. If it ends with 0, debugging is still on: ask the owner
-   to check the switches again. Then ask them to restart the TV with the remote and run `connect` once more.
+   to check the switches again. Only if the Home check in step 2 passed, ask them to restart the TV with the
+   remote, then run `connect` once more.
    Only `connect` saying it can't reach the TV counts.
 4. Check `git status`. Nothing from `backups/`, `photos/`, `user-content/`, `screenshots/` or `.env` may be
    staged. Never commit or upload them.

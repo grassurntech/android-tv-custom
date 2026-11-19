@@ -227,6 +227,58 @@ class PromptTests(unittest.TestCase):
         p67 = self.section(r"^\*\*6\.7", r"^\*\*6\.8").lower()
         self.assertRegex(p67, r"restore --home-only`? immediately, then stop")
 
+    # --- Final fix wave: theme flags, privacy-safe sharing, gated restarts ------------------------
+
+    def test_theme_settings_are_make_theme_flags_never_hand_edits(self):
+        # .claude/settings.json denies Read of user-content/**, so the agent must never be told to edit it.
+        for bad in ("edit user-content", "open user-content/theme/config.json", "to `user-content/theme/config.json`",
+                    "to user-content/theme/config.json", "add back the extra keys", "must be added again"):
+            self.assertNotIn(bad, self.low, f"PROMPT.md tells the agent to hand-edit the theme: {bad}")
+        verb = re.compile(r"\b(add|edit|open|read|change|modify|cat)\b", re.I)
+        for s in self.sentences:
+            if "user-content/" in s and verb.search(s):
+                self.assertRegex(s, NEGATION, f"a sentence seems to tell the agent to open or edit user-content/: {s}")
+        for flag in ("--stock-home-redirect", "--app-key", "--live-tv-package", "--power-on home",
+                     "--power-on live-tv", "--key-filter"):
+            self.has(flag)
+        p62 = self.section(r"^\*\*6\.2", r"^\*\*6\.3").lower()
+        self.assertRegex(p62, r"from scratch")
+        self.assertRegex(p62, r"(full|every|whole)[^.]{0,40}(set|list) of flags|every flag")
+        self.assertRegex(p62, r"never open or edit anything in `user-content/`")
+        p7 = self.section(r"^## Phase 7", r"^---").lower()
+        self.assertRegex(p7, r"make_theme`? again[^.]{0,120}(every|full)[^.]{0,40}flag")
+
+    def test_only_share_md_is_ever_shared(self):
+        check = self.section(r"^### The Home check", r"^### ").lower()
+        self.assertIn("share.md", check)
+        self.assertRegex(check, r"paste `share\.md`")
+        self.assertRegex(check, r"never paste `summary\.md`")
+        for word in ("model", "android version", "step", "exit code"):
+            self.assertIn(word, check)
+        self.assertRegex(check, r"no ip address, serial number, folder path, names? or photos")
+        for s in self.sentences:
+            low = s.lower()
+            if "paste" in low and "summary.md" in low:
+                self.assertRegex(low, NEGATION, f"SUMMARY.md must never be pasted anywhere: {s}")
+        rules = self.section(r"^### Rules you never break", r"^### ").lower()
+        self.assertRegex(rules, r"exception[^.]{0,80}share\.md")
+
+    def test_stop_rule_without_a_backup_folder(self):
+        check = self.section(r"^### The Home check", r"^### ")
+        self.assertIn("backups/no-backup-<YYYY-MM-DD_HHMMSS>/", check)
+        self.assertRegex(check.lower(), r"never[^.]{0,60}(repo root|top level of the project|project folder itself)")
+
+    def test_phase5_decline_follows_the_stop_rule(self):
+        check = self.section(r"^### The Home check", r"^### ").lower()
+        self.assertRegex(check, r"--packages-only[^.]*\.[^.]{0,40}(declines|says no)[^.]{0,80}stop rule")
+
+    def test_phase7_restart_is_gated_by_the_home_check(self):
+        p7 = self.section(r"^## Phase 7", r"^---").lower()
+        self.assertIn("do the home check first; only if it passes", p7)
+        for s in re.split(r"(?<=[.!?])\s+", p7):
+            if re.search(r"\brestart\b", s) and "ask them" in s:
+                self.assertRegex(s, r"only if", f"Phase 7 restart without the Home check gate: {s}")
+
     # --- What the prompt must never tell the agent to do ---------------------------------------
 
     def test_never_reads_env(self):
