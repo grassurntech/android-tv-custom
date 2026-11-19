@@ -65,11 +65,17 @@ fi
 # Step 2 and 3: cleanyourtv at the pinned commit. Never pulled or upgraded.
 VENDOR="$REPO_ROOT/vendor/cleanyourtv"
 verify_pin() {
-  local head
+  local head dirty
   head="$(git -C "$VENDOR" rev-parse HEAD 2>/dev/null)"
-  if [ "$head" != "$CLEANYOURTV_COMMIT" ]; then
+  dirty=""
+  if [ "$head" = "$CLEANYOURTV_COMMIT" ]; then
+    # edited or extra files would run as "pinned" code; fsmonitor=false stops a tampered .git/config running a command
+    dirty="$(git -C "$VENDOR" -c core.fsmonitor=false status --porcelain 2>/dev/null; echo "rc=$?")"
+    [ "$dirty" = "rc=0" ] && dirty=""
+  fi
+  if [ "$head" != "$CLEANYOURTV_COMMIT" ] || [ -n "$dirty" ]; then
     rm -rf "$VENDOR"
-    echo "The downloaded cleanyourtv is not the pinned version ($CLEANYOURTV_COMMIT), so it was deleted. Nothing was installed." >&2
+    echo "The downloaded cleanyourtv is not the pinned version ($CLEANYOURTV_COMMIT) or has been modified, so it was deleted. Nothing was installed." >&2
     exit 30
   fi
 }

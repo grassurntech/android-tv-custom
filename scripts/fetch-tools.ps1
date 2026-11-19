@@ -78,9 +78,15 @@ $Vendor = Join-Path $RepoRoot 'vendor/cleanyourtv'
 function Test-Pin {
     $ErrorActionPreference = 'Continue'
     $head = (& $GitExe -C $Vendor rev-parse HEAD 2>$null | ForEach-Object { $_.ToString() }) -join ''
-    if ($head.Trim() -ne $Commit) {
+    $dirty = $true
+    if ($head.Trim() -eq $Commit) {
+        # edited or extra files would run as "pinned" code; fsmonitor=false stops a tampered .git/config running a command
+        $status = @(& $GitExe -C $Vendor -c core.fsmonitor=false status --porcelain 2>$null | ForEach-Object { $_.ToString() })
+        if ($LASTEXITCODE -eq 0 -and (($status -join '').Trim().Length -eq 0)) { $dirty = $false }
+    }
+    if (($head.Trim() -ne $Commit) -or $dirty) {
         Remove-Item -LiteralPath $Vendor -Recurse -Force -ErrorAction SilentlyContinue
-        [Console]::Error.WriteLine("The downloaded cleanyourtv is not the pinned version ($Commit), so it was deleted. Nothing was installed.")
+        [Console]::Error.WriteLine("The downloaded cleanyourtv is not the pinned version ($Commit) or has been modified, so it was deleted. Nothing was installed.")
         exit 30
     }
 }

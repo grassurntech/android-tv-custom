@@ -118,6 +118,23 @@ class FetchToolsTests(unittest.TestCase):
                 self.assertEqual(p.returncode, 30, p.stdout + p.stderr)
                 self.assertFalse((repo / "vendor" / "cleanyourtv").exists())
 
+    def _tamper_case(self, tag, tamper):
+        for impl in self.impls():
+            with self.subTest(impl=impl):
+                repo = self.make_repo(tag + impl)
+                env = {"CLEANYOURTV_COMMIT": self.tag_commit}
+                self.assertEqual(self.run_impl(impl, repo, env).returncode, 0)
+                tamper(repo / "vendor" / "cleanyourtv")
+                p = self.run_impl(impl, repo, env)
+                self.assertEqual(p.returncode, 30, p.stdout + p.stderr)
+                self.assertFalse((repo / "vendor" / "cleanyourtv").exists())
+
+    def test_F7_edited_tracked_file_is_refused(self):
+        self._tamper_case("f7", lambda v: (v / "a.txt").write_text("tampered\n"))
+
+    def test_F8_untracked_file_is_refused(self):
+        self._tamper_case("f8", lambda v: (v / "extra.py").write_text("print(1)\n"))
+
     def test_F5_unreachable_url_is_exit_3(self):
         for impl in self.impls():
             with self.subTest(impl=impl):
