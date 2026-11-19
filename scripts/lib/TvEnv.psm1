@@ -90,6 +90,8 @@ function Get-TvLatestBackup {
     if (-not (Test-Path -LiteralPath $global:TV_BACKUP_DIR -PathType Container)) { return }
     $best = $null
     foreach ($d in Get-ChildItem -LiteralPath $global:TV_BACKUP_DIR -Directory) {
+        # only finished backups (YYYY-MM-DD_HHMMSS); never a leftover .partial
+        if ($d.Name -cnotmatch '^[0-9]{4}-[0-9]{2}-[0-9]{2}_[0-9]{6}$') { continue }
         $pkgs = Join-Path $d.FullName 'packages-all.txt'
         if (-not (Test-Path -LiteralPath $pkgs -PathType Leaf)) { continue }
         if ((Get-Item -LiteralPath $pkgs).Length -le 0) { continue }
@@ -120,4 +122,32 @@ function Invoke-TvShell {
     & $global:ADB -s $global:SERIAL shell @args
 }
 
-Export-ModuleMember -Function Import-TvEnv, Test-TvMatches, Get-TvLatestBackup, Test-TvReachable, Invoke-TvShell
+# Save-TvShellOutput <file> <cmd...>: run a command on the TV and write its stdout to <file> byte for byte
+# (no console code page decoding, no newline changes), like bash's `adb shell ... > file`.
+# Returns adb's exit code. stderr passes through to the console.
+function Save-TvShellOutput {
+    param([string]$File, [string[]]$Command)
+    $adbPath = $global:ADB
+    $cmdInfo = Get-Command $global:ADB -ErrorAction SilentlyContinue
+    if ($cmdInfo -and $cmdInfo.Source) { $adbPath = $cmdInfo.Source }
+    $parts = @('-s', $global:SERIAL, 'shell') + $Command
+    $quoted = foreach ($a in $parts) {
+        if ($a -match '[\s"]' -or $a.Length -eq 0) { '"' + ($a -replace '"', '\"') + '"' } else { $a }
+    }
+    $psi = New-Object System.Diagnostics.ProcessStartInfo
+    $psi.FileName = $adbPath
+    $psi.Arguments = ($quoted -join ' ')
+    $psi.UseShellExecute = $false
+    $psi.RedirectStandardOutput = $true
+    $proc = [System.Diagnostics.Process]::Start($psi)
+    $fs = [System.IO.File]::Create($File)
+    try {
+        $proc.StandardOutput.BaseStream.CopyTo($fs)
+    } finally {
+        $fs.Dispose()
+    }
+    $proc.WaitForExit()
+    return $proc.ExitCode
+}
+
+Export-ModuleMember -Function Save-TvShellOutput, Import-TvEnv, Test-TvMatches, Get-TvLatestBackup, Test-TvReachable, Invoke-TvShell

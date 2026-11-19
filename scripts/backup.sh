@@ -43,13 +43,13 @@ capture() {
   fi
 }
 
-capture packages-all.txt pm list packages
 capture packages-disabled.txt pm list packages -d
 capture getprop.txt getprop
 capture settings-global.txt settings list global
 capture settings-secure.txt settings list secure
 capture settings-system.txt settings list system
 capture home-activity.txt cmd package resolve-activity --brief -a android.intent.action.MAIN -c android.intent.category.HOME
+capture packages-all.txt pm list packages   # last: its presence marks a complete capture
 
 if [ ! -s "$partial/packages-all.txt" ]; then
   echo "The TV returned an empty package list; no backup was kept." >&2

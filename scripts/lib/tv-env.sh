@@ -93,6 +93,11 @@ tv_latest_backup() {
   for d in "$TV_BACKUP_DIR"/*/; do
     [ -d "$d" ] || continue
     d="${d%/}"
+    # only finished backups (YYYY-MM-DD_HHMMSS); never a leftover .partial
+    case "${d##*/}" in
+      [0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]_[0-9][0-9][0-9][0-9][0-9][0-9]) ;;
+      *) continue ;;
+    esac
     [ -s "$d/packages-all.txt" ] || continue
     if [ -z "$best" ] || [[ "$d" > "$best" ]]; then best="$d"; fi
   done

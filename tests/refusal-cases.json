@@ -188,7 +188,8 @@
         "shell pm list packages -d",
         "settings list secure",
         "resolve-activity"
-      ]
+      ],
+      "stdout_last_line_matches": "backups[/\\\\]\\d{4}-\\d{2}-\\d{2}_\\d{6}$"
     }
   },
   {

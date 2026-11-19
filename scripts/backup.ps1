@@ -21,25 +21,22 @@ if ($rc -eq 21) {
 }
 if ($rc -ne 0) { exit $rc }
 
-$final = Join-Path $global:TV_BACKUP_DIR (Get-Date -Format 'yyyy-MM-dd_HHmmss')
+$final = Join-Path $global:TV_BACKUP_DIR ((Get-Date).ToString('yyyy-MM-dd_HHmmss', [System.Globalization.CultureInfo]::InvariantCulture))
 $partial = "$final.partial"
 if ((Test-Path -LiteralPath $final) -or (Test-Path -LiteralPath $partial)) {
     [Console]::Error.WriteLine("A backup for this second already exists: $final. Wait a moment and run again.")
     exit 20
 }
 
-# Runs one command on the TV and writes its raw output (UTF-8, no BOM) into the partial folder.
+# Runs one command on the TV and writes its raw stdout into the partial folder.
 # Returns $false when the TV refused or failed.
 function Save-TvOutput {
     param([string]$File, [string[]]$Command)
-    $lines = @(Invoke-TvShell @Command | ForEach-Object { $_.ToString() })
-    if ($LASTEXITCODE -ne 0) {
+    $exit = Save-TvShellOutput (Join-Path $partial $File) $Command
+    if ($exit -ne 0) {
         [Console]::Error.WriteLine("The TV refused or failed: $($Command -join ' ')")
         return $false
     }
-    $text = ''
-    if ($lines.Count -gt 0) { $text = ($lines -join "`n") + "`n" }
-    [System.IO.File]::WriteAllText((Join-Path $partial $File), $text, (New-Object System.Text.UTF8Encoding($false)))
     return $true
 }
 
@@ -47,13 +44,13 @@ $code = 0
 try {
     $null = New-Item -ItemType Directory -Path $partial -Force
     $steps = @(
-        @('packages-all.txt', @('pm', 'list', 'packages')),
         @('packages-disabled.txt', @('pm', 'list', 'packages', '-d')),
         @('getprop.txt', @('getprop')),
         @('settings-global.txt', @('settings', 'list', 'global')),
         @('settings-secure.txt', @('settings', 'list', 'secure')),
         @('settings-system.txt', @('settings', 'list', 'system')),
-        @('home-activity.txt', @('cmd', 'package', 'resolve-activity', '--brief', '-a', 'android.intent.action.MAIN', '-c', 'android.intent.category.HOME'))
+        @('home-activity.txt', @('cmd', 'package', 'resolve-activity', '--brief', '-a', 'android.intent.action.MAIN', '-c', 'android.intent.category.HOME')),
+        @('packages-all.txt', @('pm', 'list', 'packages'))
     )
     foreach ($step in $steps) {
         if (-not (Save-TvOutput $step[0] $step[1])) { $code = 20; break }

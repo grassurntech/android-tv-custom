@@ -146,6 +146,11 @@ def check_expect(test, expect, proc, adb_lines, bin_lines, repo):
             test.assertIn(line, have, f"{rel} lacks line {line!r}{ctx}")
     for rel in expect.get("files_absent", []):
         test.assertEqual(_matches(repo, rel), [], f"{rel} exists but should not{ctx}")
+    if "stdout_last_line_matches" in expect:
+        lines = [l for l in proc.stdout.splitlines() if l.strip()]
+        test.assertTrue(lines, f"no stdout{ctx}")
+        test.assertRegex(lines[-1].strip(), expect["stdout_last_line_matches"], ctx)
+        test.assertTrue(Path(lines[-1].strip()).is_dir(), f"last stdout line is not an existing folder{ctx}")
     if "stderr_contains" in expect:
         test.assertIn(expect["stderr_contains"], proc.stderr, ctx)
 
