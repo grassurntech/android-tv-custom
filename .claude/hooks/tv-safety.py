@@ -54,7 +54,7 @@ def segments(cmd):
             yield Path(words[0]).name, " ".join(words)
 
 
-def check_adb(text, protected, forbidden):
+def check_adb(text, protected, forbidden, streaming):
     # text is the whole segment starting with "adb ..."
     if re.search(r"^adb\s+(-\S+\s+\S+\s+)*(root|unroot|sideload|disable-verity|enable-verity|remount)\b", text):
         block("no root, no flashing, no system remounts.")
@@ -90,6 +90,8 @@ def check_adb(text, protected, forbidden):
             block("one package at a time.")
         if matches(pkg, protected):
             block(f"`{pkg}` is protected (it keeps the TV working). Never disable it.")
+        if matches(pkg, streaming):
+            block(f"`{pkg}` is a streaming app. Owners turn these off themselves in TV Settings.")
         if not BACKUP_DIR.exists() or not any(BACKUP_DIR.rglob("packages-all.txt")):
             block(f"no backup found in {BACKUP_DIR.name}/. Back up the package list, disabled list, "
                   "getprop and settings before the first change.")
@@ -109,7 +111,7 @@ def main():
     if loopy and any("disable-user" in t and "adb" in t for _, t in segs):
         block("one package at a time. No loops, xargs or batches of disable-user.")
 
-    protected = forbidden = None
+    protected = forbidden = streaming = None
     for word, text in segs:
         if word in UPLOAD_TOOLS and re.search(r"(^|[\s/=@])(photos|backups|screenshots|user-content)(/|\s|$)", text):
             block("photos, backups and screenshots must never be uploaded anywhere.")
@@ -119,9 +121,11 @@ def main():
             if protected is None:
                 protected = load_patterns("protected-packages.txt")
                 forbidden = load_patterns("forbidden-packages.txt")
-                if protected is None or forbidden is None:
-                    block("config/protected-packages.txt or forbidden-packages.txt is missing, so TV commands can't be checked.")
-            check_adb(text, protected, forbidden)
+                streaming = load_patterns("streaming-apps.txt")
+                if protected is None or forbidden is None or streaming is None:
+                    block("config/protected-packages.txt, forbidden-packages.txt or streaming-apps.txt is missing, "
+                          "so TV commands can't be checked.")
+            check_adb(text, protected, forbidden, streaming)
     sys.exit(0)
 
 

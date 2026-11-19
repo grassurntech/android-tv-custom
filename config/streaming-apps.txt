@@ -1,0 +1,25 @@
+# Streaming apps. The scripts and the safety hook refuse to disable these.
+# The owner switches these off themselves in TV Settings -> Apps if they want to.
+# One glob pattern per line (fnmatch). Matching is case-insensitive.
+com.netflix.*
+com.amazon.amazonvideo.*
+com.amazon.avod*
+com.disney.*
+com.google.android.youtube.tv*
+com.google.android.youtube.tvkids
+com.google.android.youtube.tvmusic
+in.startv.hotstar*
+com.jio.*
+com.apple.atve.*
+com.wbd.*
+com.hbo.*
+com.cbs.*
+com.paramount.*
+com.peacocktv.*
+com.hulu.*
+com.plexapp.*
+com.spotify.*
+tv.twitch.*
+com.sonyliv*
+com.zee5*
+com.primevideo*
