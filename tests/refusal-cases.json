@@ -953,5 +953,519 @@
       },
       "stderr_contains": "Nothing was changed"
     }
+  },
+  {
+    "script": "restore",
+    "name": "R1 no backups",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {},
+    "tv": {
+      "state": "device"
+    },
+    "expect": {
+      "exit": 13,
+      "adb_call_count": {
+        "": 0
+      }
+    }
+  },
+  {
+    "script": "restore",
+    "name": "R2 enables each package once and records it",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:d.e.f\npackage:com.google.android.apps.tv.launcherx\n",
+      "backups/2026-11-19_100000/disabled-by-us.txt": "a.b.c\t2026-11-19T10:05:00Z\nd.e.f\t2026-11-19T10:06:00Z\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "a.b.c",
+        "d.e.f"
+      ],
+      "disabled": [
+        "a.b.c",
+        "d.e.f"
+      ]
+    },
+    "expect": {
+      "exit": 0,
+      "adb_call_count": {
+        "pm enable a.b.c": 1,
+        "pm enable d.e.f": 1
+      },
+      "adb_calls_in_order": [
+        "pm enable a.b.c",
+        "pm enable d.e.f"
+      ],
+      "files_match": {
+        "backups/2026-11-19_100000/restored.txt": "a\\.b\\.c\\t\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z\\nd\\.e\\.f\\t\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z\\n"
+      }
+    }
+  },
+  {
+    "script": "restore",
+    "name": "R3 TV refuses: stop at once",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:d.e.f\npackage:com.google.android.apps.tv.launcherx\n",
+      "backups/2026-11-19_100000/disabled-by-us.txt": "a.b.c\t2026-11-19T10:05:00Z\nd.e.f\t2026-11-19T10:06:00Z\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "a.b.c",
+        "d.e.f"
+      ],
+      "disabled": [
+        "a.b.c",
+        "d.e.f"
+      ],
+      "refuse": [
+        "a.b.c"
+      ]
+    },
+    "expect": {
+      "exit": 20,
+      "adb_call_count": {
+        "pm enable a.b.c": 1,
+        "pm enable d.e.f": 0
+      },
+      "files_absent": [
+        "backups/2026-11-19_100000/restored.txt"
+      ],
+      "stderr_contains": "a.b.c"
+    }
+  },
+  {
+    "script": "restore",
+    "name": "R4 run again: nothing to do",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:d.e.f\npackage:com.google.android.apps.tv.launcherx\n",
+      "backups/2026-11-19_100000/disabled-by-us.txt": "a.b.c\t2026-11-19T10:05:00Z\nd.e.f\t2026-11-19T10:06:00Z\n",
+      "backups/2026-11-19_100000/restored.txt": "a.b.c\t2026-11-19T11:00:00Z\nd.e.f\t2026-11-19T11:00:01Z\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "a.b.c",
+        "d.e.f"
+      ]
+    },
+    "expect": {
+      "exit": 0,
+      "adb_call_count": {
+        "pm enable": 0
+      },
+      "files_match": {
+        "backups/2026-11-19_100000/restored.txt": "a\\.b\\.c\\t2026-11-19T11:00:00Z\\nd\\.e\\.f\\t2026-11-19T11:00:01Z\\n"
+      }
+    }
+  },
+  {
+    "script": "restore",
+    "name": "R5 home only, in order",
+    "args": [
+      "--home-only"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:d.e.f\npackage:com.google.android.apps.tv.launcherx\n",
+      "backups/2026-11-19_100000/installed-by-us.txt": "com.gathin.tvhome\n",
+      "backups/2026-11-19_100000/home-state.txt": "stock_package=com.google.android.apps.tv.launcherx\nstock_component=com.google.android.apps.tv.launcherx/.MainActivity\nours=com.gathin.tvhome\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "a.b.c",
+        "d.e.f",
+        "com.google.android.apps.tv.launcherx",
+        "com.gathin.tvhome"
+      ],
+      "disabled": [
+        "com.google.android.apps.tv.launcherx"
+      ]
+    },
+    "expect": {
+      "exit": 0,
+      "adb_calls_in_order": [
+        "shell pm enable com.google.android.apps.tv.launcherx",
+        "shell cmd package set-home-activity --user 0 com.google.android.apps.tv.launcherx/.MainActivity",
+        "shell pm disable-user --user 0 com.gathin.tvhome"
+      ],
+      "adb_call_count": {
+        "pm enable a.b.c": 0,
+        "disable-user": 1,
+        "set-home-activity": 1
+      }
+    }
+  },
+  {
+    "script": "restore",
+    "name": "R6 TV offline",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:d.e.f\npackage:com.google.android.apps.tv.launcherx\n",
+      "backups/2026-11-19_100000/disabled-by-us.txt": "a.b.c\t2026-11-19T10:05:00Z\nd.e.f\t2026-11-19T10:06:00Z\n"
+    },
+    "tv": {
+      "state": "offline",
+      "packages": [
+        "a.b.c",
+        "d.e.f"
+      ]
+    },
+    "expect": {
+      "exit": 21,
+      "adb_call_count": {
+        "pm enable": 0
+      },
+      "files_absent": [
+        "backups/2026-11-19_100000/restored.txt"
+      ]
+    }
+  },
+  {
+    "script": "restore",
+    "name": "R7 unauthorized",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:d.e.f\npackage:com.google.android.apps.tv.launcherx\n",
+      "backups/2026-11-19_100000/disabled-by-us.txt": "a.b.c\t2026-11-19T10:05:00Z\nd.e.f\t2026-11-19T10:06:00Z\n"
+    },
+    "tv": {
+      "state": "unauthorized",
+      "packages": [
+        "a.b.c",
+        "d.e.f"
+      ]
+    },
+    "expect": {
+      "exit": 22,
+      "adb_call_count": {
+        "pm enable": 0
+      }
+    }
+  },
+  {
+    "script": "restore",
+    "name": "R8 already enabled counts as restored",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:d.e.f\npackage:com.google.android.apps.tv.launcherx\n",
+      "backups/2026-11-19_100000/disabled-by-us.txt": "a.b.c\t2026-11-19T10:05:00Z\nd.e.f\t2026-11-19T10:06:00Z\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "a.b.c",
+        "d.e.f"
+      ],
+      "disabled": [
+        "d.e.f"
+      ]
+    },
+    "expect": {
+      "exit": 0,
+      "adb_call_count": {
+        "pm enable a.b.c": 0,
+        "pm enable d.e.f": 1
+      },
+      "files_match": {
+        "backups/2026-11-19_100000/restored.txt": "a\\.b\\.c\\t\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z\\nd\\.e\\.f\\t\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z\\n"
+      }
+    }
+  },
+  {
+    "script": "restore",
+    "name": "R9 every backup folder, newest first",
+    "args": [
+      "--packages-only"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:d.e.f\npackage:com.google.android.apps.tv.launcherx\n",
+      "backups/2026-11-19_100000/disabled-by-us.txt": "d.e.f\t2026-11-19T10:06:00Z\n",
+      "backups/2026-11-18_090000/packages-all.txt": "package:a.b.c\npackage:d.e.f\npackage:com.google.android.apps.tv.launcherx\n",
+      "backups/2026-11-18_090000/disabled-by-us.txt": "a.b.c\t2026-11-18T10:06:00Z\n",
+      "backups/2026-11-17_080000.partial/disabled-by-us.txt": "x.y.z\t2026-11-17T10:06:00Z\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "a.b.c",
+        "d.e.f",
+        "x.y.z"
+      ],
+      "disabled": [
+        "a.b.c",
+        "d.e.f",
+        "x.y.z"
+      ]
+    },
+    "expect": {
+      "exit": 0,
+      "adb_calls_in_order": [
+        "pm enable d.e.f",
+        "pm enable a.b.c"
+      ],
+      "adb_call_count": {
+        "pm enable x.y.z": 0
+      },
+      "files_match": {
+        "backups/2026-11-19_100000/restored.txt": "d\\.e\\.f\\t\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z\\n",
+        "backups/2026-11-18_090000/restored.txt": "a\\.b\\.c\\t\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z\\n"
+      }
+    }
+  },
+  {
+    "script": "restore",
+    "name": "R10 two modes at once",
+    "args": [
+      "--home-only",
+      "--packages-only"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:d.e.f\npackage:com.google.android.apps.tv.launcherx\n"
+    },
+    "tv": {
+      "state": "device"
+    },
+    "expect": {
+      "exit": 2,
+      "adb_call_count": {
+        "": 0
+      }
+    }
+  },
+  {
+    "script": "restore",
+    "name": "R11 unknown argument",
+    "args": [
+      "--everything"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:d.e.f\npackage:com.google.android.apps.tv.launcherx\n"
+    },
+    "tv": {
+      "state": "device"
+    },
+    "expect": {
+      "exit": 2,
+      "adb_call_count": {
+        "": 0
+      }
+    }
+  },
+  {
+    "script": "restore",
+    "name": "R12 home only, no home-state file: skipped",
+    "args": [
+      "--home-only"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:d.e.f\npackage:com.google.android.apps.tv.launcherx\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "a.b.c",
+        "d.e.f",
+        "com.google.android.apps.tv.launcherx",
+        "com.gathin.tvhome"
+      ]
+    },
+    "expect": {
+      "exit": 0,
+      "adb_call_count": {
+        "pm enable": 0,
+        "disable-user": 0,
+        "set-home-activity": 0
+      }
+    }
+  },
+  {
+    "script": "restore",
+    "name": "R13 home: our launcher will not turn off",
+    "args": [
+      "--home-only"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:d.e.f\npackage:com.google.android.apps.tv.launcherx\n",
+      "backups/2026-11-19_100000/installed-by-us.txt": "com.gathin.tvhome\n",
+      "backups/2026-11-19_100000/home-state.txt": "stock_package=com.google.android.apps.tv.launcherx\nstock_component=com.google.android.apps.tv.launcherx/.MainActivity\nours=com.gathin.tvhome\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "a.b.c",
+        "d.e.f",
+        "com.google.android.apps.tv.launcherx",
+        "com.gathin.tvhome"
+      ],
+      "disabled": [
+        "com.google.android.apps.tv.launcherx"
+      ],
+      "refuse": [
+        "com.gathin.tvhome"
+      ]
+    },
+    "expect": {
+      "exit": 20,
+      "adb_call_count": {
+        "disable-user": 1
+      }
+    }
+  },
+  {
+    "script": "restore",
+    "name": "R14 default: Home first, then packages, never our launcher",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:d.e.f\npackage:com.google.android.apps.tv.launcherx\n",
+      "backups/2026-11-19_100000/installed-by-us.txt": "com.gathin.tvhome\n",
+      "backups/2026-11-19_100000/home-state.txt": "stock_package=com.google.android.apps.tv.launcherx\nstock_component=com.google.android.apps.tv.launcherx/.MainActivity\nours=com.gathin.tvhome\n",
+      "backups/2026-11-19_100000/disabled-by-us.txt": "a.b.c\t2026-11-19T10:05:00Z\ncom.gathin.tvhome\t2026-11-19T10:06:00Z\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "a.b.c",
+        "d.e.f",
+        "com.google.android.apps.tv.launcherx",
+        "com.gathin.tvhome"
+      ],
+      "disabled": [
+        "a.b.c",
+        "com.google.android.apps.tv.launcherx"
+      ]
+    },
+    "expect": {
+      "exit": 0,
+      "adb_calls_in_order": [
+        "pm enable com.google.android.apps.tv.launcherx",
+        "set-home-activity --user 0",
+        "disable-user --user 0 com.gathin.tvhome",
+        "pm enable a.b.c"
+      ],
+      "adb_call_count": {
+        "pm enable com.gathin.tvhome": 0
+      },
+      "files_match": {
+        "backups/2026-11-19_100000/restored.txt": "a\\.b\\.c\\t\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z\\n"
+      }
+    }
+  },
+  {
+    "script": "restore",
+    "name": "R15 home-state file is incomplete",
+    "args": [
+      "--home-only"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:d.e.f\npackage:com.google.android.apps.tv.launcherx\n",
+      "backups/2026-11-19_100000/home-state.txt": "stock_package=com.google.android.apps.tv.launcherx\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "a.b.c",
+        "d.e.f",
+        "com.google.android.apps.tv.launcherx",
+        "com.gathin.tvhome"
+      ]
+    },
+    "expect": {
+      "exit": 3,
+      "adb_call_count": {
+        "pm enable": 0,
+        "disable-user": 0
+      }
+    }
+  },
+  {
+    "script": "restore",
+    "name": "R16 TV_IP unset",
+    "args": [],
+    "env": {
+      "TV_IP": null
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:d.e.f\npackage:com.google.android.apps.tv.launcherx\n"
+    },
+    "tv": {
+      "state": "device"
+    },
+    "expect": {
+      "exit": 3,
+      "adb_call_count": {
+        "": 0
+      }
+    }
+  },
+  {
+    "script": "restore",
+    "name": "R17 log line that is not a package name",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:d.e.f\npackage:com.google.android.apps.tv.launcherx\n",
+      "backups/2026-11-19_100000/disabled-by-us.txt": "a.b.c;reboot\t2026-11-19T10:05:00Z\n"
+    },
+    "tv": {
+      "state": "device"
+    },
+    "expect": {
+      "exit": 3,
+      "adb_call_count": {
+        "pm enable": 0
+      }
+    }
   }
 ]

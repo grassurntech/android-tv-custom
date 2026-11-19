@@ -87,21 +87,26 @@ tv_matches() {
   return 1
 }
 
-# Prints the newest backup directory (lexical max of TV_BACKUP_DIR/*/) whose packages-all.txt is non-empty.
-tv_latest_backup() {
-  local d best=""
+# Prints every usable backup directory, newest first, one per line: only finished backups named
+# YYYY-MM-DD_HHMMSS (never a leftover .partial) whose packages-all.txt is non-empty.
+tv_all_backups() {
+  local d
   for d in "$TV_BACKUP_DIR"/*/; do
     [ -d "$d" ] || continue
     d="${d%/}"
-    # only finished backups (YYYY-MM-DD_HHMMSS); never a leftover .partial
     case "${d##*/}" in
       [0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]_[0-9][0-9][0-9][0-9][0-9][0-9]) ;;
       *) continue ;;
     esac
     [ -s "$d/packages-all.txt" ] || continue
-    if [ -z "$best" ] || [[ "$d" > "$best" ]]; then best="$d"; fi
-  done
-  [ -n "$best" ] && printf '%s\n' "$best"
+    printf '%s\n' "$d"
+  done | LC_ALL=C sort -r
+  return 0
+}
+
+# Prints the newest usable backup directory (see tv_all_backups); nothing if there is none.
+tv_latest_backup() {
+  tv_all_backups | sed -n '1p'
   return 0
 }
 

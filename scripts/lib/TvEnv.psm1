@@ -85,19 +85,27 @@ function Test-TvMatches {
     return $false
 }
 
-# Prints the newest backup directory (ordinal max name) whose packages-all.txt is non-empty; nothing if none.
-function Get-TvLatestBackup {
+# Prints every usable backup directory, newest first (ordinal name order): only finished backups named
+# YYYY-MM-DD_HHMMSS (never a leftover .partial) whose packages-all.txt is non-empty.
+function Get-TvBackups {
     if (-not (Test-Path -LiteralPath $global:TV_BACKUP_DIR -PathType Container)) { return }
-    $best = $null
+    $names = New-Object 'System.Collections.Generic.List[string]'
     foreach ($d in Get-ChildItem -LiteralPath $global:TV_BACKUP_DIR -Directory) {
-        # only finished backups (YYYY-MM-DD_HHMMSS); never a leftover .partial
         if ($d.Name -cnotmatch '^[0-9]{4}-[0-9]{2}-[0-9]{2}_[0-9]{6}$') { continue }
         $pkgs = Join-Path $d.FullName 'packages-all.txt'
         if (-not (Test-Path -LiteralPath $pkgs -PathType Leaf)) { continue }
         if ((Get-Item -LiteralPath $pkgs).Length -le 0) { continue }
-        if ($null -eq $best -or [string]::CompareOrdinal($d.Name, $best.Name) -gt 0) { $best = $d }
+        $names.Add($d.Name)
     }
-    if ($null -ne $best) { $best.FullName }
+    $names.Sort([System.StringComparer]::Ordinal)
+    $names.Reverse()
+    foreach ($n in $names) { Join-Path $global:TV_BACKUP_DIR $n }
+}
+
+# Prints the newest usable backup directory (see Get-TvBackups); nothing if there is none.
+function Get-TvLatestBackup {
+    $all = @(Get-TvBackups)
+    if ($all.Count -gt 0) { $all[0] }
 }
 
 # Returns 0 if the TV is a usable device, 22 if unauthorized, 21 if unreachable, 3 if adb is missing.
@@ -151,4 +159,4 @@ function Save-TvShellOutput {
     return $proc.ExitCode
 }
 
-Export-ModuleMember -Function Save-TvShellOutput, Import-TvEnv, Test-TvMatches, Get-TvLatestBackup, Test-TvReachable, Invoke-TvShell
+Export-ModuleMember -Function Save-TvShellOutput, Import-TvEnv, Test-TvMatches, Get-TvBackups, Get-TvLatestBackup, Test-TvReachable, Invoke-TvShell

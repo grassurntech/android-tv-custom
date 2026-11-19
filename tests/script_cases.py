@@ -136,6 +136,11 @@ def check_expect(test, expect, proc, adb_lines, bin_lines, repo):
         test.assertTrue(any(sub in l for l in adb_lines), f"no adb call contains {sub!r}{ctx}")
     for sub in expect.get("adb_calls_exclude", []):
         test.assertFalse(any(sub in l for l in adb_lines), f"an adb call contains {sub!r}{ctx}")
+    pos = 0  # each substring must appear on a later call than the one before it
+    for sub in expect.get("adb_calls_in_order", []):
+        idx = next((i for i in range(pos, len(adb_lines)) if sub in adb_lines[i]), None)
+        test.assertIsNotNone(idx, f"adb call {sub!r} missing or out of order{ctx}")
+        pos = idx + 1
     for sub, n in expect.get("adb_call_count", {}).items():
         got = sum(1 for l in adb_lines if sub in l)
         test.assertEqual(got, n, f"adb calls containing {sub!r}: {got}, expected {n}{ctx}")
