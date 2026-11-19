@@ -182,7 +182,7 @@ put back.
    belongs to the old home screen, so it goes with it (each app still has its own). And ads inside streaming
    apps like YouTube can't be removed, because they come from the apps. Everything else I do can be undone."
 2. Check, one at a time: Git (`git --version`), Python 3 (`python3 --version`, on Windows `py -3 --version`),
-   Docker (`docker info` must answer without an error), and at least 10 GB of free disk space.
+   Docker (`docker info` must answer without an error), and at least 5 GB of free disk space.
 3. For anything missing, walk the owner through installing it in plain steps: Git from git-scm.com, Python from
    python.org, Docker Desktop from docker.com. For Docker, **say:** "Open Docker Desktop and wait until it says
    it's running."
@@ -338,7 +338,7 @@ volume up moves it one step per press. Shall I go ahead?" If no, skip to Phase 7
 `make_theme` with your flags plus `--stock-home-redirect <the stock launcher package>` (this sets
 `stock_home_redirect` to the stock launcher).
 
-**6.4 Build the app.** **Say:** "Now I'm building your home screen app. The first time takes 10 to 20 minutes."
+**6.4 Build the app.** **Say:** "Now I'm building your home screen app. The first time takes about 10 minutes, up to 20 on a slower computer."
 Run `build-launcher`. It signs the app with the owner's own key in `user-content/keystore/`.
 
 **6.5 Install it.** **Say:** "Watch the TV: a second 'Allow debugging?' box may appear, because cleanyourtv's

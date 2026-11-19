@@ -78,7 +78,7 @@ Details: [docs/SECURITY.md](docs/SECURITY.md), [CONTRIBUTING.md](CONTRIBUTING.md
 
 Run this every time a PR is successfully committed and pushed. Do not skip it, and do not update docs that weren't affected.
 
-1. **Identify** — Read the PR diff and list the docs it actually affects (use the TOC above; e.g. new endpoint → ARCHITECTURE.md, UI change → FRONTEND.md, finished plan → move from `exec-plans/active/` to `completed/`, new shortcut → tech-debt-tracker.md, schema change → regenerate db-schema.md).
+1. **Identify** — Read the PR diff and list the docs it actually affects (use the TOC above; e.g. new endpoint → ARCHITECTURE.md, UI change → FRONTEND.md, finished plan → move from `exec-plans/active/` to `completed/`, new shortcut → tech-debt-tracker.md).
 2. **Grade each candidate detail** before writing it down:
    - **Must** — changes how someone builds, runs, or reasons about the system (new component, changed contract, new constraint, decision + why). → Document.
    - **Should** — useful context that will still be true in a month. → Document in one line.

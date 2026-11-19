@@ -46,7 +46,7 @@ Your AI tool checks each of these for you and walks you through anything missing
 - [ ] An AI coding tool that can run terminal commands: Claude Code, Cursor, Codex, Antigravity or similar
 - [ ] **Docker Desktop, installed and running.** This builds the home-screen app on your computer (see [Install Docker](#install-docker))
 - [ ] Git and Python 3 (on a Mac, the first time you need them it offers to install them for you)
-- [ ] About 3 GB of free disk space
+- [ ] At least 5 GB of free disk space
 
 **Ready to hand**
 - [ ] A folder of photos you'd like on your home screen. They stay on your computer and your TV only.
@@ -69,7 +69,7 @@ Docker builds the home-screen app inside a sealed box on your computer, so you d
 
 **Linux:** install Docker Engine for your distribution by following [docs.docker.com/engine/install](https://docs.docker.com/engine/install/).
 
-Leave Docker open while your AI tool works. The first build takes about 5–10 minutes and downloads about 1.5 GB. Later builds take under a minute.
+Leave Docker open while your AI tool works. The first build takes about 10 minutes (up to 20 on a slower computer) and downloads about 1.5 GB. Later builds take under a minute.
 
 > Docker Desktop is free for personal use, education, open-source projects and small businesses (under 250 employees and under $10M annual revenue). Larger organisations need a paid plan.
 
