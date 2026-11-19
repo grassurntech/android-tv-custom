@@ -12,13 +12,15 @@ Needs Pillow (requirements.txt). Exit: 0 done, 2 bad arguments or no usable phot
 import argparse
 import io
 import json
+import os
 import re
 import sys
 from pathlib import Path
 
 PKG_RE = re.compile(r"^[A-Za-z][A-Za-z0-9_]*(\.[A-Za-z0-9_]+)+$")
 SIZE = (1920, 1080)
-MAX_BYTES = 300 * 1024
+# TV_MAKE_THEME_MAX_BYTES is a test-only knob (forces the "cannot fit" path); owners never set it.
+MAX_BYTES = int(os.environ.get("TV_MAKE_THEME_MAX_BYTES") or 300 * 1024)
 MAX_PHOTOS = 100  # the launcher considers at most 100 pictures
 EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp", ".heic", ".heif"}
 TEMPLATE = Path(__file__).resolve().parent.parent / "themes" / "template" / "config.json"
@@ -56,10 +58,9 @@ def parse_args(argv):
 
 
 def encode(img):
-    """JPEG bytes under MAX_BYTES. Steps quality down, then softens a little; always ends."""
+    """JPEG bytes under MAX_BYTES. Steps quality down, then softens a little; ValueError if none fits."""
     from PIL import ImageFilter
 
-    data = b""
     work = img
     for blur in (0, 1, 2, 3, 4, 6, 8):
         if blur:
@@ -70,7 +71,7 @@ def encode(img):
             data = buf.getvalue()
             if len(data) <= MAX_BYTES:
                 return data
-    return data  # smallest attempt; every real photo fits long before this
+    raise ValueError("cannot fit 300 KB")
 
 
 def main(argv):

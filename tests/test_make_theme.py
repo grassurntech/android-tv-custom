@@ -29,11 +29,11 @@ class MakeThemeTests(unittest.TestCase):
         self.photos.mkdir()
         self.out = Path(self.tmp.name) / "out"
 
-    def run_tool(self, apps=APPS, name="Sam", clock="12"):
+    def run_tool(self, apps=APPS, name="Sam", clock="12", env=None):
         return subprocess.run(
             [sys.executable, str(SCRIPT), "--photos", str(self.photos), "--name", name,
              "--apps", apps, "--clock", clock, "--out", str(self.out)],
-            capture_output=True, text=True)
+            capture_output=True, text=True, env=dict(os.environ, **(env or {})))
 
     def noise(self, size=(4000, 3000)):
         return Image.frombytes("RGB", size, os.urandom(size[0] * size[1] * 3))
@@ -119,6 +119,13 @@ class MakeThemeTests(unittest.TestCase):
         self.assertEqual(self.run_tool(name="").returncode, 2)
         self.assertEqual(self.run_tool(name="x" * 41).returncode, 2)
         self.assertEqual(self.run_tool(clock="13").returncode, 2)
+
+    def test_photo_that_cannot_fit_is_skipped_then_exit_2(self):
+        self.noise((800, 600)).save(self.photos / "n.png")
+        r = self.run_tool(env={"TV_MAKE_THEME_MAX_BYTES": "100"})
+        self.assertEqual(r.returncode, 2, r.stderr)
+        self.assertIn("skipped n.png", r.stderr)
+        self.assertFalse((self.out / "config.json").exists())
 
     def test_rejects_empty_photo_folder(self):
         r = self.run_tool()
