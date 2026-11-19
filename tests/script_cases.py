@@ -210,6 +210,12 @@ def check_expect(test, expect, proc, adb_lines, bin_lines, repo):
         test.assertTrue(Path(lines[-1].strip()).is_dir(), f"last stdout line is not an existing folder{ctx}")
     if "stderr_contains" in expect:
         test.assertIn(expect["stderr_contains"], proc.stderr, ctx)
+    for sub in expect.get("stdout_contains", []):
+        test.assertIn(sub, proc.stdout, ctx)
+    for sub in expect.get("stdout_excludes", []):
+        test.assertNotIn(sub, proc.stdout, ctx)
+    for sub in expect.get("stderr_excludes", []):
+        test.assertNotIn(sub, proc.stderr, ctx)
 
 
 def load_cases():

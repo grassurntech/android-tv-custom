@@ -108,7 +108,7 @@ Each phase ends with a short plain-language summary. The agent only moves on aft
 ## 9. Undoing it
 
 - **Clean-up:** `pm enable` each package in `disabled-by-us.txt`, one at a time (a `restore` script reads the log).
-- **Home screen:** re-enable the stock launcher, make it Home again, then `pm disable-user --user 0` our launcher. **Our app stays installed but switched off. It's never uninstalled.** It can be switched back on later with `pm enable`.
+- **Home screen:** re-enable the stock launcher, `pm disable-user --user 0` our launcher (skipped if it was never installed), make the stock launcher Home, then read Home back; anything but the stock launcher stops with exit 20. **Our app stays installed but switched off. It's never uninstalled.** It can be switched back on later with `pm enable`.
 - The undo steps go in `SUMMARY.md` and the README, so the owner can run them without the original AI session.
 
 ## 10. Repo layout

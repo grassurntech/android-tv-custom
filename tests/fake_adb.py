@@ -9,7 +9,10 @@ State keys:
   packages  [str]  installed packages
   disabled  [str]  disabled packages
   refuse    [str]  packages whose disable/enable has no effect
-  home      str    current home activity component
+  home      str    current home activity component (set-home-activity changes it)
+  resolve_home  str  if set, what resolve-activity HOME prints instead of `home` (a TV that ignores set-home)
+  refuse_home   bool set-home-activity fails and changes nothing
+  fail_list_filter bool `pm list packages <name>` fails (the TV cannot answer)
   getprop   str    text printed by `getprop`
 """
 import json
@@ -17,7 +20,8 @@ import os
 import shlex
 import sys
 
-DEFAULTS = {"state": "device", "packages": [], "disabled": [], "refuse": [], "home": "", "getprop": ""}
+DEFAULTS = {"state": "device", "packages": [], "disabled": [], "refuse": [], "home": "", "getprop": "",
+            "resolve_home": None, "refuse_home": False, "fail_list_filter": False}
 
 
 def load():
@@ -72,6 +76,8 @@ def main(argv):
         name_filter = None
         if flag is not None and not flag.startswith("-"):  # `pm list packages <text>`: substring filter
             name_filter, flag = flag, None
+            if state["fail_list_filter"]:
+                fail("Error: could not access the Package Manager.")
         disabled = set(state["disabled"])
         for p in state["packages"]:
             if name_filter is not None and name_filter not in p:
@@ -99,8 +105,10 @@ def main(argv):
         print(f"fake_{cmd[2]}_setting=1")
     elif cmd[:3] == ["cmd", "package", "resolve-activity"] and cmd[-1].endswith("HOME"):
         print("priority=0 preferredOrder=0 match=0x108000 specificIndex=-1 isDefault=true")
-        print(state["home"])
+        print(state["resolve_home"] if state["resolve_home"] is not None else state["home"])
     elif cmd[:4] == ["cmd", "package", "set-home-activity", "--user"] and len(cmd) == 6 and cmd[4] == "0":
+        if state["refuse_home"]:
+            fail("Error: could not set the home activity.")
         state["home"] = cmd[5]
         save(state)
     else:

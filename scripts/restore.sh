@@ -1,13 +1,15 @@
 #!/usr/bin/env bash
 # Undoes what this tool changed on the TV. Never uninstalls anything.
 #   restore.sh [--home-only | --packages-only]     (default: both, Home first)
-# Home:     turn the stock launcher back on, make it Home again, then switch OUR launcher off
-#           (through disable-one.sh, the only script that disables anything).
+# Home:     turn the stock launcher back on, switch OUR launcher off (through disable-one.sh, the only
+#           script that disables anything; skipped if it was never installed), make the stock launcher
+#           Home, then read Home back. Only a matching read-back counts as done.
 # Packages: turn back on every package listed in any backup's disabled-by-us.txt that the TV currently
 #           shows as disabled (each distinct package once; restored.txt is only a record), one `pm enable` at a time, newest backup first. A TV refusal stops it.
+#           Our launcher and the stock launcher from home-state.txt are skipped: the Home step owns both.
 # Exit: 0 done (or nothing to do), 2 bad arguments, 3 setup missing or a file is unreadable,
-#       13 no usable backup, 20 TV refused, 21 unreachable, 22 unauthorized; a failed Home disable
-#       passes disable-one's own exit code up unchanged.
+#       13 no usable backup, 20 TV refused (or Home did not read back as the stock launcher),
+#       21 unreachable, 22 unauthorized; a failed Home disable passes disable-one's own exit code up unchanged.
 export LC_ALL=C
 . "$(dirname "$0")/lib/tv-env.sh"
 
@@ -97,16 +99,40 @@ state_value() {
 
 SCRIPT_DIR="$(CDPATH= cd -- "$(dirname "$0")" && pwd)"
 ours="$OUR_LAUNCHER"
-home_done=0
+STAY_ON="Please leave the TV switched on. Don't unplug it or restart it."
 
-# ---- Home ------------------------------------------------------------------------------------
-restore_home() {
-  local folder hs="" stock_pkg stock_comp rc
+# is_installed <pkg>: 0 the TV lists it (exact line), 1 it does not, 2 the TV could not answer.
+is_installed() {
+  local out line
+  out="$(tv_run pm list packages "$1" 2>/dev/null)" || return 2
+  while IFS= read -r line; do
+    line="${line%$'\r'}"
+    _tv_trim "$line"
+    [ "$TV_TRIMMED" = "package:$1" ] && return 0
+  done <<EOT
+$out
+EOT
+  return 1
+}
+
+# find_home_state: the newest backup's home-state.txt into HS (empty if none).
+find_home_state() {
+  local folder
+  HS=""
   while IFS= read -r folder; do
-    if [ -f "$folder/home-state.txt" ]; then hs="$folder/home-state.txt"; break; fi
+    if [ -f "$folder/home-state.txt" ]; then HS="$folder/home-state.txt"; return 0; fi
   done <<EOT
 $backups
 EOT
+  return 0
+}
+
+# ---- Home ------------------------------------------------------------------------------------
+# Order: stock launcher on, ours off, stock made Home, then read Home back. Switching ours off changes
+# the set of Home apps, which makes Android drop the Home choice, so Home is set only after that.
+restore_home() {
+  local hs stock_pkg stock_comp rc out line comp
+  find_home_state; hs="$HS"
   if [ -z "$hs" ]; then
     echo "No home-state.txt in any backup, so the Home screen was never changed. Skipping the Home step."
     return 0
@@ -119,35 +145,73 @@ EOT
     exit 3
   fi
 
+  # 1. The stock launcher back on.
   tv_run pm enable "$stock_pkg" >/dev/null 2>&1
   is_disabled "$stock_pkg"; rc=$?
   if [ "$rc" -ne 1 ]; then
     echo "The TV would not turn the original launcher ($stock_pkg) back on. Home was left as it was and nothing else was restored. Stopping." >&2
     exit 20
   fi
+  echo "The original launcher ($stock_pkg) is on again."
+
+  # 2. Our launcher off, through disable-one (skipped when it never got installed).
+  is_installed "$ours"; rc=$?
+  if [ "$rc" -eq 2 ]; then
+    echo "The original launcher is on again, but the TV didn't say whether our launcher ($ours) is installed, so its state is unknown. Home was not changed and packages were not restored. Stopping." >&2
+    exit 20
+  fi
+  if [ "$rc" -eq 1 ]; then
+    echo "Our launcher ($ours) is not installed on the TV, so there is nothing to switch off."
+  else
+    bash "$SCRIPT_DIR/disable-one.sh" "$ours"
+    rc=$?
+    if [ "$rc" -ne 0 ]; then
+      # Say what the TV really looks like now (disable-one may have switched it off before failing to log).
+      is_disabled "$ours"
+      case "$?" in
+        0) echo "The original launcher is on again and our launcher ($ours) is off, but disable-one reported a problem afterwards. Home was not set and packages were not restored. $STAY_ON Stopping." >&2 ;;
+        1) echo "The original launcher is on again, but our launcher ($ours) is still on, so Home was not changed. Packages were not restored. Stopping." >&2 ;;
+        *) echo "The original launcher is on again, but the TV didn't say whether our launcher ($ours) is off, so its state is unknown. Home was not set and packages were not restored. $STAY_ON Stopping." >&2 ;;
+      esac
+      exit "$rc"
+    fi
+  fi
+
+  # 3. Make the stock launcher Home.
   if ! tv_run cmd package set-home-activity --user 0 "$stock_comp" >/dev/null 2>&1; then
-    echo "The original launcher ($stock_pkg) is on again, but the TV would not make it the Home screen. Our launcher was left on and nothing else was restored. Stopping." >&2
+    echo "The TV would not make the original launcher ($stock_comp) the Home screen. Packages were not restored. $STAY_ON Stopping." >&2
+    exit 20
+  fi
+
+  # 4. Read Home back: the last non-empty line must be the stock component.
+  out="$(tv_run cmd package resolve-activity --brief -a android.intent.action.MAIN -c android.intent.category.HOME)"
+  rc=$?
+  comp=""
+  while IFS= read -r line; do
+    line="${line%$'\r'}"
+    _tv_trim "$line"; [ -n "$TV_TRIMMED" ] && comp="$TV_TRIMMED"
+  done <<EOT
+$out
+EOT
+  if [ "$rc" -ne 0 ] || [ "$comp" != "$stock_comp" ]; then
+    echo "The TV did not confirm the original launcher as the Home screen (it says: ${comp:-nothing}). Packages were not restored. $STAY_ON Stopping." >&2
     exit 20
   fi
   echo "The original launcher ($stock_pkg) is back as the Home screen."
-  bash "$SCRIPT_DIR/disable-one.sh" "$ours"
-  rc=$?
-  if [ "$rc" -ne 0 ]; then
-    # Say what the TV really looks like now (disable-one may have switched it off before failing to log).
-    is_disabled "$ours"
-    if [ "$?" -eq 0 ]; then
-      echo "The original launcher is back and our launcher ($ours) is off, but disable-one reported a problem afterwards. Packages were not restored. Stopping." >&2
-    else
-      echo "The original launcher is back, but our launcher ($ours) is still on. Packages were not restored. Stopping." >&2
-    fi
-    exit "$rc"
-  fi
-  home_done=1
 }
 
 # ---- Packages --------------------------------------------------------------------------------
 restore_packages() {
-  local folder log res line pkg now n=0 skipped=0 lineno rc seen=""
+  local folder log res line pkg now n=0 skipped=0 lineno rc seen="" stock="" left_stock=0
+  # The stock launcher belongs to the Home step: switching it on while ours is Home can drop the Home choice.
+  find_home_state
+  if [ -n "$HS" ]; then
+    state_value "$HS" stock_package; stock="$VALUE"
+    if ! [[ "$stock" =~ $PKG_RE ]]; then
+      echo "$HS is missing or has a bad stock_package line. Nothing was changed. Stopping." >&2
+      exit 3
+    fi
+  fi
   while IFS= read -r folder; do
     log="$folder/disabled-by-us.txt"
     res="$folder/restored.txt"
@@ -171,6 +235,9 @@ $pkg
       # Our own launcher stays switched off (it is never re-enabled by a restore).
       if [ "$pkg" = "$OUR_LAUNCHER" ] || [ "$pkg" = "$ours" ]; then
         skipped=$((skipped + 1)); continue
+      fi
+      if [ -n "$stock" ] && [ "$pkg" = "$stock" ]; then
+        left_stock=1; continue
       fi
       is_disabled "$pkg"; rc=$?
       if [ "$rc" -eq 2 ]; then
@@ -201,6 +268,9 @@ $backups
 EOT
   if [ "$skipped" -gt 0 ]; then
     echo "Left our own launcher ($OUR_LAUNCHER) switched off, as intended."
+  fi
+  if [ "$left_stock" -eq 1 ] && [ "$do_home" -eq 0 ]; then
+    echo "The original launcher ($stock) is handled by the Home step, so --packages-only did not change it."
   fi
   if [ "$n" -eq 0 ]; then
     echo "No apps needed turning back on."

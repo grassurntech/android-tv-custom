@@ -1077,7 +1077,7 @@
   },
   {
     "script": "restore",
-    "name": "R5 home only, in order",
+    "name": "R5 home only, in order: stock on, ours off, stock made Home, Home read back",
     "args": [
       "--home-only"
     ],
@@ -1105,14 +1105,19 @@
       "exit": 0,
       "adb_calls_in_order": [
         "shell pm enable com.google.android.apps.tv.launcherx",
+        "shell pm list packages com.gathin.tvhome",
+        "shell pm disable-user --user 0 com.gathin.tvhome",
         "shell cmd package set-home-activity --user 0 com.google.android.apps.tv.launcherx/.MainActivity",
-        "shell pm disable-user --user 0 com.gathin.tvhome"
+        "shell cmd package resolve-activity --brief -a android.intent.action.MAIN -c android.intent.category.HOME"
       ],
       "adb_call_count": {
         "pm enable a.b.c": 0,
         "disable-user": 1,
         "set-home-activity": 1
-      }
+      },
+      "stdout_contains": [
+        "(com.google.android.apps.tv.launcherx) is back as the Home screen."
+      ]
     }
   },
   {
@@ -1351,8 +1356,10 @@
     "expect": {
       "exit": 20,
       "adb_call_count": {
-        "disable-user": 1
-      }
+        "disable-user": 1,
+        "set-home-activity": 0
+      },
+      "stderr_contains": "our launcher (com.gathin.tvhome) is still on"
     }
   },
   {
@@ -1385,8 +1392,9 @@
       "exit": 0,
       "adb_calls_in_order": [
         "pm enable com.google.android.apps.tv.launcherx",
-        "set-home-activity --user 0",
         "disable-user --user 0 com.gathin.tvhome",
+        "set-home-activity --user 0 com.google.android.apps.tv.launcherx/.MainActivity",
+        "resolve-activity",
         "pm enable a.b.c"
       ],
       "adb_call_count": {
@@ -1522,6 +1530,272 @@
       "exit": 0,
       "adb_call_count": {
         "pm enable a.b.c": 1
+      }
+    }
+  },
+  {
+    "script": "restore",
+    "name": "R20 our launcher never got installed: Home restored, packages restored, exit 0",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.junk.ads\npackage:com.google.android.apps.tv.launcherx\n",
+      "backups/2026-11-19_100000/home-state.txt": "stock_package=com.google.android.apps.tv.launcherx\nstock_component=com.google.android.apps.tv.launcherx/.MainActivity\nours=com.gathin.tvhome\n",
+      "backups/2026-11-19_100000/disabled-by-us.txt": "com.junk.ads\t2026-11-19T10:05:00Z\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "a.b.c",
+        "com.junk.ads",
+        "com.google.android.apps.tv.launcherx"
+      ],
+      "disabled": [
+        "com.junk.ads"
+      ],
+      "home": "com.google.android.tungsten.setupwraith/.MainActivity"
+    },
+    "expect": {
+      "exit": 0,
+      "adb_calls_in_order": [
+        "pm enable com.google.android.apps.tv.launcherx",
+        "pm list packages com.gathin.tvhome",
+        "set-home-activity --user 0 com.google.android.apps.tv.launcherx/.MainActivity",
+        "resolve-activity",
+        "pm enable com.junk.ads"
+      ],
+      "adb_call_count": {
+        "disable-user": 0
+      },
+      "stdout_contains": [
+        "Our launcher (com.gathin.tvhome) is not installed on the TV",
+        "is back as the Home screen.",
+        "Turned com.junk.ads back on"
+      ],
+      "stderr_excludes": [
+        "still on"
+      ],
+      "files_match": {
+        "backups/2026-11-19_100000/restored.txt": "com\\.junk\\.ads\\t\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z\\n"
+      }
+    }
+  },
+  {
+    "script": "restore",
+    "name": "R21 Home reads back as something else: 20, stay-on warning, packages untouched",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.junk.ads\npackage:com.google.android.apps.tv.launcherx\n",
+      "backups/2026-11-19_100000/home-state.txt": "stock_package=com.google.android.apps.tv.launcherx\nstock_component=com.google.android.apps.tv.launcherx/.MainActivity\nours=com.gathin.tvhome\n",
+      "backups/2026-11-19_100000/disabled-by-us.txt": "com.junk.ads\t2026-11-19T10:05:00Z\n",
+      "backups/2026-11-19_100000/installed-by-us.txt": "com.gathin.tvhome\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "a.b.c",
+        "com.junk.ads",
+        "com.google.android.apps.tv.launcherx",
+        "com.gathin.tvhome"
+      ],
+      "disabled": [
+        "com.junk.ads",
+        "com.google.android.apps.tv.launcherx"
+      ],
+      "resolve_home": "com.android.tv.settings/.RecoveryActivity"
+    },
+    "expect": {
+      "exit": 20,
+      "stderr_contains": "Please leave the TV switched on. Don't unplug it or restart it.",
+      "adb_calls_in_order": [
+        "pm enable com.google.android.apps.tv.launcherx",
+        "disable-user --user 0 com.gathin.tvhome",
+        "set-home-activity --user 0 com.google.android.apps.tv.launcherx/.MainActivity",
+        "resolve-activity"
+      ],
+      "adb_call_count": {
+        "pm enable com.junk.ads": 0
+      },
+      "stdout_excludes": [
+        "back as the Home screen"
+      ]
+    }
+  },
+  {
+    "script": "restore",
+    "name": "R22 stock launcher will not turn on: 20, Home never set, ours untouched",
+    "args": [
+      "--home-only"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.junk.ads\npackage:com.google.android.apps.tv.launcherx\n",
+      "backups/2026-11-19_100000/home-state.txt": "stock_package=com.google.android.apps.tv.launcherx\nstock_component=com.google.android.apps.tv.launcherx/.MainActivity\nours=com.gathin.tvhome\n",
+      "backups/2026-11-19_100000/disabled-by-us.txt": "com.junk.ads\t2026-11-19T10:05:00Z\n",
+      "backups/2026-11-19_100000/installed-by-us.txt": "com.gathin.tvhome\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "a.b.c",
+        "com.junk.ads",
+        "com.google.android.apps.tv.launcherx",
+        "com.gathin.tvhome"
+      ],
+      "disabled": [
+        "com.google.android.apps.tv.launcherx"
+      ],
+      "refuse": [
+        "com.google.android.apps.tv.launcherx"
+      ]
+    },
+    "expect": {
+      "exit": 20,
+      "adb_call_count": {
+        "set-home-activity": 0,
+        "disable-user": 0,
+        "resolve-activity": 0
+      },
+      "stdout_excludes": [
+        "back as the Home screen"
+      ]
+    }
+  },
+  {
+    "script": "restore",
+    "name": "R23 set-home-activity fails: 20, stay-on warning, no read-back",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.junk.ads\npackage:com.google.android.apps.tv.launcherx\n",
+      "backups/2026-11-19_100000/home-state.txt": "stock_package=com.google.android.apps.tv.launcherx\nstock_component=com.google.android.apps.tv.launcherx/.MainActivity\nours=com.gathin.tvhome\n",
+      "backups/2026-11-19_100000/disabled-by-us.txt": "com.junk.ads\t2026-11-19T10:05:00Z\n",
+      "backups/2026-11-19_100000/installed-by-us.txt": "com.gathin.tvhome\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "a.b.c",
+        "com.junk.ads",
+        "com.google.android.apps.tv.launcherx",
+        "com.gathin.tvhome"
+      ],
+      "disabled": [
+        "com.junk.ads",
+        "com.google.android.apps.tv.launcherx"
+      ],
+      "refuse_home": true
+    },
+    "expect": {
+      "exit": 20,
+      "stderr_contains": "Please leave the TV switched on. Don't unplug it or restart it.",
+      "adb_calls_in_order": [
+        "pm enable com.google.android.apps.tv.launcherx",
+        "disable-user --user 0 com.gathin.tvhome",
+        "set-home-activity --user 0 com.google.android.apps.tv.launcherx/.MainActivity"
+      ],
+      "adb_call_count": {
+        "resolve-activity": 0,
+        "pm enable com.junk.ads": 0
+      },
+      "stdout_excludes": [
+        "back as the Home screen"
+      ]
+    }
+  },
+  {
+    "script": "restore",
+    "name": "R24 TV cannot say whether our launcher is installed: 20, state unknown, nothing switched off",
+    "args": [
+      "--home-only"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.junk.ads\npackage:com.google.android.apps.tv.launcherx\n",
+      "backups/2026-11-19_100000/home-state.txt": "stock_package=com.google.android.apps.tv.launcherx\nstock_component=com.google.android.apps.tv.launcherx/.MainActivity\nours=com.gathin.tvhome\n",
+      "backups/2026-11-19_100000/disabled-by-us.txt": "com.junk.ads\t2026-11-19T10:05:00Z\n",
+      "backups/2026-11-19_100000/installed-by-us.txt": "com.gathin.tvhome\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "a.b.c",
+        "com.junk.ads",
+        "com.google.android.apps.tv.launcherx",
+        "com.gathin.tvhome"
+      ],
+      "disabled": [
+        "com.google.android.apps.tv.launcherx"
+      ],
+      "fail_list_filter": true
+    },
+    "expect": {
+      "exit": 20,
+      "stderr_contains": "unknown",
+      "adb_call_count": {
+        "disable-user": 0,
+        "set-home-activity": 0
+      },
+      "stderr_excludes": [
+        "still on"
+      ]
+    }
+  },
+  {
+    "script": "restore",
+    "name": "R25 packages only leaves the stock launcher to the Home step",
+    "args": [
+      "--packages-only"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.junk.ads\npackage:com.google.android.apps.tv.launcherx\n",
+      "backups/2026-11-19_100000/home-state.txt": "stock_package=com.google.android.apps.tv.launcherx\nstock_component=com.google.android.apps.tv.launcherx/.MainActivity\nours=com.gathin.tvhome\n",
+      "backups/2026-11-19_100000/disabled-by-us.txt": "com.junk.ads\t2026-11-19T10:05:00Z\ncom.google.android.apps.tv.launcherx\t2026-11-19T10:06:00Z\n",
+      "backups/2026-11-19_100000/installed-by-us.txt": "com.gathin.tvhome\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "a.b.c",
+        "com.junk.ads",
+        "com.google.android.apps.tv.launcherx",
+        "com.gathin.tvhome"
+      ],
+      "disabled": [
+        "com.junk.ads",
+        "com.google.android.apps.tv.launcherx"
+      ],
+      "home": "com.gathin.tvhome/.MainActivity"
+    },
+    "expect": {
+      "exit": 0,
+      "adb_calls_include": [
+        "pm enable com.junk.ads"
+      ],
+      "adb_call_count": {
+        "pm enable com.google.android.apps.tv.launcherx": 0,
+        "set-home-activity": 0,
+        "disable-user": 0
+      },
+      "stdout_contains": [
+        "(com.google.android.apps.tv.launcherx) is handled by the Home step, so --packages-only did not change it."
+      ],
+      "files_match": {
+        "backups/2026-11-19_100000/restored.txt": "com\\.junk\\.ads\\t\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z\\n"
       }
     }
   },
