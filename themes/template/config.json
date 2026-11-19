@@ -1,0 +1,25 @@
+{
+  "columns": 4,
+  "rows_below_dock": 0,
+  "show_greeting": true,
+  "greeting_name": "Your Name",
+  "clock_format": "24",
+  "wallpaper": true,
+  "wallpaper_rotation_minutes": 30,
+  "wallpaper_order": "shuffle",
+  "wallpaper_dim": 30,
+  "wallpaper_captions": false,
+  "dock_row": true,
+  "dock_glass": true,
+  "dock_opacity": 30,
+  "icon_only_buttons": true,
+  "ambient_glow": false,
+  "app_glow": false,
+  "fill_dock": false,
+  "dock_apps": [
+    "com.netflix.ninja",
+    "com.google.android.youtube.tv",
+    "com.disney.disneyplus",
+    "com.amazon.amazonvideo.livingroom"
+  ]
+}

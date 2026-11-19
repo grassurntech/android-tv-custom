@@ -1524,5 +1524,85 @@
         "pm enable a.b.c": 1
       }
     }
+  },
+  {
+    "script": "push-theme",
+    "name": "P1 vendor missing is setup missing",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "user-content/theme/config.json": "{\"columns\": 4}\n"
+    },
+    "expect": {
+      "exit": 3,
+      "stderr_contains": "fetch-tools"
+    }
+  },
+  {
+    "script": "push-theme",
+    "name": "P2 theme folder missing is setup missing",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "vendor/cleanyourtv/tools/theme.sh": "#!/usr/bin/env bash\necho \"theme.sh TV_HOST=$TV_HOST arg=$1\" >> \"$FAKE_BIN_LOG\"\nexit 7\n",
+      "vendor/cleanyourtv/tools/theme.ps1": "param([string]$TvHost, [string]$ThemeDir)\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"theme.ps1 TvHost=$TvHost arg=$ThemeDir\"\nexit 7\n"
+    },
+    "expect": {
+      "exit": 3,
+      "stderr_contains": "make_theme"
+    }
+  },
+  {
+    "script": "push-theme",
+    "name": "P3 no TV_IP is setup missing",
+    "args": [],
+    "env": {
+      "TV_IP": null
+    },
+    "files": {
+      "user-content/theme/config.json": "{\"columns\": 4}\n",
+      "vendor/cleanyourtv/tools/theme.sh": "#!/usr/bin/env bash\necho \"theme.sh TV_HOST=$TV_HOST arg=$1\" >> \"$FAKE_BIN_LOG\"\nexit 7\n",
+      "vendor/cleanyourtv/tools/theme.ps1": "param([string]$TvHost, [string]$ThemeDir)\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"theme.ps1 TvHost=$TvHost arg=$ThemeDir\"\nexit 7\n"
+    },
+    "expect": {
+      "exit": 3
+    }
+  },
+  {
+    "script": "push-theme",
+    "name": "P4 passes TV_IP and theme path to upstream and its exit code back",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "user-content/theme/config.json": "{\"columns\": 4}\n",
+      "vendor/cleanyourtv/tools/theme.sh": "#!/usr/bin/env bash\necho \"theme.sh TV_HOST=$TV_HOST arg=$1\" >> \"$FAKE_BIN_LOG\"\nexit 7\n",
+      "vendor/cleanyourtv/tools/theme.ps1": "param([string]$TvHost, [string]$ThemeDir)\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"theme.ps1 TvHost=$TvHost arg=$ThemeDir\"\nexit 7\n"
+    },
+    "expect": {
+      "exit": 7,
+      "bin_calls_include": [
+        "=192.168.1.50 arg=",
+        "user-content"
+      ]
+    }
+  },
+  {
+    "script": "push-theme",
+    "name": "P5 arguments are refused",
+    "args": [
+      "x"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "expect": {
+      "exit": 2
+    }
   }
 ]
