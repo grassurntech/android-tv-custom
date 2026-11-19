@@ -2,11 +2,19 @@
 """Turns a folder of the owner's photos into a cleanyourtv theme folder.
 
   python scripts/make_theme.py --photos DIR --name STR --apps p1,p2,p3,p4 --clock 12|24 --out DIR
+      [--stock-home-redirect PKG] [--app-key KEYCODE:PKG ...] [--live-tv-package PKG]
+      [--power-on home|live-tv] [--key-filter true|false]
 
 Writes OUT/config.json (themes/template/config.json with greeting_name, dock_apps and clock_format
-overridden) and OUT/wallpapers/01.jpg, 02.jpg, ...: each photo turned upright by its EXIF orientation,
+overridden, plus only the optional keys whose flags are given) and OUT/wallpapers/01.jpg, 02.jpg, ...: each photo turned upright by its EXIF orientation,
 cover-cropped to 1920x1080, saved as an RGB JPEG with no metadata (no GPS, no camera data) and under 300 KB.
 Photos Pillow cannot open (HEIC needs a Pillow build that reads it) are skipped with a warning.
+Every run rebuilds the theme from scratch, so a re-run must pass every flag decided so far: one left out
+is gone from config.json. config.json is never meant to be edited by hand.
+Optional keys: --stock-home-redirect -> stock_home_redirect, --app-key (repeatable) -> app_keys (a list of
+"KEYCODE:PKG" strings; KEYCODE is digits, KEYCODE_NAME or scan:digits), --live-tv-package -> live_tv_package,
+--power-on home -> power_on_home: true or live-tv -> boot_to_live_tv: true (never both),
+--key-filter -> key_filter (true or false).
 Needs Pillow (requirements.txt). Exit: 0 done, 2 bad arguments or no usable photo, 3 template or Pillow missing.
 """
 import argparse
@@ -18,6 +26,7 @@ import sys
 from pathlib import Path
 
 PKG_RE = re.compile(r"^[A-Za-z][A-Za-z0-9_]*(\.[A-Za-z0-9_]+)+$")
+KEY_RE = re.compile(r"^(?:[0-9]+|KEYCODE_[A-Z0-9_]+|scan:[0-9]+)$")
 SIZE = (1920, 1080)
 # TV_MAKE_THEME_MAX_BYTES is a test-only knob (forces the "cannot fit" path); owners never set it.
 LIMIT_BYTES = 300 * 1024
@@ -59,6 +68,12 @@ def parse_args(argv):
     p.add_argument("--apps", required=True, help="exactly 4 package names, comma separated")
     p.add_argument("--clock", required=True, choices=["12", "24"])
     p.add_argument("--out", required=True, help="theme folder to write")
+    p.add_argument("--stock-home-redirect", metavar="PKG", help="stock launcher package to send back to ours")
+    p.add_argument("--app-key", metavar="KEYCODE:PKG", action="append", default=[],
+                   help="a remote button that opens an app (repeatable)")
+    p.add_argument("--live-tv-package", metavar="PKG", help="the TV's Live TV app")
+    p.add_argument("--power-on", choices=["home", "live-tv"], help="what the TV shows at power-on")
+    p.add_argument("--key-filter", choices=["true", "false"], help="whether the key helpers filter keys")
     args = p.parse_args(argv)
     name = args.name.strip()
     if not name or len(name) > 40 or any(ord(c) < 32 for c in name):
@@ -71,6 +86,15 @@ def parse_args(argv):
         if not PKG_RE.match(a):
             fail(2, f"--apps: '{a}' does not look like a package name (for example com.example.app)")
     args.apps = apps
+    for flag, value in (("--stock-home-redirect", args.stock_home_redirect),
+                        ("--live-tv-package", args.live_tv_package)):
+        if value is not None and not PKG_RE.match(value):
+            fail(2, f"{flag}: '{value}' does not look like a package name (for example com.example.app)")
+    for entry in args.app_key:
+        key, sep, pkg = entry.rpartition(":")
+        if not sep or not KEY_RE.match(key) or not PKG_RE.match(pkg):
+            fail(2, f"--app-key: '{entry}' must be KEYCODE:PKG, where KEYCODE is digits, KEYCODE_NAME or "
+                    "scan:digits and PKG a package name (for example 190:com.google.android.youtube.tv)")
     return args
 
 
@@ -130,6 +154,21 @@ def main(argv):
     config["greeting_name"] = args.name
     config["dock_apps"] = args.apps
     config["clock_format"] = args.clock
+    for key in ("stock_home_redirect", "app_keys", "live_tv_package", "power_on_home", "boot_to_live_tv",
+                "key_filter"):
+        config.pop(key, None)  # only what this run's flags say
+    if args.stock_home_redirect is not None:
+        config["stock_home_redirect"] = args.stock_home_redirect
+    if args.app_key:
+        config["app_keys"] = list(args.app_key)
+    if args.live_tv_package is not None:
+        config["live_tv_package"] = args.live_tv_package
+    if args.power_on == "home":
+        config["power_on_home"] = True
+    elif args.power_on == "live-tv":
+        config["boot_to_live_tv"] = True
+    if args.key_filter is not None:
+        config["key_filter"] = args.key_filter == "true"
 
     out = Path(args.out)
     wall = out / "wallpapers"

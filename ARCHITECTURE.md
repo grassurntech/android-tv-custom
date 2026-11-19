@@ -25,7 +25,7 @@
 | `config/*.txt` | Safety lists (protected, streaming apps, forbidden) and vetted junk candidates. `upstream.env` pins cleanyourtv. |
 | `.claude/hooks/tv-safety.py` | Blocks unsafe commands when Claude runs them directly. Does not cover other AI tools, so the scripts enforce the same rules. |
 | cleanyourtv launcher | Upstream launcher (`com.gathin.tvhome`), fetched into git-ignored `vendor/` and built in Docker. See [references/cleanyourtv.md](docs/references/cleanyourtv.md). |
-| Theme | `scripts/make_theme.py` turns the owner's photos plus `themes/template/config.json` into `user-content/theme/`. |
+| Theme | `scripts/make_theme.py` turns the owner's photos plus `themes/template/config.json` into `user-content/theme/`. Home and remote-key settings are its flags too; each run rebuilds the theme from scratch, so nobody edits `config.json` by hand. |
 | `tests/` | `unittest` suite; one shared refusal table is run against both script versions with a fake adb. |
 
 ## Data flow
