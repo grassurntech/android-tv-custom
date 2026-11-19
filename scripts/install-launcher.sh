@@ -9,7 +9,8 @@
 # can always switch it off; upstream's exit code is passed up either way.
 # Optional, only when set in the environment: HOME_KEY_SERVICE=1, INPUT_KEY_SERVICE=1 (passed to upstream).
 # Exit: 0 installed, 2 bad arguments, 3 setup missing (TV_IP, vendor or its venv not fetched, Home already ours
-#       with no recorded stock launcher), 13 no usable backup, 20 Home could not be read, 21 unreachable,
+#       with no recorded stock launcher, or Home is not a real launcher: the chooser `android`, setupwraith,
+#       RecoveryActivity or FallbackHome), 13 no usable backup, 20 Home could not be read, 21 unreachable,
 #       22 unauthorized; otherwise upstream's own exit code.
 export LC_ALL=C
 . "$(dirname "$0")/lib/tv-env.sh"
@@ -71,7 +72,18 @@ else
   done <<EOT
 $out
 EOT
-  if [ "$rc" -ne 0 ] || ! [[ "$comp" =~ $COMP_RE ]] || ! [[ "${comp%%/*}" =~ $PKG_RE ]]; then
+  if [ "$rc" -ne 0 ]; then
+    echo "The TV did not say which launcher is the Home screen. Nothing was changed. Stopping." >&2
+    exit 20
+  fi
+  # Never record something that is not a real launcher as the one to restore to.
+  low="$(printf '%s' "$comp" | tr '[:upper:]' '[:lower:]')"
+  case "${low%%/*}:$low" in
+    android:*|*setupwraith*:*|*:*recoveryactivity*|*:*fallbackhome*)
+      echo "Home is not a real launcher right now ($comp): it is Android's chooser, the setup wizard or a recovery screen. Nothing was changed. Stopping." >&2
+      exit 3 ;;
+  esac
+  if ! [[ "$comp" =~ $COMP_RE ]] || ! [[ "${comp%%/*}" =~ $PKG_RE ]]; then
     echo "The TV did not say which launcher is the Home screen. Nothing was changed. Stopping." >&2
     exit 20
   fi
@@ -135,5 +147,5 @@ if [ "$rc" -ne 0 ]; then
 fi
 
 record_ours
-echo "Installed $OURS. The original launcher is still on; turn it off with scripts/disable-one when you are ready."
+echo "Our launcher is installed. Follow PROMPT.md Phase 6 for the next step."
 exit 0

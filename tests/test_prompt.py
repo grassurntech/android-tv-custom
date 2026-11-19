@@ -140,7 +140,6 @@ class PromptTests(unittest.TestCase):
     def test_home_invariant(self):
         # R-A: never reboot or end a turn unless Home is ours or the recorded stock launcher.
         self.assertRegex(self.low, r"never reboot")
-        self.assertRegex(self.low, r"never end (a|your) turn")
         self.has("stock_component")
         self.has("cmd package resolve-activity --brief -a android.intent.action.MAIN -c android.intent.category.HOME")
         for bad in ("setupwraith", "recoveryactivity", "fallbackhome"):
@@ -188,6 +187,45 @@ class PromptTests(unittest.TestCase):
         self.assertRegex(self.text, r"getevent -lt -c \d+")
         self.assertNotRegex(self.text, r"(?m)^#+ Read-only commands")
         self.assertRegex(self.low, r"(terminal|powershell)[^.]{0,200}\bcd\b")
+
+    # --- Fix round 2: safe end states, no ungated power cycle ------------------------------------
+
+    def section(self, start, end):
+        a = re.search(start, self.text, re.M).start()
+        b = re.search(end, self.text[a + 1:], re.M).start() + a + 1
+        return re.sub(r"[ \t]*\n[ \t]*", " ", self.text[a:b])  # one line, so wrapped phrases still match
+
+    def test_stop_rule_keeps_the_tv_on(self):
+        self.assertNotRegex(self.low, r"never end (a|your) turn")
+        check = self.section(r"^### The Home check", r"^### ").lower()
+        self.assertRegex(check, r"still wrong")
+        self.assertRegex(check, r"any code other than 0")
+        self.assertRegex(check, r"can't be reached|cannot be reached")
+        self.assertIn("please leave the tv switched on", check)
+        self.assertIn("don't unplug it or restart it", check)
+        self.assertIn("summary.md", check)
+        self.assertRegex(check, r"issue")
+        self.assertRegex(check, r"restore --packages-only")
+
+    def test_no_unconditional_power_cycle(self):
+        for s in self.sentences:
+            if re.search(r"unplug", s, re.I):
+                self.assertRegex(s, re.compile(r"\b(only|never|don't|do not|not)\b", re.I),
+                                 f"power cycle suggested without a condition: {s}")
+        wrong = self.section(r"^## If something goes wrong", r"\Z|^## ").lower()
+        self.assertRegex(wrong, r"what does the tv screen show")
+        self.assertRegex(wrong, r"every minute|once a minute")
+        self.assertRegex(wrong, r"only if[^.]{0,200}(normal|picture)")
+
+    def test_phase3_stops_on_a_non_launcher_home(self):
+        p3 = self.section(r"^## Phase 3", r"^## Phase 4").lower()
+        for word in ("`android`", "setupwraith", "recoveryactivity", "fallbackhome"):
+            self.assertIn(word, p3)
+        self.assertRegex(p3, r"stop[^.]{0,40}change nothing|change nothing[^.]{0,40}stop|nothing was changed")
+
+    def test_restore_branches_then_stop(self):
+        p67 = self.section(r"^\*\*6\.7", r"^\*\*6\.8").lower()
+        self.assertRegex(p67, r"restore --home-only`? immediately, then stop")
 
     # --- What the prompt must never tell the agent to do ---------------------------------------
 

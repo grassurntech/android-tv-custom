@@ -8,7 +8,8 @@
 # can always switch it off; upstream's exit code is passed up either way.
 # Optional, only when set in the environment: HOME_KEY_SERVICE=1, INPUT_KEY_SERVICE=1 (passed to upstream).
 # Exit: 0 installed, 2 bad arguments, 3 setup missing (TV_IP, vendor or its venv not fetched, Home already ours
-#       with no recorded stock launcher), 13 no usable backup, 20 Home could not be read, 21 unreachable,
+#       with no recorded stock launcher, or Home is not a real launcher: the chooser `android`, setupwraith,
+#       RecoveryActivity or FallbackHome), 13 no usable backup, 20 Home could not be read, 21 unreachable,
 #       22 unauthorized; otherwise upstream's own exit code.
 Set-StrictMode -Version 2
 $ErrorActionPreference = 'Stop'
@@ -71,7 +72,19 @@ if (Test-Path -LiteralPath $state -PathType Leaf) {
     }
     $stock = ''
     if ($comp.Contains('/')) { $stock = $comp.Substring(0, $comp.IndexOf('/')) }
-    if ($shellRc -ne 0 -or $comp -cnotmatch $compRe -or $stock -cnotmatch $pkgRe) {
+    if ($shellRc -ne 0) {
+        [Console]::Error.WriteLine('The TV did not say which launcher is the Home screen. Nothing was changed. Stopping.')
+        exit 20
+    }
+    # Never record something that is not a real launcher as the one to restore to.
+    $low = $comp.ToLowerInvariant()
+    $lowPkg = $low
+    if ($low.Contains('/')) { $lowPkg = $low.Substring(0, $low.IndexOf('/')) }
+    if ($lowPkg -ceq 'android' -or $lowPkg.Contains('setupwraith') -or $low.Contains('recoveryactivity') -or $low.Contains('fallbackhome')) {
+        [Console]::Error.WriteLine("Home is not a real launcher right now ($comp): it is Android's chooser, the setup wizard or a recovery screen. Nothing was changed. Stopping.")
+        exit 3
+    }
+    if ($comp -cnotmatch $compRe -or $stock -cnotmatch $pkgRe) {
         [Console]::Error.WriteLine('The TV did not say which launcher is the Home screen. Nothing was changed. Stopping.')
         exit 20
     }
@@ -155,5 +168,5 @@ if ($rc -ne 0) {
 }
 
 Save-Ours
-Write-Host "Installed $ours. The original launcher is still on; turn it off with scripts/disable-one when you are ready."
+Write-Host "Our launcher is installed. Follow PROMPT.md Phase 6 for the next step."
 exit 0

@@ -2180,6 +2180,130 @@
   },
   {
     "script": "install-launcher",
+    "name": "L8c Home is the chooser: refused with 3, nothing recorded or installed",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "vendor/cleanyourtv/launcher/build-and-install.sh": "#!/usr/bin/env bash\n: > ran.txt\nhk=0; [ -n \"${HOME_KEY_SERVICE:-}\" ] && hk=1\nik=0; [ -n \"${INPUT_KEY_SERVICE:-}\" ] && ik=1\necho \"upstream cwd=$(basename \"$(pwd)\") TV_HOST=$TV_HOST SKIP_BUILD=$SKIP_BUILD STOCK_LAUNCHER=$STOCK_LAUNCHER homekey=$hk inputkey=$ik\" >> \"$FAKE_BIN_LOG\"\nexit 0\n",
+      "vendor/cleanyourtv/launcher/build-and-install.ps1": "param([string]$TvHost, [string]$StockLauncher, [switch]$HomeKeyService, [switch]$InputKeyService)\nSet-Content -LiteralPath ran.txt -Value \"\"\n$hk = if ($HomeKeyService) { 1 } else { 0 }\n$ik = if ($InputKeyService) { 1 } else { 0 }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"upstream cwd=$(Split-Path -Leaf (Get-Location).Path) TV_HOST=$TvHost SKIP_BUILD=$env:SKIP_BUILD STOCK_LAUNCHER=$StockLauncher homekey=$hk inputkey=$ik\"\nexit 0\n",
+      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "",
+      "vendor/cleanyourtv/tools/venv/pyvenv.cfg": "home = /usr/bin\n",
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "a.b.c"
+      ],
+      "home": "android/com.android.internal.app.ResolverActivity"
+    },
+    "expect": {
+      "exit": 3,
+      "files_absent": [
+        "vendor/cleanyourtv/launcher/ran.txt",
+        "backups/2026-11-19_100000/home-state.txt",
+        "backups/2026-11-19_100000/installed-by-us.txt"
+      ],
+      "stderr_contains": "not a real launcher"
+    }
+  },
+  {
+    "script": "install-launcher",
+    "name": "L8d Home is setupwraith: refused with 3, nothing recorded or installed",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "vendor/cleanyourtv/launcher/build-and-install.sh": "#!/usr/bin/env bash\n: > ran.txt\nhk=0; [ -n \"${HOME_KEY_SERVICE:-}\" ] && hk=1\nik=0; [ -n \"${INPUT_KEY_SERVICE:-}\" ] && ik=1\necho \"upstream cwd=$(basename \"$(pwd)\") TV_HOST=$TV_HOST SKIP_BUILD=$SKIP_BUILD STOCK_LAUNCHER=$STOCK_LAUNCHER homekey=$hk inputkey=$ik\" >> \"$FAKE_BIN_LOG\"\nexit 0\n",
+      "vendor/cleanyourtv/launcher/build-and-install.ps1": "param([string]$TvHost, [string]$StockLauncher, [switch]$HomeKeyService, [switch]$InputKeyService)\nSet-Content -LiteralPath ran.txt -Value \"\"\n$hk = if ($HomeKeyService) { 1 } else { 0 }\n$ik = if ($InputKeyService) { 1 } else { 0 }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"upstream cwd=$(Split-Path -Leaf (Get-Location).Path) TV_HOST=$TvHost SKIP_BUILD=$env:SKIP_BUILD STOCK_LAUNCHER=$StockLauncher homekey=$hk inputkey=$ik\"\nexit 0\n",
+      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "",
+      "vendor/cleanyourtv/tools/venv/pyvenv.cfg": "home = /usr/bin\n",
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "a.b.c"
+      ],
+      "home": "com.google.android.tungsten.setupwraith/.RecoveryActivity"
+    },
+    "expect": {
+      "exit": 3,
+      "files_absent": [
+        "vendor/cleanyourtv/launcher/ran.txt",
+        "backups/2026-11-19_100000/home-state.txt",
+        "backups/2026-11-19_100000/installed-by-us.txt"
+      ],
+      "stderr_contains": "not a real launcher"
+    }
+  },
+  {
+    "script": "install-launcher",
+    "name": "L8e Home is a RecoveryActivity: refused with 3, nothing recorded or installed",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "vendor/cleanyourtv/launcher/build-and-install.sh": "#!/usr/bin/env bash\n: > ran.txt\nhk=0; [ -n \"${HOME_KEY_SERVICE:-}\" ] && hk=1\nik=0; [ -n \"${INPUT_KEY_SERVICE:-}\" ] && ik=1\necho \"upstream cwd=$(basename \"$(pwd)\") TV_HOST=$TV_HOST SKIP_BUILD=$SKIP_BUILD STOCK_LAUNCHER=$STOCK_LAUNCHER homekey=$hk inputkey=$ik\" >> \"$FAKE_BIN_LOG\"\nexit 0\n",
+      "vendor/cleanyourtv/launcher/build-and-install.ps1": "param([string]$TvHost, [string]$StockLauncher, [switch]$HomeKeyService, [switch]$InputKeyService)\nSet-Content -LiteralPath ran.txt -Value \"\"\n$hk = if ($HomeKeyService) { 1 } else { 0 }\n$ik = if ($InputKeyService) { 1 } else { 0 }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"upstream cwd=$(Split-Path -Leaf (Get-Location).Path) TV_HOST=$TvHost SKIP_BUILD=$env:SKIP_BUILD STOCK_LAUNCHER=$StockLauncher homekey=$hk inputkey=$ik\"\nexit 0\n",
+      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "",
+      "vendor/cleanyourtv/tools/venv/pyvenv.cfg": "home = /usr/bin\n",
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "a.b.c"
+      ],
+      "home": "com.vendor.setup/.RecoveryActivity"
+    },
+    "expect": {
+      "exit": 3,
+      "files_absent": [
+        "vendor/cleanyourtv/launcher/ran.txt",
+        "backups/2026-11-19_100000/home-state.txt",
+        "backups/2026-11-19_100000/installed-by-us.txt"
+      ],
+      "stderr_contains": "not a real launcher"
+    }
+  },
+  {
+    "script": "install-launcher",
+    "name": "L8f Home is FallbackHome: refused with 3, nothing recorded or installed",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "vendor/cleanyourtv/launcher/build-and-install.sh": "#!/usr/bin/env bash\n: > ran.txt\nhk=0; [ -n \"${HOME_KEY_SERVICE:-}\" ] && hk=1\nik=0; [ -n \"${INPUT_KEY_SERVICE:-}\" ] && ik=1\necho \"upstream cwd=$(basename \"$(pwd)\") TV_HOST=$TV_HOST SKIP_BUILD=$SKIP_BUILD STOCK_LAUNCHER=$STOCK_LAUNCHER homekey=$hk inputkey=$ik\" >> \"$FAKE_BIN_LOG\"\nexit 0\n",
+      "vendor/cleanyourtv/launcher/build-and-install.ps1": "param([string]$TvHost, [string]$StockLauncher, [switch]$HomeKeyService, [switch]$InputKeyService)\nSet-Content -LiteralPath ran.txt -Value \"\"\n$hk = if ($HomeKeyService) { 1 } else { 0 }\n$ik = if ($InputKeyService) { 1 } else { 0 }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"upstream cwd=$(Split-Path -Leaf (Get-Location).Path) TV_HOST=$TvHost SKIP_BUILD=$env:SKIP_BUILD STOCK_LAUNCHER=$StockLauncher homekey=$hk inputkey=$ik\"\nexit 0\n",
+      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "",
+      "vendor/cleanyourtv/tools/venv/pyvenv.cfg": "home = /usr/bin\n",
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "a.b.c"
+      ],
+      "home": "com.android.tv.settings/.FallbackHome"
+    },
+    "expect": {
+      "exit": 3,
+      "files_absent": [
+        "vendor/cleanyourtv/launcher/ran.txt",
+        "backups/2026-11-19_100000/home-state.txt",
+        "backups/2026-11-19_100000/installed-by-us.txt"
+      ],
+      "stderr_contains": "not a real launcher"
+    }
+  },
+  {
+    "script": "install-launcher",
     "name": "L9 upstream exit code is passed up; our app not on the TV, so nothing is listed",
     "args": [],
     "env": {

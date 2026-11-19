@@ -75,9 +75,16 @@ its last line is what Home is now.
 - Do it after every step that touches Home, and right before every restart.
 - If it shows anything else (the setup wizard `setupwraith`, `.RecoveryActivity`, `FallbackHome`, a chooser shown
   as `android`, or nothing), run `restore --home-only` immediately, before anything else. Explain to the owner
-  after it finishes, then do the Home check again.
-- Never reboot, and never end your turn, while Home is anything else. On some TVs a restart on the setup
-  wizard's recovery screen forced a factory reset.
+  after it finishes, then do the Home check again. In Phase 5, before any Home record exists, offer
+  `restore --packages-only` instead (the clean-up is the only change so far) and run it once the owner says yes.
+- Never reboot while Home is anything else. On some TVs a restart on the setup wizard's recovery screen forced
+  a factory reset.
+- **The stop rule.** If Home is still wrong after that restore, or `restore` ends with any code other than 0, or
+  the TV can't be reached for the Home check: stop, and run nothing else on the TV. **Say:** "Please leave the TV
+  switched on. Don't unplug it or restart it." Write into `SUMMARY.md` in the backup folder what happened, the
+  backup folder's name and what the Home check last showed. Then tell the owner how to get help: open an issue
+  on the project's GitHub page (the Issues tab) and paste `SUMMARY.md`, leaving out the TV's IP address, serial
+  number and any photos.
 
 ### Direct adb commands you may run
 
@@ -133,7 +140,7 @@ put back.
 | 1 (`install-launcher`) | cleanyourtv's install inside `install-launcher` stopped, often because Home didn't end up on our app | Our app may be installed. Do the Home check, run `restore --home-only` if Home isn't the stock launcher, then stop and explain. **Say:** "The new home screen couldn't take over on this TV, so your original one stays in charge. Your clean-up stays." |
 | 2 (`push-theme`) | cleanyourtv's theme tool refused before sending anything | Stop, no retry. Explain its message in plain words. |
 | 2 | The command was typed wrong, or `make_theme` found no usable photo | Nothing changed. Check the command against this prompt and run the corrected one once. If it says 2 again, stop. **Say:** "I made a mistake typing that. Nothing on the TV changed." |
-| 3 | Something on the computer isn't set up: no `.env` or `TV_IP`, Docker not running, tools not downloaded, or an undo note that can't be saved | Nothing changed. Tell the owner what is missing in plain words (the script's message names it), help them fix it, then run the script once more. |
+| 3 | Something on the computer isn't set up: no `.env` or `TV_IP`, Docker not running, tools not downloaded, or an undo note that can't be saved | Nothing changed. Tell the owner what is missing in plain words (the script's message names it), help them fix it, then run the script once more. If `install-launcher` says Home is not a real launcher, stop instead and follow the stop rule. |
 | 10 | The package is protected: it keeps the TV working as a TV | Nothing changed. Take it off the list and go on. **Say:** "The TV needs that one, so I left it alone." |
 | 11 | The package is a streaming app | Nothing changed. Take it off the list and go on. **Say:** "That's a streaming app, so I left it. You can switch it off yourself in Settings → Apps if you never use it." |
 | 12 | The package is a factory or service app | Nothing changed. Take it off the list, never touch it in any other way, and go on. **Say:** "That's a factory tool. It's safest left alone." |
@@ -211,19 +218,23 @@ information." Wait for yes.
 
 Read only. Change nothing.
 
-1. Read `getprop` for `ro.product.manufacturer`, `ro.product.model`, `ro.product.device`,
+1. Do the Home check. If it shows `android` (Android's chooser), the setup wizard (`setupwraith`),
+   `.RecoveryActivity` or `FallbackHome`, Home isn't a real launcher right now: stop and change nothing.
+   **Say:** "Your TV's home screen isn't in its normal state right now, so it isn't safe for me to change
+   anything. Nothing was changed." Then follow the stop rule.
+2. Read `getprop` for `ro.product.manufacturer`, `ro.product.model`, `ro.product.device`,
    `ro.build.version.release` and `ro.build.version.sdk`.
-2. Work out the TV type from `pm list packages`: `com.google.android.apps.tv.launcherx` means Google TV,
+3. Work out the TV type from `pm list packages`: `com.google.android.apps.tv.launcherx` means Google TV,
    `com.google.android.tvlauncher` means the older Android TV. Read which app is Home now with the Home check,
    and note it: that is the stock launcher.
-3. If `ro.build.version.sdk` is below 26, the new home screen can't be installed. **Say:** "Your TV is too old
+4. If `ro.build.version.sdk` is below 26, the new home screen can't be installed. **Say:** "Your TV is too old
    for the new home screen, but I can still clean it up." Skip Phase 6 later.
-4. Look for notes on this exact model in cleanyourtv's folders: the first lines of
+5. Look for notes on this exact model in cleanyourtv's folders: the first lines of
    `vendor/cleanyourtv/examples/*/debloat.txt` name the model and device, and `vendor/cleanyourtv/docs/devices/`
    has extra notes. Read every matching file fully, including what it says about Home, the setup wizard and the
    remote's buttons. If nothing matches the exact model, say so. Never use a list from a different model as if
    it were vetted.
-5. If any package starts with `com.cvte.`, this TV uses a CVTE board: keep its own launcher switched on in
+6. If any package starts with `com.cvte.`, this TV uses a CVTE board: keep its own launcher switched on in
    Phase 6 unless the matching example for that exact board switches it off, and never turn on a remote-button
    helper in the same step as the Home change.
 
@@ -332,7 +343,8 @@ original one back. Your clean-up stays."
 
 **6.7 Other TVs only: the old home screen.** Only if the example for this exact model switches its stock launcher
 off, and the Home check shows `com.gathin.tvhome`: read the `stock_package=` line of `home-state.txt` and run
-`disable-one <stock_package>`. Do the Home check immediately. Otherwise leave the stock launcher on.
+`disable-one <stock_package>`. Do the Home check immediately. If it fails, run `restore --home-only`
+immediately, then stop. Otherwise leave the stock launcher on.
 
 **6.8 The setup wizard rule.** The Google TV setup wizard (`setupwraith`) is never disabled, by you or anyone.
 Why: the Wi-Fi network saved during the TV's first setup belongs to the wizard, and Android deletes it the moment
@@ -410,11 +422,16 @@ choice.> Last step: I'll write down everything I did and close the connection." 
 
 - If the TV refuses a command, or doesn't come back after a restart, stop at once. Say what happened in
   plain words. Never retry and never try another way.
-- If the TV doesn't come back after a restart: **Say:** "Please unplug the TV from the wall for 30 seconds,
-  then plug it back in and turn it on." Then run `connect` once.
+- If the TV doesn't come back after a restart, first ask: **Say:** "What does the TV screen show right now?"
+  - A setup or recovery screen, a blank screen, or a TV that keeps restarting: never unplug it. **Say:** "Please
+    leave it switched on." Run `connect` once a minute for up to five minutes. If it never answers, follow the
+    stop rule.
+  - Only if the owner sees the normal TV home screen or a normal picture, and only the connection is missing,
+    suggest a power cycle: **Say:** "Please unplug the TV from the wall for 30 seconds, then plug it back in
+    and turn it on." This is only for that case. Then run `connect` once, and if it still fails, follow the stop rule.
 - If the picture, HDMI or remote stopped working after a clean-up batch, tell the owner which 3 packages were
   last, and offer `restore --packages-only`. Run it only after they say yes.
 - If Home is wrong, black or the setup wizard, run `restore --home-only` immediately (see the Home check). It
   puts the original home screen back and switches ours off. It never uninstalls anything.
-- If a restore ends with any code other than 0, stop too. Its message says what was and wasn't put back. Write that into
-  `SUMMARY.md` for the owner.
+- If a restore ends with any code other than 0, follow the stop rule. Its message says what was and wasn't put
+  back: write that into `SUMMARY.md` for the owner.
