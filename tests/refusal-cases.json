@@ -104,5 +104,109 @@
         "connect 10.0.0.9:6000"
       ]
     }
+  },
+  {
+    "script": "backup",
+    "name": "B1 no TV_IP",
+    "args": [],
+    "env": {
+      "TV_IP": null
+    },
+    "tv": {
+      "state": "device"
+    },
+    "expect": {
+      "exit": 3,
+      "adb_call_count": {
+        "": 0
+      },
+      "files_absent": [
+        "backups/*"
+      ],
+      "stderr_contains": "Create .env from .env.example and set TV_IP"
+    }
+  },
+  {
+    "script": "backup",
+    "name": "B2 offline makes no folder",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "tv": {
+      "state": "offline",
+      "packages": [
+        "com.android.systemui"
+      ]
+    },
+    "expect": {
+      "exit": 21,
+      "files_absent": [
+        "backups/*"
+      ],
+      "stderr_contains": "Can't reach the TV at 192.168.1.50"
+    }
+  },
+  {
+    "script": "backup",
+    "name": "B3 happy path writes all files",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.android.systemui",
+        "com.example.junk"
+      ],
+      "disabled": [
+        "com.example.junk"
+      ],
+      "home": "com.example/.Home",
+      "getprop": "[ro.product.model]: [TV]"
+    },
+    "expect": {
+      "exit": 0,
+      "files_absent": [
+        "backups/*.partial"
+      ],
+      "files_contain": {
+        "backups/*/packages-all.txt": [
+          "package:com.android.systemui"
+        ],
+        "backups/*/packages-disabled.txt": [
+          "package:com.example.junk"
+        ],
+        "backups/*/getprop.txt": [],
+        "backups/*/settings-global.txt": [],
+        "backups/*/settings-secure.txt": [],
+        "backups/*/settings-system.txt": [],
+        "backups/*/home-activity.txt": []
+      },
+      "adb_calls_include": [
+        "shell pm list packages -d",
+        "settings list secure",
+        "resolve-activity"
+      ]
+    }
+  },
+  {
+    "script": "backup",
+    "name": "B4 empty package list fails and leaves nothing",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "tv": {
+      "state": "device",
+      "packages": []
+    },
+    "expect": {
+      "exit": 20,
+      "files_absent": [
+        "backups/*"
+      ]
+    }
   }
 ]

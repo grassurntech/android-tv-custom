@@ -92,7 +92,7 @@ def main(argv):
         print(state["getprop"])
     elif cmd[:2] == ["settings", "list"] and len(cmd) == 3 and cmd[2] in ("global", "secure", "system"):
         print(f"fake_{cmd[2]}_setting=1")
-    elif cmd[:3] == ["cmd", "package", "resolve-activity"] and cmd[-1] == "HOME":
+    elif cmd[:3] == ["cmd", "package", "resolve-activity"] and cmd[-1].endswith("HOME"):
         print("priority=0 preferredOrder=0 match=0x108000 specificIndex=-1 isDefault=true")
         print(state["home"])
     elif cmd[:4] == ["cmd", "package", "set-home-activity", "--user"] and len(cmd) == 6 and cmd[4] == "0":

@@ -114,6 +114,16 @@ def run_case(case, impl_name, ext, argv_prefix, tmp):
     return proc, read_lines(adb_log), read_lines(bin_log), repo
 
 
+def _matches(repo, rel):
+    """A path under the repo; '*' globs (for timestamped folders)."""
+    return sorted(repo.glob(rel)) if "*" in rel else ([repo / rel] if (repo / rel).exists() else [])
+
+
+def _resolve(repo, rel):
+    found = _matches(repo, rel)
+    return found[0] if found else repo / rel
+
+
 def check_expect(test, expect, proc, adb_lines, bin_lines, repo):
     ctx = (f"\nexit={proc.returncode}\nstdout:\n{proc.stdout}\nstderr:\n{proc.stderr}\n"
            f"adb calls:\n" + "\n".join(adb_lines) + "\nbin calls:\n" + "\n".join(bin_lines))
@@ -129,13 +139,13 @@ def check_expect(test, expect, proc, adb_lines, bin_lines, repo):
     for sub in expect.get("bin_calls_include", []):
         test.assertTrue(any(sub in l for l in bin_lines), f"no stub call contains {sub!r}{ctx}")
     for rel, wanted in expect.get("files_contain", {}).items():
-        path = repo / rel
+        path = _resolve(repo, rel)
         test.assertTrue(path.exists(), f"{rel} was not written{ctx}")
         have = [l.rstrip("\r") for l in path.read_text().splitlines()]
         for line in wanted:
             test.assertIn(line, have, f"{rel} lacks line {line!r}{ctx}")
     for rel in expect.get("files_absent", []):
-        test.assertFalse((repo / rel).exists(), f"{rel} exists but should not{ctx}")
+        test.assertEqual(_matches(repo, rel), [], f"{rel} exists but should not{ctx}")
     if "stderr_contains" in expect:
         test.assertIn(expect["stderr_contains"], proc.stderr, ctx)
 
