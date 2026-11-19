@@ -1,0 +1,115 @@
+# Shared helpers for the TV scripts. Source it; do not execute it:
+#   . "$(dirname "$0")/lib/tv-env.sh"
+# Works on macOS's stock bash 3.2. Reads .env as plain KEY=VALUE lines, never sources it.
+
+TV_LIB_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "$TV_LIB_DIR/../.." && pwd)"
+
+# Trim leading and trailing whitespace of $1 into TV_TRIMMED (no subshell, no sed).
+_tv_trim() {
+  TV_TRIMMED="$1"
+  TV_TRIMMED="${TV_TRIMMED#"${TV_TRIMMED%%[![:space:]]*}"}"
+  TV_TRIMMED="${TV_TRIMMED%"${TV_TRIMMED##*[![:space:]]}"}"
+}
+
+# Read $REPO_ROOT/.env (if any). Variables that are already set in the environment win.
+_tv_read_dotenv() {
+  local file="$REPO_ROOT/.env" line key val first last
+  [ -f "$file" ] || return 0
+  while IFS= read -r line || [ -n "$line" ]; do
+    line="${line%$'\r'}"
+    _tv_trim "$line"; line="$TV_TRIMMED"
+    case "$line" in ''|'#'*) continue ;; esac
+    case "$line" in 'export '*) line="${line#export }" ;; esac
+    case "$line" in *=*) ;; *) continue ;; esac
+    key="${line%%=*}"; val="${line#*=}"
+    _tv_trim "$key"; key="$TV_TRIMMED"
+    _tv_trim "$val"; val="$TV_TRIMMED"
+    case "$key" in ''|[!A-Za-z_]*|*[!A-Za-z0-9_]*) continue ;; esac
+    if [ "${#val}" -ge 2 ]; then
+      first="${val:0:1}"; last="${val: -1}"
+      if [ "$first" = "$last" ] && { [ "$first" = '"' ] || [ "$first" = "'" ]; }; then
+        val="${val:1:${#val}-2}"
+      fi
+    fi
+    # shellcheck disable=SC2086
+    if eval "[ -z \"\${$key+x}\" ]"; then
+      export "$key=$val"
+    fi
+  done < "$file"
+}
+
+# Sets REPO_ROOT, TV_IP, TV_ADB_PORT, TV_BACKUP_DIR (absolute), ADB, SERIAL. Exits 3 if TV_IP is empty.
+tv_load_env() {
+  _tv_read_dotenv
+  if [ -z "${TV_IP:-}" ]; then
+    echo "Create .env from .env.example and set TV_IP" >&2
+    exit 3
+  fi
+  TV_ADB_PORT="${TV_ADB_PORT:-5555}"
+  TV_BACKUP_DIR="${TV_BACKUP_DIR:-backups}"
+  case "$TV_BACKUP_DIR" in
+    /*|[A-Za-z]:*) ;;
+    *) TV_BACKUP_DIR="$REPO_ROOT/$TV_BACKUP_DIR" ;;
+  esac
+  if [ -z "${ADB:-}" ]; then
+    if [ -x "$REPO_ROOT/tools/platform-tools/adb" ]; then
+      ADB="$REPO_ROOT/tools/platform-tools/adb"
+    else
+      ADB="adb"
+    fi
+  fi
+  SERIAL="$TV_IP:$TV_ADB_PORT"
+  export TV_IP TV_ADB_PORT TV_BACKUP_DIR ADB SERIAL
+}
+
+# tv_matches <pkg> <listfile>: 0 if the package matches any glob line, 1 if not, exits 3 if the list is missing.
+tv_matches() {
+  local pkg list="$2" line
+  if [ ! -f "$list" ]; then
+    echo "Missing list file: $list" >&2
+    exit 3
+  fi
+  pkg="$(printf '%s' "$1" | tr '[:upper:]' '[:lower:]')"
+  while IFS= read -r line || [ -n "$line" ]; do
+    line="${line%$'\r'}"
+    _tv_trim "$line"; line="$TV_TRIMMED"
+    case "$line" in ''|'#'*) continue ;; esac
+    line="$(printf '%s' "$line" | tr '[:upper:]' '[:lower:]')"
+    # shellcheck disable=SC2254
+    case "$pkg" in $line) return 0 ;; esac
+  done < "$list"
+  return 1
+}
+
+# Prints the newest backup directory (lexical max of TV_BACKUP_DIR/*/) whose packages-all.txt is non-empty.
+tv_latest_backup() {
+  local d best=""
+  for d in "$TV_BACKUP_DIR"/*/; do
+    [ -d "$d" ] || continue
+    d="${d%/}"
+    [ -s "$d/packages-all.txt" ] || continue
+    if [ -z "$best" ] || [[ "$d" > "$best" ]]; then best="$d"; fi
+  done
+  [ -n "$best" ] && printf '%s\n' "$best"
+  return 0
+}
+
+# Returns 0 if the TV is a usable device, 22 if unauthorized, 21 if unreachable, 3 if adb is missing.
+tv_reachable() {
+  local out rc
+  if ! command -v "$ADB" >/dev/null 2>&1; then
+    echo "adb not found ($ADB). Run scripts/fetch-tools or install platform-tools." >&2
+    return 3
+  fi
+  "$ADB" connect "$SERIAL" >/dev/null 2>&1
+  out="$("$ADB" -s "$SERIAL" get-state 2>&1)"; rc=$?
+  case "$out" in *unauthorized*) return 22 ;; esac
+  if [ "$rc" -eq 0 ] && [ "$out" = "device" ]; then return 0; fi
+  return 21
+}
+
+# tv_shell <cmd...>: run a command on the TV.
+tv_shell() {
+  "$ADB" -s "$SERIAL" shell "$@"
+}

@@ -1,1 +1,68 @@
-[]
+[
+  {
+    "script": "connect",
+    "name": "C1 device is reachable",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "tv": {
+      "state": "device"
+    },
+    "expect": {
+      "exit": 0,
+      "adb_calls_include": [
+        "connect 192.168.1.50:5555",
+        "-s 192.168.1.50:5555 get-state"
+      ]
+    }
+  },
+  {
+    "script": "connect",
+    "name": "C2 unauthorized asks to accept the prompt",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "tv": {
+      "state": "unauthorized"
+    },
+    "expect": {
+      "exit": 22,
+      "stderr_contains": "Accept 'Allow debugging?' on the TV"
+    }
+  },
+  {
+    "script": "connect",
+    "name": "C3 offline is unreachable",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "tv": {
+      "state": "offline"
+    },
+    "expect": {
+      "exit": 21,
+      "stderr_contains": "Can't reach the TV at 192.168.1.50"
+    }
+  },
+  {
+    "script": "connect",
+    "name": "C4 no TV_IP and no .env",
+    "args": [],
+    "env": {
+      "TV_IP": null
+    },
+    "tv": {
+      "state": "device"
+    },
+    "expect": {
+      "exit": 3,
+      "adb_call_count": {
+        "": 0
+      },
+      "stderr_contains": "Create .env from .env.example and set TV_IP"
+    }
+  }
+]
