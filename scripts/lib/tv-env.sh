@@ -2,8 +2,8 @@
 #   . "$(dirname "$0")/lib/tv-env.sh"
 # Works on macOS's stock bash 3.2. Reads .env as plain KEY=VALUE lines, never sources it.
 
-TV_LIB_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_ROOT="$(cd "$TV_LIB_DIR/../.." && pwd)"
+TV_LIB_DIR="$(CDPATH= cd -- "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(CDPATH= cd -- "$TV_LIB_DIR/../.." && pwd)"
 
 # Trim leading and trailing whitespace of $1 into TV_TRIMMED (no subshell, no sed).
 _tv_trim() {
@@ -50,6 +50,9 @@ tv_load_env() {
   fi
   TV_ADB_PORT="${TV_ADB_PORT:-5555}"
   TV_BACKUP_DIR="${TV_BACKUP_DIR:-backups}"
+  while [ "${#TV_BACKUP_DIR}" -gt 1 ] && [ "${TV_BACKUP_DIR%/}" != "$TV_BACKUP_DIR" ]; do
+    TV_BACKUP_DIR="${TV_BACKUP_DIR%/}"
+  done
   case "$TV_BACKUP_DIR" in
     /*|[A-Za-z]:*) ;;
     *) TV_BACKUP_DIR="$REPO_ROOT/$TV_BACKUP_DIR" ;;

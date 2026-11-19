@@ -2,6 +2,9 @@
 #   Import-Module (Join-Path $PSScriptRoot 'lib/TvEnv.psm1') -Force
 # Reads .env as plain KEY=VALUE lines, never dot-sources it. Mirrors lib/tv-env.sh.
 Set-StrictMode -Version 2
+# Module functions do not inherit the caller's preference; set it here. Functions that run native
+# adb relax it locally, so adb's stderr maps to the exit-code table instead of throwing.
+$ErrorActionPreference = 'Stop'
 
 $script:TvLibDir = $PSScriptRoot
 $script:TvRepoRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
@@ -42,17 +45,29 @@ function Import-TvEnv {
     if ([string]::IsNullOrEmpty($port)) { $port = '5555' }
     $backup = [Environment]::GetEnvironmentVariable('TV_BACKUP_DIR')
     if ([string]::IsNullOrEmpty($backup)) { $backup = 'backups' }
+    while ($backup.Length -gt 1 -and ($backup.EndsWith('/') -or $backup.EndsWith('\')) -and $backup -notmatch '^[A-Za-z]:[\\/]$') {
+        $backup = $backup.Substring(0, $backup.Length - 1)
+    }
     if (-not [System.IO.Path]::IsPathRooted($backup)) { $backup = Join-Path $script:TvRepoRoot $backup }
     $adb = [Environment]::GetEnvironmentVariable('ADB')
     if ([string]::IsNullOrEmpty($adb)) {
-        $local = Join-Path $script:TvRepoRoot 'tools/platform-tools/adb.exe'
-        if (Test-Path -LiteralPath $local -PathType Leaf) { $adb = $local } else { $adb = 'adb' }
+        $adb = 'adb'
+        foreach ($name in @('adb.exe', 'adb')) {
+            $local = Join-Path $script:TvRepoRoot "tools/platform-tools/$name"
+            if (Test-Path -LiteralPath $local -PathType Leaf) { $adb = $local; break }
+        }
     }
     $global:TV_IP = $ip
     $global:TV_ADB_PORT = $port
     $global:TV_BACKUP_DIR = $backup
     $global:ADB = $adb
     $global:SERIAL = "${ip}:${port}"
+    # Child processes (docker, upstream tools) see the same values bash exports.
+    $env:TV_IP = $ip
+    $env:TV_ADB_PORT = $port
+    $env:TV_BACKUP_DIR = $backup
+    $env:ADB = $adb
+    $env:SERIAL = $global:SERIAL
 }
 
 # Test-TvMatches <pkg> <listfile>: $true if the package matches any glob line. Exits 3 if the list is missing.
@@ -101,6 +116,7 @@ function Test-TvReachable {
 
 # Invoke-TvShell <cmd...>: run a command on the TV. Check $LASTEXITCODE afterwards.
 function Invoke-TvShell {
+    $ErrorActionPreference = 'Continue'
     & $global:ADB -s $global:SERIAL shell @args
 }
 
