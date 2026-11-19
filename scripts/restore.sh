@@ -3,8 +3,8 @@
 #   restore.sh [--home-only | --packages-only]     (default: both, Home first)
 # Home:     turn the stock launcher back on, make it Home again, then switch OUR launcher off
 #           (through disable-one.sh, the only script that disables anything).
-# Packages: turn back on every package listed in each backup's disabled-by-us.txt that is not yet in
-#           that folder's restored.txt, one `pm enable` at a time, newest backup first. A TV refusal stops it.
+# Packages: turn back on every package listed in any backup's disabled-by-us.txt that the TV currently
+#           shows as disabled (each distinct package once; restored.txt is only a record), one `pm enable` at a time, newest backup first. A TV refusal stops it.
 # Exit: 0 done (or nothing to do), 2 bad arguments, 3 setup missing or a file is unreadable,
 #       13 no usable backup, 20 TV refused, 21 unreachable, 22 unauthorized; a failed Home disable
 #       passes disable-one's own exit code up unchanged.
@@ -133,7 +133,13 @@ EOT
   bash "$SCRIPT_DIR/disable-one.sh" "$ours"
   rc=$?
   if [ "$rc" -ne 0 ]; then
-    echo "The original launcher is back, but our launcher ($ours) could not be switched off. Packages were not restored. Stopping." >&2
+    # Say what the TV really looks like now (disable-one may have switched it off before failing to log).
+    is_disabled "$ours"
+    if [ "$?" -eq 0 ]; then
+      echo "The original launcher is back and our launcher ($ours) is off, but disable-one reported a problem afterwards. Packages were not restored. Stopping." >&2
+    else
+      echo "The original launcher is back, but our launcher ($ours) is still on. Packages were not restored. Stopping." >&2
+    fi
     exit "$rc"
   fi
   home_done=1
@@ -141,7 +147,7 @@ EOT
 
 # ---- Packages --------------------------------------------------------------------------------
 restore_packages() {
-  local folder log res line pkg now n=0 skipped=0 lineno rc
+  local folder log res line pkg now n=0 skipped=0 lineno rc seen=""
   while IFS= read -r folder; do
     log="$folder/disabled-by-us.txt"
     res="$folder/restored.txt"
@@ -155,7 +161,13 @@ restore_packages() {
         echo "Line $lineno of $log is not a package name. Restored $n so far; stopping before changing anything else." >&2
         exit 3
       fi
-      if in_restored "$res" "$pkg"; then continue; fi
+      # Each distinct package once. The TV's state decides, not restored.txt (which is only a record).
+      case "$seen" in *"
+$pkg
+"*) continue ;; esac
+      seen="$seen
+$pkg
+"
       # Our own launcher stays switched off (it is never re-enabled by a restore).
       if [ "$pkg" = "$OUR_LAUNCHER" ] || [ "$pkg" = "$ours" ]; then
         skipped=$((skipped + 1)); continue
@@ -175,6 +187,7 @@ restore_packages() {
         echo "Turned $pkg back on"
       else
         echo "$pkg was already on."
+        if in_restored "$res" "$pkg"; then continue; fi
       fi
       now="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
       if ! printf '%s\t%s\n' "$pkg" "$now" >> "$res"; then

@@ -2,8 +2,8 @@
 #   restore.ps1 [--home-only | --packages-only]     (default: both, Home first)
 # Home:     turn the stock launcher back on, make it Home again, then switch OUR launcher off
 #           (through disable-one.ps1, the only script that disables anything).
-# Packages: turn back on every package listed in each backup's disabled-by-us.txt that is not yet in
-#           that folder's restored.txt, one `pm enable` at a time, newest backup first. A TV refusal stops it.
+# Packages: turn back on every package listed in any backup's disabled-by-us.txt that the TV currently
+#           shows as disabled (each distinct package once; restored.txt is only a record), one `pm enable` at a time, newest backup first. A TV refusal stops it.
 # Exit: 0 done (or nothing to do), 2 bad arguments, 3 setup missing or a file is unreadable,
 #       13 no usable backup, 20 TV refused, 21 unreachable, 22 unauthorized; a failed Home disable
 #       passes disable-one's own exit code up unchanged.
@@ -142,7 +142,12 @@ function Restore-Home {
     $childRc = $LASTEXITCODE
     $ErrorActionPreference = 'Stop'
     if ($childRc -ne 0) {
-        Write-Err "The original launcher is back, but our launcher ($($script:ours)) could not be switched off. Packages were not restored. Stopping."
+        # Say what the TV really looks like now (disable-one may have switched it off before failing to log).
+        if ((Get-DisabledState $script:ours) -eq 0) {
+            Write-Err "The original launcher is back and our launcher ($($script:ours)) is off, but disable-one reported a problem afterwards. Packages were not restored. Stopping."
+        } else {
+            Write-Err "The original launcher is back, but our launcher ($($script:ours)) is still on. Packages were not restored. Stopping."
+        }
         exit $childRc
     }
 }
@@ -152,6 +157,7 @@ function Restore-Packages {
     $n = 0
     $skipped = 0
     $utf8 = New-Object System.Text.UTF8Encoding($false)
+    $seen = @{}
     foreach ($folder in $backups) {
         $log = Join-Path ([string]$folder) 'disabled-by-us.txt'
         $res = Join-Path ([string]$folder) 'restored.txt'
@@ -165,7 +171,9 @@ function Restore-Packages {
                 Write-Err "Line $lineno of $log is not a package name. Restored $n so far; stopping before changing anything else."
                 exit 3
             }
-            if (Test-InRestored $res $pkg) { continue }
+            # Each distinct package once. The TV's state decides, not restored.txt (which is only a record).
+            if ($seen.ContainsKey($pkg)) { continue }
+            $seen[$pkg] = $true
             # Our own launcher stays switched off (it is never re-enabled by a restore).
             if (($pkg -ceq $OurLauncher) -or ($pkg -ceq $script:ours)) { $skipped++; continue }
             $state = Get-DisabledState $pkg
@@ -182,6 +190,7 @@ function Restore-Packages {
                 Write-Output "Turned $pkg back on"
             } else {
                 Write-Output "$pkg was already on."
+                if (Test-InRestored $res $pkg) { continue }
             }
             $stamp = (Get-Date).ToUniversalTime().ToString("yyyy-MM-dd'T'HH:mm:ss'Z'", [System.Globalization.CultureInfo]::InvariantCulture)
             try {

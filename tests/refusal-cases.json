@@ -1467,5 +1467,62 @@
         "pm enable": 0
       }
     }
+  },
+  {
+    "script": "restore",
+    "name": "R18 disabled again after a restore is undone again",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:d.e.f\npackage:com.google.android.apps.tv.launcherx\n",
+      "backups/2026-11-19_100000/disabled-by-us.txt": "a.b.c\t2026-11-19T10:05:00Z\na.b.c\t2026-11-19T12:00:00Z\n",
+      "backups/2026-11-19_100000/restored.txt": "a.b.c\t2026-11-19T11:00:00Z\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "a.b.c"
+      ],
+      "disabled": [
+        "a.b.c"
+      ]
+    },
+    "expect": {
+      "exit": 0,
+      "adb_call_count": {
+        "pm enable a.b.c": 1
+      }
+    }
+  },
+  {
+    "script": "restore",
+    "name": "R19 near-match name in restored.txt does not count",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:d.e.f\npackage:com.google.android.apps.tv.launcherx\n",
+      "backups/2026-11-19_100000/disabled-by-us.txt": "a.b.c\t2026-11-19T10:05:00Z\n",
+      "backups/2026-11-19_100000/restored.txt": "a.b.c.d\t2026-11-19T11:00:00Z\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "a.b.c",
+        "a.b.c.d"
+      ],
+      "disabled": [
+        "a.b.c"
+      ]
+    },
+    "expect": {
+      "exit": 0,
+      "adb_call_count": {
+        "pm enable a.b.c": 1
+      }
+    }
   }
 ]
