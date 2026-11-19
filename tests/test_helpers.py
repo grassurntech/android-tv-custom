@@ -6,9 +6,9 @@ import unittest
 from pathlib import Path
 
 try:
-    from script_cases import ROOT, find_bash, find_powershell
+    from script_cases import ROOT, find_bash, find_powershell, require_shell
 except ImportError:
-    from tests.script_cases import ROOT, find_bash, find_powershell
+    from tests.script_cases import ROOT, find_bash, find_powershell, require_shell
 
 
 def make_backups(base):
@@ -26,7 +26,7 @@ class LatestBackup(unittest.TestCase):
         return env
 
     def test_bash_ignores_partial(self):
-        bash = find_bash()
+        bash = require_shell("bash", find_bash())
         if not bash:
             self.skipTest("bash is not installed")
         with tempfile.TemporaryDirectory() as tmp:
@@ -36,7 +36,7 @@ class LatestBackup(unittest.TestCase):
             self.assertEqual(Path(out).name, "2026-01-01_000000")
 
     def test_powershell_ignores_partial(self):
-        ps = find_powershell()
+        ps = require_shell("powershell", find_powershell())
         if not ps:
             self.skipTest("powershell is not installed")
         with tempfile.TemporaryDirectory() as tmp:

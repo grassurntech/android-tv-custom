@@ -29,7 +29,18 @@ def find_bash():
     return None if IS_WINDOWS else shutil.which("bash")
 
 
+def require_shell(name, found):
+    """Skip when a shell is missing, unless CI says it is required (then fail: a skip would hide it)."""
+    var = "TV_TEST_REQUIRE_" + name.upper()
+    if not found and os.environ.get(var) == "1":
+        raise AssertionError(f"{name} is required ({var}=1) but is not installed")
+    return found
+
+
 def find_powershell():
+    override = os.environ.get("TV_TEST_POWERSHELL")  # CI pins "powershell" (5.1) on Windows
+    if override:
+        return shutil.which(override)
     if IS_WINDOWS:
         return shutil.which("pwsh") or shutil.which("powershell")
     return shutil.which("pwsh")
@@ -179,6 +190,7 @@ class ScriptCases(unittest.TestCase):
 def _make_test(case, impl_name):
     def test(self):
         ext, argv_prefix = implementations()[impl_name]
+        require_shell(impl_name, argv_prefix)
         if argv_prefix is None:
             self.skipTest(f"{impl_name} is not installed")
         with tempfile.TemporaryDirectory() as tmp:
