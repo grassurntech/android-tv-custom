@@ -82,6 +82,9 @@ def run_case(case, impl_name, ext, argv_prefix, tmp):
             (repo / d).mkdir()
     for rel, text in case.get("files", {}).items():
         target = repo / rel
+        if text is None:  # null removes a file copied from the repo (e.g. a config list)
+            target.unlink()
+            continue
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text(text, encoding="utf-8", newline="\n")
         if rel.endswith(".sh"):
@@ -144,6 +147,11 @@ def check_expect(test, expect, proc, adb_lines, bin_lines, repo):
         have = [l.rstrip("\r") for l in path.read_text().splitlines()]
         for line in wanted:
             test.assertIn(line, have, f"{rel} lacks line {line!r}{ctx}")
+    for rel, pattern in expect.get("files_match", {}).items():
+        path = _resolve(repo, rel)
+        test.assertTrue(path.exists(), f"{rel} was not written{ctx}")
+        # exact bytes: UTF-8 without BOM, LF endings; the whole file must match
+        test.assertRegex(path.read_bytes().decode("utf-8"), "^(?:" + pattern + ")\\Z", f"{rel} content is wrong{ctx}")
     for rel in expect.get("files_absent", []):
         test.assertEqual(_matches(repo, rel), [], f"{rel} exists but should not{ctx}")
     if "stdout_last_line_matches" in expect:

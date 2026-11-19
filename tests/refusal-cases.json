@@ -209,5 +209,623 @@
         "backups/*"
       ]
     }
+  },
+  {
+    "script": "disable-one",
+    "name": "D1 no args",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ]
+    },
+    "expect": {
+      "exit": 2,
+      "adb_call_count": {
+        "": 0
+      }
+    }
+  },
+  {
+    "script": "disable-one",
+    "name": "D2 two args",
+    "args": [
+      "com.tcl.ad.service",
+      "com.tcl.other"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ]
+    },
+    "expect": {
+      "exit": 2,
+      "adb_call_count": {
+        "": 0
+      }
+    }
+  },
+  {
+    "script": "disable-one",
+    "name": "D3 glob argument",
+    "args": [
+      "com.foo.*"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ]
+    },
+    "expect": {
+      "exit": 2,
+      "adb_call_count": {
+        "": 0
+      }
+    }
+  },
+  {
+    "script": "disable-one",
+    "name": "D4 shell metacharacters",
+    "args": [
+      "com.foo;reboot"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ]
+    },
+    "expect": {
+      "exit": 2,
+      "adb_call_count": {
+        "": 0
+      }
+    }
+  },
+  {
+    "script": "disable-one",
+    "name": "D5 TV_IP unset",
+    "args": [
+      "com.tcl.ad.service"
+    ],
+    "env": {
+      "TV_IP": null
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ]
+    },
+    "expect": {
+      "exit": 3,
+      "adb_call_count": {
+        "": 0
+      }
+    }
+  },
+  {
+    "script": "disable-one",
+    "name": "D6 protected core package",
+    "args": [
+      "com.android.systemui"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ]
+    },
+    "expect": {
+      "exit": 10,
+      "adb_call_count": {
+        "disable-user": 0
+      },
+      "files_absent": [
+        "backups/*/disabled-by-us.txt"
+      ]
+    }
+  },
+  {
+    "script": "disable-one",
+    "name": "D7 protected by pattern",
+    "args": [
+      "com.tcl.hdmi.service"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ]
+    },
+    "expect": {
+      "exit": 10,
+      "adb_call_count": {
+        "disable-user": 0
+      },
+      "files_absent": [
+        "backups/*/disabled-by-us.txt"
+      ]
+    }
+  },
+  {
+    "script": "disable-one",
+    "name": "D8 streaming app",
+    "args": [
+      "com.netflix.ninja"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ]
+    },
+    "expect": {
+      "exit": 11,
+      "adb_call_count": {
+        "disable-user": 0
+      },
+      "files_absent": [
+        "backups/*/disabled-by-us.txt"
+      ]
+    }
+  },
+  {
+    "script": "disable-one",
+    "name": "D9 streaming app, mixed case",
+    "args": [
+      "com.Netflix.ninja"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ]
+    },
+    "expect": {
+      "exit": 11,
+      "adb_call_count": {
+        "disable-user": 0
+      },
+      "files_absent": [
+        "backups/*/disabled-by-us.txt"
+      ]
+    }
+  },
+  {
+    "script": "disable-one",
+    "name": "D10 forbidden factory app",
+    "args": [
+      "com.tcl.factory.view"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ]
+    },
+    "expect": {
+      "exit": 12,
+      "adb_call_count": {
+        "disable-user": 0
+      },
+      "files_absent": [
+        "backups/*/disabled-by-us.txt"
+      ]
+    }
+  },
+  {
+    "script": "disable-one",
+    "name": "D11 no backups folder",
+    "args": [
+      "com.tcl.ad.service"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {},
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ]
+    },
+    "expect": {
+      "exit": 13,
+      "adb_call_count": {
+        "disable-user": 0
+      }
+    }
+  },
+  {
+    "script": "disable-one",
+    "name": "D12 empty packages-all.txt",
+    "args": [
+      "com.tcl.ad.service"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": ""
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ]
+    },
+    "expect": {
+      "exit": 13,
+      "adb_call_count": {
+        "disable-user": 0
+      },
+      "files_absent": [
+        "backups/*/disabled-by-us.txt"
+      ]
+    }
+  },
+  {
+    "script": "disable-one",
+    "name": "D13 package not in backup",
+    "args": [
+      "com.unknown.app"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ]
+    },
+    "expect": {
+      "exit": 14,
+      "adb_call_count": {
+        "disable-user": 0
+      },
+      "files_absent": [
+        "backups/*/disabled-by-us.txt"
+      ]
+    }
+  },
+  {
+    "script": "disable-one",
+    "name": "D14 package installed by us",
+    "args": [
+      "com.gathin.tvhome"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/installed-by-us.txt": "com.gathin.tvhome\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja",
+        "com.gathin.tvhome"
+      ]
+    },
+    "expect": {
+      "exit": 0,
+      "adb_call_count": {
+        "disable-user": 1
+      },
+      "files_match": {
+        "backups/2026-11-19_100000/disabled-by-us.txt": "com\\.gathin\\.tvhome\\t\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z\\n"
+      }
+    }
+  },
+  {
+    "script": "disable-one",
+    "name": "D15 TV offline",
+    "args": [
+      "com.tcl.ad.service"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n"
+    },
+    "tv": {
+      "state": "offline",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ]
+    },
+    "expect": {
+      "exit": 21,
+      "adb_call_count": {
+        "disable-user": 0
+      },
+      "files_absent": [
+        "backups/*/disabled-by-us.txt"
+      ]
+    }
+  },
+  {
+    "script": "disable-one",
+    "name": "D16 TV refuses",
+    "args": [
+      "com.tcl.ad.service"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ],
+      "refuse": [
+        "com.tcl.ad.service"
+      ]
+    },
+    "expect": {
+      "exit": 20,
+      "adb_call_count": {
+        "disable-user": 1
+      },
+      "files_absent": [
+        "backups/*/disabled-by-us.txt"
+      ],
+      "stderr_contains": "The TV refused to turn off com.tcl.ad.service. Nothing was changed. Stopping."
+    }
+  },
+  {
+    "script": "disable-one",
+    "name": "D17 happy path",
+    "args": [
+      "com.tcl.ad.service"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ]
+    },
+    "expect": {
+      "exit": 0,
+      "adb_calls_include": [
+        "shell pm disable-user --user 0 com.tcl.ad.service"
+      ],
+      "adb_call_count": {
+        "disable-user": 1
+      },
+      "files_match": {
+        "backups/2026-11-19_100000/disabled-by-us.txt": "com\\.tcl\\.ad\\.service\\t\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z\\n"
+      }
+    }
+  },
+  {
+    "script": "disable-one",
+    "name": "D18 already disabled",
+    "args": [
+      "com.tcl.ad.service"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ],
+      "disabled": [
+        "com.tcl.ad.service"
+      ]
+    },
+    "expect": {
+      "exit": 0,
+      "adb_call_count": {
+        "disable-user": 0
+      },
+      "files_absent": [
+        "backups/*/disabled-by-us.txt"
+      ]
+    }
+  },
+  {
+    "script": "disable-one",
+    "name": "D19 CRLF protected list",
+    "args": [
+      "com.android.systemui"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "config/protected-packages.txt": "# crlf\r\ncom.android.systemui\r\nandroid\r\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ]
+    },
+    "expect": {
+      "exit": 10,
+      "adb_call_count": {
+        "disable-user": 0
+      }
+    }
+  },
+  {
+    "script": "disable-one",
+    "name": "D20 log goes to newest backup",
+    "args": [
+      "com.tcl.ad.service"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-18_090000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ]
+    },
+    "expect": {
+      "exit": 0,
+      "files_match": {
+        "backups/2026-11-19_100000/disabled-by-us.txt": "com\\.tcl\\.ad\\.service\\t\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z\\n"
+      },
+      "files_absent": [
+        "backups/2026-11-18_090000/disabled-by-us.txt"
+      ]
+    }
+  },
+  {
+    "script": "disable-one",
+    "name": "D21 missing list file",
+    "args": [
+      "com.tcl.ad.service"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "config/streaming-apps.txt": null
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ]
+    },
+    "expect": {
+      "exit": 3,
+      "adb_call_count": {
+        "": 0
+      }
+    }
   }
 ]
