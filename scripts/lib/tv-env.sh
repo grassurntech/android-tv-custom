@@ -18,6 +18,7 @@ _tv_read_dotenv() {
   [ -f "$file" ] || return 0
   while IFS= read -r line || [ -n "$line" ]; do
     line="${line%$'\r'}"
+    line="${line#$'\xef\xbb\xbf'}"   # UTF-8 BOM
     _tv_trim "$line"; line="$TV_TRIMMED"
     case "$line" in ''|'#'*) continue ;; esac
     case "$line" in 'export '*) line="${line#export }" ;; esac
@@ -33,7 +34,8 @@ _tv_read_dotenv() {
       fi
     fi
     # shellcheck disable=SC2086
-    if eval "[ -z \"\${$key+x}\" ]"; then
+    # unset or empty counts as unset (Windows can't hold an empty env var; keeps sh and ps1 identical)
+    if eval "[ -z \"\${$key:-}\" ]"; then
       export "$key=$val"
     fi
   done < "$file"

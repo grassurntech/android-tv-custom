@@ -64,5 +64,45 @@
       },
       "stderr_contains": "Create .env from .env.example and set TV_IP"
     }
+  },
+  {
+    "script": "connect",
+    "name": "C5 .env with BOM and CRLF",
+    "args": [],
+    "env": {
+      "TV_IP": null
+    },
+    "files": {
+      ".env": "\ufeffTV_IP=10.0.0.9\r\n# tv\r\n"
+    },
+    "tv": {
+      "state": "device"
+    },
+    "expect": {
+      "exit": 0,
+      "adb_calls_include": [
+        "connect 10.0.0.9:5555"
+      ]
+    }
+  },
+  {
+    "script": "connect",
+    "name": "C6 empty env var falls back to .env",
+    "args": [],
+    "env": {
+      "TV_IP": ""
+    },
+    "files": {
+      ".env": "TV_IP=10.0.0.9\nTV_ADB_PORT=6000\n"
+    },
+    "tv": {
+      "state": "device"
+    },
+    "expect": {
+      "exit": 0,
+      "adb_calls_include": [
+        "connect 10.0.0.9:6000"
+      ]
+    }
   }
 ]
