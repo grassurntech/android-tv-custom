@@ -5,6 +5,8 @@
 # Before installing it records what Home is now in home-state.txt (stock_package=, stock_component=, ours=) and,
 # after a good install, lists our package in installed-by-us.txt, both in the newest backup folder (the one
 # disable-one and restore read). An existing home-state.txt is never overwritten: the stock values must survive.
+# If upstream fails, it still asks the TV whether our package got installed and, if so, lists it, so restore
+# can always switch it off; upstream's exit code is passed up either way.
 # Optional, only when set in the environment: HOME_KEY_SERVICE=1, INPUT_KEY_SERVICE=1 (passed to upstream).
 # Exit: 0 installed, 2 bad arguments, 3 setup missing (TV_IP, vendor or its venv not fetched, Home already ours
 #       with no recorded stock launcher), 13 no usable backup, 20 Home could not be read, 21 unreachable,
@@ -92,24 +94,46 @@ EOT
   fi
 fi
 
+mine="$backup/installed-by-us.txt"
+# record_ours: list our package in installed-by-us.txt once (deduplicated).
+record_ours() {
+  local line found=0
+  if [ -f "$mine" ]; then
+    while IFS= read -r line || [ -n "$line" ]; do
+      line="${line%$'\r'}"
+      [ "$line" = "$OURS" ] && found=1
+    done < "$mine"
+  fi
+  if [ "$found" -eq 0 ]; then
+    if [ -s "$mine" ] && [ -n "$(tail -c 1 "$mine")" ]; then printf '\n' >> "$mine"; fi
+    printf '%s\n' "$OURS" >> "$mine"
+  fi
+}
+# tv_has_ours: 0 if the TV lists our package (exact line), 1 if not or if it could not answer.
+tv_has_ours() {
+  local out line
+  out="$(tv_shell pm list packages "$OURS" </dev/null 2>/dev/null)" || return 1
+  while IFS= read -r line; do
+    line="${line%$'\r'}"
+    _tv_trim "$line"
+    [ "$TV_TRIMMED" = "package:$OURS" ] && return 0
+  done <<EOT
+$out
+EOT
+  return 1
+}
+
 ( cd "$launcher" && TV_HOST="$TV_IP" SKIP_BUILD=1 STOCK_LAUNCHER=none bash ./build-and-install.sh )
 rc=$?
 if [ "$rc" -ne 0 ]; then
   echo "The launcher install failed (exit $rc)." >&2
+  if tv_has_ours; then
+    record_ours
+    echo "Our launcher ($OURS) is on the TV anyway, so it is listed in $mine and restore can switch it off." >&2
+  fi
   exit "$rc"
 fi
 
-mine="$backup/installed-by-us.txt"
-found=0
-if [ -f "$mine" ]; then
-  while IFS= read -r line || [ -n "$line" ]; do
-    line="${line%$'\r'}"
-    [ "$line" = "$OURS" ] && found=1
-  done < "$mine"
-fi
-if [ "$found" -eq 0 ]; then
-  if [ -s "$mine" ] && [ -n "$(tail -c 1 "$mine")" ]; then printf '\n' >> "$mine"; fi
-  printf '%s\n' "$OURS" >> "$mine"
-fi
+record_ours
 echo "Installed $OURS. The original launcher is still on; turn it off with scripts/disable-one when you are ready."
 exit 0

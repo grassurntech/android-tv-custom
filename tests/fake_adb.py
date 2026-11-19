@@ -69,8 +69,13 @@ def main(argv):
 
     if cmd[:3] == ["pm", "list", "packages"]:
         flag = cmd[3] if len(cmd) > 3 else None
+        name_filter = None
+        if flag is not None and not flag.startswith("-"):  # `pm list packages <text>`: substring filter
+            name_filter, flag = flag, None
         disabled = set(state["disabled"])
         for p in state["packages"]:
+            if name_filter is not None and name_filter not in p:
+                continue
             if flag == "-d" and p not in disabled:
                 continue
             if flag == "-e" and p in disabled:

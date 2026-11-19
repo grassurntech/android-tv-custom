@@ -51,7 +51,9 @@ You are helping someone who does not write code. Follow this prompt exactly, pha
 1. **Change the TV only through this project's scripts** (the table below). Never type `pm disable-user`,
    `pm uninstall`, `pm clear`, `pm hide`, `pm suspend` or `pm enable` yourself. Never use root or
    fastboot, and never flash anything. Never install or start any app on the TV yourself.
-2. **Never uninstall anything.** Apps are switched off, one package at a time, only with `disable-one`.
+2. **Never uninstall anything.** Apps are switched off, one package at a time, only with `disable-one`: one
+   `disable-one` per tool call, then read its exit code before the next. Never a loop, `xargs`, a script or
+   several commands chained together.
 3. **Back up first.** No change to the TV before Phase 4 has made a backup.
 4. **Never open a factory or service menu app, not even to look.** On some TVs, opening one flips a hidden
    factory switch that breaks the remote and inputs and can't be undone from a computer. To learn what a
@@ -63,18 +65,32 @@ You are helping someone who does not write code. Follow this prompt exactly, pha
    never paste their contents anywhere online, and never commit them to git.
 8. If a safety hook or guard on this computer blocks a command, do not work around it. Stop and tell the owner.
 
-### Read-only commands you may run
+### The Home check (never skip it)
+
+Home must always be our launcher (`com.gathin.tvhome`) or the TV's original one: the `stock_component=` line of
+`home-state.txt` in the backup folder, or before Phase 6 writes that file, what Phase 3 found. The Home check is a
+fresh run of `shell cmd package resolve-activity --brief -a android.intent.action.MAIN -c android.intent.category.HOME`;
+its last line is what Home is now.
+
+- Do it after every step that touches Home, and right before every restart.
+- If it shows anything else (the setup wizard `setupwraith`, `.RecoveryActivity`, `FallbackHome`, a chooser shown
+  as `android`, or nothing), run `restore --home-only` immediately, before anything else. Explain to the owner
+  after it finishes, then do the Home check again.
+- Never reboot, and never end your turn, while Home is anything else. On some TVs a restart on the setup
+  wizard's recovery screen forced a factory reset.
+
+### Direct adb commands you may run
 
 Some checks need `adb` directly. Use `tools/platform-tools/adb` (Windows: `tools\platform-tools\adb.exe`) if it
 exists, otherwise `adb`. Always pass `-s <TV IP>:<port>` with the IP and port the owner gave you (port 5555
-unless they said otherwise). These are the only direct adb commands you may run:
+unless they said otherwise). These are the only ones you may run. All of them only read, except `sync` and `reboot`:
 
 - `shell getprop <key>` (model, Android version and similar; never quote serial numbers or IDs to anyone)
 - `shell pm list packages` and `shell pm list packages -d` (lists only)
-- `shell dumpsys package <name>`, `shell dumpsys activity activities`, `shell dumpsys wifi`
+- `shell dumpsys package <name>` and `shell dumpsys activity activities`
 - `shell cmd package resolve-activity --brief -a android.intent.action.MAIN -c android.intent.category.HOME`
-- `shell logcat -b events -d`, `shell settings get <namespace> <key>`, `shell getevent -lt` (only while the
-  owner presses a button, for at most 15 seconds)
+- `shell logcat -b events -d`, `shell settings get <namespace> <key>`, and `shell getevent -lt -c 20` (only
+  while the owner presses a button; it stops by itself after 20 events)
 - `shell sync` and `reboot`, only at the points this prompt says. Never `reboot bootloader` or `reboot recovery`.
 
 Filter long output yourself on the computer. Never chain several TV commands into one.
@@ -105,13 +121,18 @@ Android switches these helpers off at every reinstall, so pass every switch that
 
 ### What the exit codes mean
 
-Every script ends with a number. Read it after every run, and act on it before doing anything else.
+Every script ends with a number. Read it after every run, and act on it before doing anything else. The rows
+for 10 to 14 are about clean-up. `restore` passes `disable-one`'s codes up: if `restore` ends with any code
+other than 0, stop, never carry on with other steps, and tell the owner what its message says was and wasn't
+put back.
 
 | Code | What it means | What you do and say |
 |---|---|---|
 | 0 | Done, or there was nothing to do | Carry on. |
-| 1 | `build-launcher` made no app, or `push-theme` could not send the photos | Stop. **Say:** "That step didn't work. Nothing on the TV changed because of it." Show the owner the script's last message in plain words. |
-| 2 | The command was typed wrong, or `make_theme` found no usable photo, or (`push-theme` only) cleanyourtv's theme tool refused before sending anything | Nothing changed. Check the command against this prompt and run the corrected one once. If it says 2 again, stop. **Say:** "I made a mistake typing that. Nothing on the TV changed." |
+| 1 | `build-launcher` made no app, or `push-theme` could not send the photos | Stop. Show the owner the script's last message in plain words. **Say:** "That step didn't work." |
+| 1 (`install-launcher`) | cleanyourtv's install inside `install-launcher` stopped, often because Home didn't end up on our app | Our app may be installed. Do the Home check, run `restore --home-only` if Home isn't the stock launcher, then stop and explain. **Say:** "The new home screen couldn't take over on this TV, so your original one stays in charge. Your clean-up stays." |
+| 2 (`push-theme`) | cleanyourtv's theme tool refused before sending anything | Stop, no retry. Explain its message in plain words. |
+| 2 | The command was typed wrong, or `make_theme` found no usable photo | Nothing changed. Check the command against this prompt and run the corrected one once. If it says 2 again, stop. **Say:** "I made a mistake typing that. Nothing on the TV changed." |
 | 3 | Something on the computer isn't set up: no `.env` or `TV_IP`, Docker not running, tools not downloaded, or an undo note that can't be saved | Nothing changed. Tell the owner what is missing in plain words (the script's message names it), help them fix it, then run the script once more. |
 | 10 | The package is protected: it keeps the TV working as a TV | Nothing changed. Take it off the list and go on. **Say:** "The TV needs that one, so I left it alone." |
 | 11 | The package is a streaming app | Nothing changed. Take it off the list and go on. **Say:** "That's a streaming app, so I left it. You can switch it off yourself in Settings → Apps if you never use it." |
@@ -120,10 +141,10 @@ Every script ends with a number. Read it after every run, and act on it before d
 | 14 | The package isn't in the backup and wasn't installed by us (it may not exist on this TV) | Nothing changed. Take it off the list and go on. |
 | 20 | The TV refused, or didn't confirm the change | Stop. **Say:** "The TV said no to that step, so I've stopped there. Nothing is broken, and everything I did so far can be undone." Never retry. Offer the undo (see "If something goes wrong"). |
 | 20 (special) | `disable-one` says the TV DID turn the app off, but the undo log could not be written | The app is off, but the undo script won't know about it. Stop. Copy the package name and the script's whole message into `SUMMARY.md` (Phase 7). **Say:** "The TV switched that app off, but I couldn't save my undo note for it. I've written it down for you separately." |
-| 21 | The TV can't be reached | **Say:** "I can't reach the TV. Is it switched on, on the same Wi-Fi as this computer, with debugging still on?" After the owner says yes, run `connect` once. If it still says 21, stop. |
+| 21 | The TV can't be reached | **Say:** "I can't reach the TV. Is it switched on, on the same Wi-Fi as this computer, with debugging still on?" After the owner says yes, run `connect` once. If it still says 21, stop. Exception: in Phase 7, 21 is the goal (debugging is off). |
 | 22 | The TV hasn't allowed this computer yet | **Say:** "Look at the TV. There's a box asking 'Allow debugging?'. Tick 'Always allow from this computer' and choose Allow." Then run `connect` once. If it still says 22, stop. |
 | 30 | The downloaded cleanyourtv doesn't match the tested version, so it was deleted | Stop. Never work around it. **Say:** "The download didn't match the version we tested, so I didn't use it. Nothing on the TV changed. Let's try again later." |
-| Any other | A cleanyourtv tool (inside `build-launcher`, `install-launcher` or `push-theme`) failed with its own code | Stop. Explain its last message in plain words. If it mentions `INSTALL_FAILED_VERIFICATION_FAILURE` or `INSTALL_FAILED_OLDER_SDK`, this TV won't accept the new home screen: keep the clean-up, skip the rest of Phase 6. |
+| Any other | A cleanyourtv tool (inside `build-launcher`, `install-launcher` or `push-theme`) failed with its own code | Stop. For `install-launcher`, do the Home check first. Explain its last message in plain words. If it mentions `INSTALL_FAILED_VERIFICATION_FAILURE` or `INSTALL_FAILED_OLDER_SDK`, this TV won't accept the new home screen: keep the clean-up, skip the rest of Phase 6. |
 
 ---
 
@@ -175,7 +196,8 @@ Every script ends with a number. Read it after every run, and act on it before d
      change the `TV_IP=` line to their IP themselves, or you create it once from `.env.example` with only that
      line changed. Mac/Linux: `sed 's/^TV_IP=.*/TV_IP=<ip>/' .env.example > .env`. Windows:
      `(Get-Content .env.example) -replace '^TV_IP=.*','TV_IP=<ip>' | Set-Content .env`.
-   - If it exists already, never overwrite it and never open it. Ask the owner to check its `TV_IP=` line.
+   - If it exists already, never overwrite it and never open it. Ask the owner which IP and port (usually 5555)
+     its `TV_IP=` and `TV_ADB_PORT=` lines hold, so you can run the direct adb commands.
 5. **Say:** "Keep looking at the TV. A box saying 'Allow debugging?' will appear. Tick 'Always allow from this
    computer' and choose Allow." Then run `connect`. Expect 22 the first time. After the owner allows it, run it
    once more.
@@ -192,8 +214,8 @@ Read only. Change nothing.
 1. Read `getprop` for `ro.product.manufacturer`, `ro.product.model`, `ro.product.device`,
    `ro.build.version.release` and `ro.build.version.sdk`.
 2. Work out the TV type from `pm list packages`: `com.google.android.apps.tv.launcherx` means Google TV,
-   `com.google.android.tvlauncher` means the older Android TV. Read which app is Home now with the
-   `resolve-activity` command.
+   `com.google.android.tvlauncher` means the older Android TV. Read which app is Home now with the Home check,
+   and note it: that is the stock launcher.
 3. If `ro.build.version.sdk` is below 26, the new home screen can't be installed. **Say:** "Your TV is too old
    for the new home screen, but I can still clean it up." Skip Phase 6 later.
 4. Look for notes on this exact model in cleanyourtv's folders: the first lines of
@@ -239,14 +261,14 @@ switch anything off until you say yes to the list." Wait for yes.
    If there's one you never use, you can switch it off yourself later in Settings → Apps."
 5. **Say:** "Here's what I'd switch off. Everything can be switched back on. Tell me anything you want to keep,
    or say yes to go ahead." Remove whatever the owner wants kept. Never add anything they didn't see.
-6. Switch off one package at a time: run `disable-one <package>` once per package, and read the exit code each
-   time (see the table).
+6. Switch off one package at a time: one `disable-one <package>` per tool call, then read its exit code (see the
+   table) before the next. Never a loop, `xargs` or a script.
 7. After every 3 packages, run `connect` to check the TV still answers, then ask: **Say:** "Quick check: does the
    TV still show a picture, do your HDMI inputs still work, and does the remote still work?" If anything is
    wrong, stop and go to "If something goes wrong".
-8. When the list is done, wait 15 seconds (Android saves these changes about ten seconds later), run
-   `shell sync`, then **say:** "I'm restarting the TV once to check everything sticks." Run `reboot`. When the
-   owner says the TV is back, run `connect`.
+8. When the list is done, do the Home check. Only if it passes, wait 15 seconds (Android saves these changes
+   about ten seconds later), run `shell sync`, **say:** "I'm restarting the TV once to check everything
+   sticks," and run `reboot`. When the owner says the TV is back, run `connect` and do the Home check again.
 9. Compare `pm list packages -d` with `disabled-by-us.txt` in the backup folder. Some TVs switch a few apps back
    on at every start. Note any that came back for the summary. Never switch them off again.
 
@@ -255,7 +277,7 @@ Wait for yes.
 
 ## Phase 6: Build the home screen
 
-Skip this phase if Phase 3 found the TV too old.
+Skip this phase if Phase 3 found the TV too old. Do the Home check after every step below that touches Home.
 
 **6.1 Ask the owner, one question at a time:**
 
@@ -274,63 +296,78 @@ On Windows, ask the owner to export them as JPEG.
 `.venv/bin/python scripts/make_theme.py --photos "<folder>" --name "<name>" --apps <p1>,<p2>,<p3>,<p4> --clock <12|24> --out user-content/theme`
 (Windows: `.venv\Scripts\python scripts\make_theme.py` with the same options). It resizes the photos and strips
 their location data into `user-content/theme`. Exit 2 here usually means no usable photo: ask for another folder.
-Running it again rewrites `config.json`, so any keys you add below (6.7, 6.9, 6.10) must be added again.
+Running it again rewrites `config.json`, so any keys you add below (`stock_home_redirect`, `app_keys`,
+`live_tv_package`, `power_on_home`, `boot_to_live_tv`) must be added again.
 
-**6.3 Build the app.** **Say:** "Now I'm building your home screen app. The first time takes 10 to 20 minutes."
+**6.3 Pick the Home path.** Use the stock launcher you noted in Phase 3.
+
+- **Google TV path:** the stock launcher is `com.google.android.apps.tv.launcherx`, or the matching example
+  keeps its stock launcher on. In v1 the stock launcher stays on: never run `disable-one` on it. Our launcher
+  answers the Home button through a small helper (`HOME_KEY_SERVICE=1`) that sends the stock home screen back to
+  ours. This path is still to be confirmed on <model> in Task 12, so treat every surprise as a stop.
+- **Other TVs:** our launcher becomes Home directly. The stock launcher is switched off only if the example for
+  this exact model switches it off (6.7).
+
+On the Google TV path, explain the key-repeat trade-off first. **Say:** "On your TV, the new home screen needs a small helper to answer the
+Home button. On some TVs, TCL especially, it has a side effect: holding a button stops repeating, so holding
+volume up moves it one step per press. Shall I go ahead?" If no, skip to Phase 7: the clean-up stays. If yes,
+**say:** "Hold volume up for two seconds and tell me if it keeps going up," note the answer, and add
+`"stock_home_redirect": "<the stock launcher package>"` to `user-content/theme/config.json`.
+
+**6.4 Build the app.** **Say:** "Now I'm building your home screen app. The first time takes 10 to 20 minutes."
 Run `build-launcher`. It signs the app with the owner's own key in `user-content/keystore/`.
 
-**6.4 Install it.** **Say:** "Watch the TV: a second 'Allow debugging?' box may appear, because cleanyourtv's
-own tool connects with its own key. Tick 'Always allow' and choose Allow again." Run `install-launcher`. It notes
-the current Home app in `home-state.txt` in the backup folder, then installs the new one and makes it Home.
+**6.5 Install it.** **Say:** "Watch the TV: a second 'Allow debugging?' box may appear, because cleanyourtv's
+own tool connects with its own key. Tick 'Always allow' and choose Allow again." Run `install-launcher`, with
+`HOME_KEY_SERVICE=1` on the Google TV path and with no switches otherwise. It notes the current Home in
+`home-state.txt` in the backup folder, installs our app and tries to make it answer Home. Do the Home check at
+once. On any exit code other than 0, follow the exit-code table and stop. Never improvise a fix.
 
-**6.5 Check Home is ours.** **Say:** "Press the Home button on the remote. What do you see?" Also read
-`dumpsys activity activities` and look at `mFocusedApp` or `ResumedActivity`: it must show `com.gathin.tvhome`.
-Some TVs say "Success" and still keep the old Home, so only these two checks count. If Home isn't ours, stop and
-run `restore --home-only`.
+**6.6 Send the photos and settings.** Run `push-theme`. Then **say:** "Press the Home button on the remote. What
+do you see?" Also read `dumpsys activity activities` and look at `mFocusedApp` or `ResumedActivity`: after the
+press it must show `com.gathin.tvhome`. Some TVs say "Success" and still keep the old Home, so only these checks
+count. Do the Home check. If the owner sees the old home screen, the setup wizard or a blank screen, run
+`restore --home-only`, then stop. **Say:** "Your TV wouldn't let the new home screen take over, so I've put your
+original one back. Your clean-up stays."
 
-**6.6 Switch the old home screen off.** Read the `stock_package=` line of `home-state.txt` in the backup folder
-and run `disable-one <stock_package>` (skip this on a CVTE board unless its example says otherwise). Then
-**say:** "Press Home again. What do you see now?" and check `dumpsys activity activities` again.
+**6.7 Other TVs only: the old home screen.** Only if the example for this exact model switches its stock launcher
+off, and the Home check shows `com.gathin.tvhome`: read the `stock_package=` line of `home-state.txt` and run
+`disable-one <stock_package>`. Do the Home check immediately. Otherwise leave the stock launcher on.
 
-**6.7 The setup wizard rule.** The Google TV setup wizard (`setupwraith`) is never disabled, by you or anyone.
+**6.8 The setup wizard rule.** The Google TV setup wizard (`setupwraith`) is never disabled, by you or anyone.
 Why: the Wi-Fi network saved during the TV's first setup belongs to the wizard, and Android deletes it the moment
-the wizard is switched off. The TV drops off Wi-Fi and this connection is cut. If the wizard (or anything else)
-takes Home after 6.6:
+the wizard is switched off. The TV drops off Wi-Fi and this connection is cut. If the Home check ever shows the
+wizard, `.RecoveryActivity` or `FallbackHome`, run `restore --home-only` immediately and never restart the TV in
+that state: on some TVs a restart there forced a factory reset.
 
-1. Explain the remote trade-off first (see 6.9) and ask whether to try the fix.
-2. If yes, add `"stock_home_redirect": "<the package that took Home>"` to `user-content/theme/config.json`, run
-   `push-theme`, then run `install-launcher` with `HOME_KEY_SERVICE=1`.
-3. Ask the owner to press Home again and check `dumpsys` again.
-4. If Home still isn't ours, stop. **Say:** "Your TV won't let the new home screen take over, so I'm putting the
-   original one back. Your clean-up stays." Run `restore --home-only`, then go to Phase 7.
+**6.9 Restart once.** Do the Home check. Only if it passes, wait 15 seconds, run `shell sync`, **say:** "I'm
+restarting the TV once more," and run `reboot`. When it's back, run `connect` and do the Home check again.
+**Say:** "What does the TV show now? You should see your photo, your name, the clock and your four apps."
 
-**6.8 Send the photos and settings, then restart once.** Run `push-theme`. Wait 15 seconds, run `shell sync`,
-**say:** "I'm restarting the TV once more," and run `reboot`. When it's back, run `connect`. **Say:** "What does
-the TV show now? You should see your photo, your name, the clock and your four apps."
-
-**6.9 Remote buttons.** On Google TV, the old home screen answered the app buttons on the remote.
+**6.10 Remote buttons.** On Google TV, the old home screen answered the app buttons on the remote.
 
 1. **Say:** "Please press each app button on your remote (Netflix, YouTube, Prime Video and any others) and tell
    me which ones open their app and which do nothing."
-2. If all work, skip to 6.10. For each dead button, find its code in the matching example or
-   `vendor/cleanyourtv/docs/devices/` notes. If it's not there, run `shell getevent -lt` while the owner presses it.
-3. Before switching anything on, explain the key-repeat trade-off. **Say:** "I can make those buttons work with a
-   small helper. On some TVs, TCL especially, the helper has a side effect: holding a button stops repeating, so
-   holding volume up moves it just one step each press. Would you like the buttons fixed anyway?"
-4. If yes: **say:** "First, hold volume up for two seconds and tell me if it keeps going up." Add the `app_keys`
-   entries (for example `"4062:com.netflix.ninja"`) to `user-content/theme/config.json`, run `push-theme`, then
-   run `install-launcher` with `INPUT_KEY_SERVICE=1` (plus `HOME_KEY_SERVICE=1` if that is already on). Ask the
-   owner to press the buttons again and to hold volume up again, and note the result for the summary.
-5. If no, leave the helpers off and note which buttons don't work.
+2. If all work, skip to 6.11. For each dead button, find its code in the matching example or
+   `vendor/cleanyourtv/docs/devices/` notes. If it's not there, start `shell getevent -lt -c 20` and have the
+   owner press that button three times right away. It stops by itself after 20 events.
+3. Add the `app_keys` entries (for example `"4062:com.netflix.ninja"`) to `user-content/theme/config.json` and
+   run `push-theme`. On the Google TV path the helper is already on, so that's all.
+4. On other TVs a helper is needed first. Explain the trade-off from 6.3 and ask. If yes, run `install-launcher`
+   with `INPUT_KEY_SERVICE=1`, do the Home check, then `push-theme`. Ask the owner to hold volume up before and
+   after. If no, leave the helpers off and note which buttons don't work.
+5. Ask the owner to press the buttons again, and note the result for the summary.
 
-**6.10 What the TV opens at power-on.** Read `shell logcat -b events -d` and look at the
-`wm_set_resumed_activity` lines from the restart in 6.8. If the TV opened its Live TV app by itself, ask:
+**6.11 What the TV opens at power-on.** Read `shell logcat -b events -d` and look at the
+`wm_set_resumed_activity` lines from the restart in 6.9. If the TV opened its Live TV app by itself, that line
+names its package (for example `com.tcl.tv`). Add `"live_tv_package": "<that package>"` to the theme, then ask:
 **Say:** "When you turn the TV on, would you like to land on your new home screen, or on live TV?"
 
-- Home: add `"power_on_home": true` to the theme, run `push-theme`, and run `install-launcher` with
-  `HOME_KEY_SERVICE=1` (plus any switch already on). Explain the trade-off from 6.9 first if it isn't on yet.
-- Live TV: add `"boot_to_live_tv": true` to the theme and run `push-theme`.
-- Never set both. Then ask the owner to switch the TV off and on with the remote and say what appears.
+- Home: add `"power_on_home": true`. It needs `HOME_KEY_SERVICE=1`: on other TVs, explain the trade-off from 6.3,
+  then run `install-launcher` with it (plus any switch already on) and do the Home check.
+- Live TV: add `"boot_to_live_tv": true`.
+- Never set both. Run `push-theme`, do the Home check, then ask the owner to switch the TV off and on with the
+  remote and say what appears.
 
 **End of phase:** **Say:** "Your new home screen is set up. <What works, which buttons work, the power-on
 choice.> Last step: I'll write down everything I did and close the connection." Wait for yes.
@@ -343,16 +380,18 @@ choice.> Last step: I'll write down everything I did and close the connection." 
      itself; any special-case app from exit code 20 with the script's message
    - the home screen: photos, name, apps, clock, which remote helpers are on and what that costs, the power-on choice
    - "Keep the `user-content/` folder. Its `keystore` is needed to update your home screen later."
-   - how to change the photos later: run `make_theme` again with a new folder, add back any extra keys you set
-     in 6.7, 6.9 or 6.10 (list them here), then `push-theme`
-   - how to undo, for the owner's computer only. First, turn debugging back on (Phase 2's steps), then run one of
-     these in the project folder. Mac: `bash scripts/restore.sh` (everything),
+   - how to change the photos later: run `make_theme` again with a new folder, add back the extra keys you set
+     in Phase 6 (list them here), then `push-theme`
+   - how to undo, for the owner's computer only. First, turn debugging back on (Phase 2's steps). If the TV's IP
+     changed, the owner fixes the `TV_IP=` line of `.env` in a text editor themselves. Open Terminal (Mac: press Cmd+Space, type
+     Terminal) or PowerShell (Windows: Start menu, type PowerShell), type `cd "<full path of the project
+     folder>"` (write the real path here), then run one of these. Mac: `bash scripts/restore.sh` (everything),
      `bash scripts/restore.sh --home-only` (only the home screen), `bash scripts/restore.sh --packages-only`
      (only the apps). Windows:
      `powershell -NoProfile -ExecutionPolicy Bypass -File scripts\restore.ps1`, adding `--home-only` or
      `--packages-only` the same way.
    - how to bring back one app without a computer: Settings → Apps → See all apps → the app → Enable.
-2. Close the connection. **Say:** "Last thing on the TV: open Settings → System → Developer options and turn
+2. Do the Home check (you can't once debugging is off). Then close the connection. **Say:** "Last thing on the TV: open Settings → System → Developer options and turn
    off Network debugging (and Wireless debugging if you see it). Would you like to keep USB debugging on? Most
    people turn it off too. You can always switch it back on to undo things later." Also suggest "Revoke USB
    debugging authorisations" in the same menu.
@@ -375,7 +414,7 @@ choice.> Last step: I'll write down everything I did and close the connection." 
   then plug it back in and turn it on." Then run `connect` once.
 - If the picture, HDMI or remote stopped working after a clean-up batch, tell the owner which 3 packages were
   last, and offer `restore --packages-only`. Run it only after they say yes.
-- If Home is wrong or black, offer `restore --home-only`. It puts the original home screen back and switches
-  ours off. It never uninstalls anything.
-- If a restore stops with 20, stop too. Its message says what was and wasn't put back. Write that into
+- If Home is wrong, black or the setup wizard, run `restore --home-only` immediately (see the Home check). It
+  puts the original home screen back and switches ours off. It never uninstalls anything.
+- If a restore ends with any code other than 0, stop too. Its message says what was and wasn't put back. Write that into
   `SUMMARY.md` for the owner.

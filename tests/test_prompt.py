@@ -132,6 +132,63 @@ class PromptTests(unittest.TestCase):
         self.has(".env.example")
         self.has("TV_IP")
 
+    # --- Fix round 1: the safe Home flow (controller rulings R-A to R-D) ------------------------
+
+    def paragraphs(self):
+        return [p for p in re.split(r"\n\s*\n", self.text) if p.strip()]
+
+    def test_home_invariant(self):
+        # R-A: never reboot or end a turn unless Home is ours or the recorded stock launcher.
+        self.assertRegex(self.low, r"never reboot")
+        self.assertRegex(self.low, r"never end (a|your) turn")
+        self.has("stock_component")
+        self.has("cmd package resolve-activity --brief -a android.intent.action.MAIN -c android.intent.category.HOME")
+        for bad in ("setupwraith", "recoveryactivity", "fallbackhome"):
+            self.has(bad)
+        self.assertRegex(self.low, r"restore(\.sh)?`? --home-only`?[^.]{0,40}immediately|immediately[^.]{0,80}--home-only")
+
+    def test_every_reboot_is_gated_by_the_home_check(self):
+        gated = 0
+        for para in self.paragraphs():
+            if re.search(r"run `reboot`", para, re.I):
+                gated += 1
+                self.assertRegex(para, re.compile(r"home check", re.I), f"reboot without the Home check: {para[:120]}")
+        self.assertGreaterEqual(gated, 2, "Phases 5 and 6 each restart the TV once")
+
+    def test_google_tv_keeps_stock_launcher(self):
+        # R-B: keep launcherx, redirect it, never point stock_home_redirect at the wizard.
+        self.assertRegex(self.low, r"launcherx[^.]{0,200}\b(keep|kept|stays)|\b(keep|kept|stays)\b[^.]{0,200}launcherx")
+        self.assertRegex(self.low, r"(never|do not|don't) run `?disable-one`? on (it|the stock launcher)")
+        for s in self.sentences:
+            low = s.lower()
+            if "stock_home_redirect" in low:
+                self.assertNotRegex(low, r"took home|setupwraith|wizard", f"stock_home_redirect must name the stock launcher: {s}")
+        self.assertRegex(self.low, r"stock_home_redirect[^.]{0,120}(stock launcher|stock_package)")
+        self.assertRegex(self.low, r"task 12")
+
+    def test_disable_one_never_looped(self):
+        self.assertRegex(self.low, r"never[^.]{0,80}\bloop")
+        self.has("xargs")
+        self.assertRegex(self.low, r"one\s+`?disable-one`?\s+per\s+(tool call|command)")
+
+    def test_exit_code_fixes(self):
+        self.assertRegex(self.text, r"(?m)^\|\s*1[^|\n]*\|[^\n]*install-launcher[^\n]*restore --home-only")
+        self.assertRegex(self.low, r"`?restore`? (ends|stops|exits) with any (code other than 0|non-zero)")
+        self.assertRegex(self.low, r"in phase 7[^.]{0,120}21|21[^.]{0,120}phase 7")
+        self.assertRegex(self.low, r"push-theme[^|\n]{0,200}\|[^\n]*(stop|no retry)")
+
+    def test_live_tv_package(self):
+        self.has("live_tv_package")
+        self.has("wm_set_resumed_activity")
+
+    def test_minor_fixes(self):
+        for s in self.sentences:
+            if "dumpsys wifi" in s.lower():
+                self.assertIn("cname=", s, f"dumpsys wifi only for the cname= check: {s}")
+        self.assertRegex(self.text, r"getevent -lt -c \d+")
+        self.assertNotRegex(self.text, r"(?m)^#+ Read-only commands")
+        self.assertRegex(self.low, r"(terminal|powershell)[^.]{0,200}\bcd\b")
+
     # --- What the prompt must never tell the agent to do ---------------------------------------
 
     def test_never_reads_env(self):
