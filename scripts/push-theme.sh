@@ -23,5 +23,6 @@ if [ ! -f "$theme/config.json" ]; then
   exit 3
 fi
 
-TV_HOST="$TV_IP" bash "$upstream" "$theme"
+# IP:port: upstream's tools/tv.py accepts it, so a custom TV_ADB_PORT reaches the TV.
+TV_HOST="$SERIAL" bash "$upstream" "$theme"
 exit $?

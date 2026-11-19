@@ -8,6 +8,7 @@
 # If upstream fails, it still asks the TV whether our package got installed and, if so, lists it, so restore
 # can always switch it off; upstream's exit code is passed up either way.
 # Optional, only when set in the environment: HOME_KEY_SERVICE=1, INPUT_KEY_SERVICE=1 (passed to upstream).
+# RESTORE_KEY_SERVICES is not supported in v1: upstream always gets 0. Upstream gets TV_HOST=<TV_IP>:<TV_ADB_PORT>.
 # Exit: 0 installed, 2 bad arguments, 3 setup missing (TV_IP, vendor or its venv not fetched, Home already ours
 #       with no recorded stock launcher, or Home is not a real launcher: the chooser `android`, setupwraith,
 #       RecoveryActivity or FallbackHome), 13 no usable backup, 20 Home could not be read, 21 unreachable,
@@ -135,7 +136,9 @@ EOT
   return 1
 }
 
-( cd "$launcher" && TV_HOST="$TV_IP" SKIP_BUILD=1 STOCK_LAUNCHER=none bash ./build-and-install.sh )
+# TV_HOST is IP:port (upstream's tools/tv.py accepts that form), so a custom TV_ADB_PORT reaches the TV.
+# RESTORE_KEY_SERVICES is unsupported in v1 and always 0, as in the .ps1 version (which never passes the switch).
+( cd "$launcher" && TV_HOST="$SERIAL" SKIP_BUILD=1 STOCK_LAUNCHER=none RESTORE_KEY_SERVICES=0 bash ./build-and-install.sh )
 rc=$?
 if [ "$rc" -ne 0 ]; then
   echo "The launcher install failed (exit $rc)." >&2

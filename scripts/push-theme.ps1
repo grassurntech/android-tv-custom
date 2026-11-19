@@ -28,6 +28,6 @@ $ErrorActionPreference = 'Continue'
 $shell = (Get-Process -Id $PID).Path
 $childArgs = @('-NoProfile')
 if ([System.IO.Path]::DirectorySeparatorChar -eq '\') { $childArgs += @('-ExecutionPolicy', 'Bypass') }
-$childArgs += @('-File', $upstream, '-TvHost', $env:TV_IP, $theme)
+$childArgs += @('-File', $upstream, '-TvHost', $global:SERIAL, $theme)
 & $shell @childArgs
 exit $LASTEXITCODE

@@ -7,6 +7,7 @@
 # If upstream fails, it still asks the TV whether our package got installed and, if so, lists it, so restore
 # can always switch it off; upstream's exit code is passed up either way.
 # Optional, only when set in the environment: HOME_KEY_SERVICE=1, INPUT_KEY_SERVICE=1 (passed to upstream).
+# RESTORE_KEY_SERVICES is not supported in v1: -RestoreKeyServices is never passed. Upstream gets -TvHost <TV_IP>:<TV_ADB_PORT>.
 # Exit: 0 installed, 2 bad arguments, 3 setup missing (TV_IP, vendor or its venv not fetched, Home already ours
 #       with no recorded stock launcher, or Home is not a real launcher: the chooser `android`, setupwraith,
 #       RecoveryActivity or FallbackHome), 13 no usable backup, 20 Home could not be read, 21 unreachable,
@@ -112,11 +113,12 @@ if (Test-Path -LiteralPath $state -PathType Leaf) {
 # Native call: relax 'Stop' so upstream's stderr and non-zero exit pass through instead of throwing.
 $ErrorActionPreference = 'Continue'
 $env:SKIP_BUILD = '1'
-$env:TV_HOST = $global:TV_IP
+# TV_HOST is IP:port (upstream's tools/tv.py accepts that form), so a custom TV_ADB_PORT reaches the TV.
+$env:TV_HOST = $global:SERIAL
 $shell = (Get-Process -Id $PID).Path
 $childArgs = @('-NoProfile')
 if ([System.IO.Path]::DirectorySeparatorChar -eq '\') { $childArgs += @('-ExecutionPolicy', 'Bypass') }
-$childArgs += @('-File', $upstream, '-TvHost', $global:TV_IP, '-StockLauncher', 'none')
+$childArgs += @('-File', $upstream, '-TvHost', $global:SERIAL, '-StockLauncher', 'none')
 if ([Environment]::GetEnvironmentVariable('HOME_KEY_SERVICE') -eq '1') { $childArgs += '-HomeKeyService' }
 if ([Environment]::GetEnvironmentVariable('INPUT_KEY_SERVICE') -eq '1') { $childArgs += '-InputKeyService' }
 # Upstream resolves its venv and app/ relative to launcher/.

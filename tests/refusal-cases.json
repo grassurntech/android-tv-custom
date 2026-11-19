@@ -1848,7 +1848,7 @@
   },
   {
     "script": "push-theme",
-    "name": "P4 passes TV_IP and theme path to upstream and its exit code back",
+    "name": "P4 passes TV_IP:port and theme path to upstream and its exit code back",
     "args": [],
     "env": {
       "TV_IP": "192.168.1.50"
@@ -1861,8 +1861,28 @@
     "expect": {
       "exit": 7,
       "bin_calls_include": [
-        "=192.168.1.50 arg=",
+        "=192.168.1.50:5555 arg=",
         "user-content"
+      ]
+    }
+  },
+  {
+    "script": "push-theme",
+    "name": "P6 a custom TV_ADB_PORT reaches upstream",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50",
+      "TV_ADB_PORT": "6000"
+    },
+    "files": {
+      "user-content/theme/config.json": "{\"columns\": 4}\n",
+      "vendor/cleanyourtv/tools/theme.sh": "#!/usr/bin/env bash\necho \"theme.sh TV_HOST=$TV_HOST arg=$1\" >> \"$FAKE_BIN_LOG\"\nexit 7\n",
+      "vendor/cleanyourtv/tools/theme.ps1": "param([string]$TvHost, [string]$ThemeDir)\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"theme.ps1 TvHost=$TvHost arg=$ThemeDir\"\nexit 7\n"
+    },
+    "expect": {
+      "exit": 7,
+      "bin_calls_include": [
+        "=192.168.1.50:6000 arg="
       ]
     }
   },
@@ -2197,7 +2217,7 @@
       "exit": 0,
       "bin_calls_include": [
         "cwd=launcher",
-        "TV_HOST=192.168.1.50",
+        "TV_HOST=192.168.1.50:5555 SKIP_BUILD",
         "SKIP_BUILD=1",
         "STOCK_LAUNCHER=none",
         "homekey=0 inputkey=0"
@@ -2780,6 +2800,67 @@
       "files_match": {
         "backups/2026-11-19_100000/home-state.txt": "stock_package=com\\.google\\.android\\.tvlauncher\\nstock_component=com\\.google\\.android\\.tvlauncher/\\.MainActivity\\nours=com\\.gathin\\.tvhome\\n"
       }
+    }
+  },
+  {
+    "script": "install-launcher",
+    "name": "L12 a custom TV_ADB_PORT reaches upstream",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50",
+      "TV_ADB_PORT": "6000"
+    },
+    "files": {
+      "vendor/cleanyourtv/launcher/build-and-install.sh": "#!/usr/bin/env bash\n: > ran.txt\nhk=0; [ -n \"${HOME_KEY_SERVICE:-}\" ] && hk=1\nik=0; [ -n \"${INPUT_KEY_SERVICE:-}\" ] && ik=1\necho \"upstream cwd=$(basename \"$(pwd)\") TV_HOST=$TV_HOST SKIP_BUILD=$SKIP_BUILD STOCK_LAUNCHER=$STOCK_LAUNCHER homekey=$hk inputkey=$ik\" >> \"$FAKE_BIN_LOG\"\nexit 0\n",
+      "vendor/cleanyourtv/launcher/build-and-install.ps1": "param([string]$TvHost, [string]$StockLauncher, [switch]$HomeKeyService, [switch]$InputKeyService)\nSet-Content -LiteralPath ran.txt -Value \"\"\n$hk = if ($HomeKeyService) { 1 } else { 0 }\n$ik = if ($InputKeyService) { 1 } else { 0 }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"upstream cwd=$(Split-Path -Leaf (Get-Location).Path) TV_HOST=$TvHost SKIP_BUILD=$env:SKIP_BUILD STOCK_LAUNCHER=$StockLauncher homekey=$hk inputkey=$ik\"\nexit 0\n",
+      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "",
+      "vendor/cleanyourtv/tools/venv/pyvenv.cfg": "home = /usr/bin\n",
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "a.b.c"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
+    },
+    "expect": {
+      "exit": 0,
+      "bin_calls_include": [
+        "TV_HOST=192.168.1.50:6000 SKIP_BUILD"
+      ],
+      "adb_calls_include": [
+        "-s 192.168.1.50:6000 shell"
+      ]
+    }
+  },
+  {
+    "script": "install-launcher",
+    "name": "L13 RESTORE_KEY_SERVICES from the environment is not passed on (unsupported in v1)",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50",
+      "RESTORE_KEY_SERVICES": "1"
+    },
+    "files": {
+      "vendor/cleanyourtv/launcher/build-and-install.sh": "#!/usr/bin/env bash\necho \"upstream restorekey=${RESTORE_KEY_SERVICES:-unset}\" >> \"$FAKE_BIN_LOG\"\nexit 0\n",
+      "vendor/cleanyourtv/launcher/build-and-install.ps1": "param([string]$TvHost, [string]$StockLauncher, [switch]$HomeKeyService, [switch]$InputKeyService, [switch]$RestoreKeyServices)\n$rk = if ($RestoreKeyServices) { 1 } else { 0 }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"upstream restorekey=$rk\"\nexit 0\n",
+      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "",
+      "vendor/cleanyourtv/tools/venv/pyvenv.cfg": "home = /usr/bin\n",
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "a.b.c"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
+    },
+    "expect": {
+      "exit": 0,
+      "bin_calls_include": [
+        "upstream restorekey=0"
+      ]
     }
   }
 ]
