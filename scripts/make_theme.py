@@ -20,7 +20,24 @@ from pathlib import Path
 PKG_RE = re.compile(r"^[A-Za-z][A-Za-z0-9_]*(\.[A-Za-z0-9_]+)+$")
 SIZE = (1920, 1080)
 # TV_MAKE_THEME_MAX_BYTES is a test-only knob (forces the "cannot fit" path); owners never set it.
-MAX_BYTES = int(os.environ.get("TV_MAKE_THEME_MAX_BYTES") or 300 * 1024)
+LIMIT_BYTES = 300 * 1024
+
+
+def _max_bytes():
+    """The limit, never above 300 KB. The test knob can only lower it; junk in it is a clean exit 2."""
+    raw = os.environ.get("TV_MAKE_THEME_MAX_BYTES")
+    if not raw:
+        return LIMIT_BYTES
+    try:
+        value = int(raw)
+    except ValueError:
+        value = 0
+    if value <= 0:
+        fail(2, "TV_MAKE_THEME_MAX_BYTES must be a positive whole number (it is a test-only setting)")
+    return min(LIMIT_BYTES, value)
+
+
+MAX_BYTES = LIMIT_BYTES  # main() lowers it if the test knob is set
 MAX_PHOTOS = 100  # the launcher considers at most 100 pictures
 EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp", ".heic", ".heif"}
 TEMPLATE = Path(__file__).resolve().parent.parent / "themes" / "template" / "config.json"
@@ -75,7 +92,9 @@ def encode(img):
 
 
 def main(argv):
+    global MAX_BYTES
     args = parse_args(argv)
+    MAX_BYTES = _max_bytes()
     try:
         from PIL import Image, ImageOps
     except ImportError:

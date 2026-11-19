@@ -127,6 +127,20 @@ class MakeThemeTests(unittest.TestCase):
         self.assertIn("skipped n.png", r.stderr)
         self.assertFalse((self.out / "config.json").exists())
 
+    def test_size_knob_cannot_raise_the_limit(self):
+        self.noise((1920, 1080)).save(self.photos / "n.png")  # per-pixel noise: far over 300 KB at q90
+        r = self.run_tool(env={"TV_MAKE_THEME_MAX_BYTES": str(10**9)})
+        self.assertIn(r.returncode, (0, 2), r.stderr)
+        for f in (self.out / "wallpapers").glob("*.jpg"):
+            self.assertLessEqual(f.stat().st_size, 307200)
+
+    def test_size_knob_junk_is_exit_2(self):
+        Image.new("RGB", (640, 480), "blue").save(self.photos / "a.jpg")
+        for bad in ("abc", "0", "-5"):
+            r = self.run_tool(env={"TV_MAKE_THEME_MAX_BYTES": bad})
+            self.assertEqual(r.returncode, 2, r.stderr)
+            self.assertNotIn("Traceback", r.stderr)
+
     def test_rejects_empty_photo_folder(self):
         r = self.run_tool()
         self.assertEqual(r.returncode, 2)
