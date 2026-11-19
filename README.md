@@ -2,16 +2,39 @@
 
 An open-source way to take back your Android TV: switch off the ads and preinstalled junk, and replace the home screen with your own photos, a small clock, your name and your four favourite apps.
 
-> **Status:** early design, being developed on a TCL TV. Nothing to install yet.
+![Mock-up of the finished home screen: a clock, a greeting and four app tiles over a calm evening landscape](docs/images/home-mockup.png)
 
-## What it will do
-- **Remove the junk and ads.** Disable ad services and bloatware from your computer over your home Wi-Fi. Every step can be undone.
-- **Give you your own home screen.** Your photos as the background, plus a clock, your name and four app shortcuts. Nothing else.
+> **Status:** v1.0, in testing on a TCL TV. [Undo everything](#undo-it) at any time.
 
-## How it works
-You don't need to know how to code. You paste **one prompt** into an AI coding tool, such as Claude Code, Cursor, Codex or Antigravity, and the AI does the work on your TV step by step. It asks you before anything that depends on your choices, and it never touches the parts that make your TV a TV.
+## Quick start
+1. Open [`PROMPT.md`](PROMPT.md) in this repo.
+2. Copy all of it.
+3. Paste it into your AI coding tool (Claude Code, Cursor, Codex, Antigravity or similar) and follow along.
 
-## Before you start (prerequisites)
+You don't need to know how to code. The AI does the work on your TV step by step, asks you before anything that depends on your choices, and never touches the parts that make your TV a TV. It takes about an hour. Check [Before you start](#before-you-start) first.
+
+## What it does, and what it doesn't
+**It does**
+- **Switch off the junk and ads.** Ad services, trackers and preinstalled apps are disabled from your computer over your home Wi-Fi. Every step can be undone.
+- **Give you your own home screen.** Your photos as the background, plus a clock, your name and four app shortcuts. Press Down on the remote to see every other app.
+
+**It doesn't**
+- **Touch your streaming apps.** Netflix, Prime Video, Disney+, YouTube and the rest are never switched off.
+- **Remove ads inside streaming apps.** Those ads come from the apps themselves (for example Prime Video's ad tier), so they stay.
+- **Delete anything.** Apps are only switched off, never uninstalled.
+- **Touch the parts that make your TV a TV.** HDMI inputs, the tuner, the remote, Bluetooth, the keyboard, the Play Store and Settings are left alone.
+- **Upload your photos or settings.** They stay on your computer and your TV.
+
+On Google TV, the "Continue watching" and recommendation rows belong to the old home screen, so they go with it. Each app's own "continue watching" still works.
+
+## Tested on
+| TV | Android / Google TV | Status | Date |
+|---|---|---|---|
+| TCL (model to be confirmed in the first on-TV session) | To be confirmed | In testing | 2026-11-19 |
+
+Works on Android TV and Google TV sets. It does not work on Samsung, LG, Roku or Fire TV. Rows are added by pull requests from the "Tested on my TV" issue form, so if it worked (or didn't) on yours, please tell us.
+
+## Before you start
 Your AI tool checks each of these for you and walks you through anything missing. It's quicker if they're ready.
 
 **Your TV**
@@ -59,22 +82,30 @@ Leave Docker open while your AI tool works. The first build takes about 5–10 m
 
 Your AI tool switches debugging off again when it's finished, so your TV doesn't stay open on the network.
 
+## Undo it
+One command puts your TV back as it was. Turn debugging back on first (see [Turn on developer mode](#turn-on-developer-mode-on-your-tv)), open a terminal in this project's folder, then run:
+
+- **Mac or Linux:** `bash scripts/restore.sh`
+- **Windows (PowerShell):** `powershell -NoProfile -ExecutionPolicy Bypass -File scripts\restore.ps1`
+
+It switches everything we turned off back on, and puts your TV's own home screen back. Our home-screen app stays installed but switched off. To undo only one part, add `--home-only` (just the home screen) or `--packages-only` (just the apps) to the command.
+
+To bring back a single app without a computer: Settings → Apps → See all apps → the app → Enable.
+
 ## Fork it, run it, change it
 This project is built for forking. Your photos, name and TV details live only in your local `.env` and content folders, which git ignores, so your fork never exposes them.
 
 ```bash
 git clone https://github.com/<you>/android-tv-custom.git
 cd android-tv-custom
-cp .env.example .env        # then fill in your own values
+cp .env.example .env        # Windows: copy .env.example .env. Then fill in your own values
 git config core.hooksPath scripts/hooks   # turns on the secret guardrail
 ```
-
-Setup steps will appear here once the first version is built.
 
 ## Built on
 The home-screen app and the core debloat tools come from [cleanyourtv](https://github.com/Gathin23/cleanyourtv) (MIT), pinned to a tested version. This project adds a stricter safety layer, a beginner-proof prompt, and the photos-and-name home-screen theme.
 
-## Contributing & security
+## Contributing and security
 - [CONTRIBUTING.md](CONTRIBUTING.md): how to propose changes
 - [docs/SECURITY.md](docs/SECURITY.md): secrets policy and how to report a vulnerability
 
