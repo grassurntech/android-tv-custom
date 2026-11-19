@@ -139,14 +139,15 @@ function Save-TvShellOutput {
     $psi.Arguments = ($quoted -join ' ')
     $psi.UseShellExecute = $false
     $psi.RedirectStandardOutput = $true
-    $proc = [System.Diagnostics.Process]::Start($psi)
     $fs = [System.IO.File]::Create($File)
+    $proc = $null
     try {
+        $proc = [System.Diagnostics.Process]::Start($psi)
         $proc.StandardOutput.BaseStream.CopyTo($fs)
     } finally {
         $fs.Dispose()
+        if ($null -ne $proc) { $proc.WaitForExit() }
     }
-    $proc.WaitForExit()
     return $proc.ExitCode
 }
 

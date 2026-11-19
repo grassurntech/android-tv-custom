@@ -42,6 +42,6 @@ class LatestBackup(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             make_backups(tmp)
             cmd = (f"Import-Module '{ROOT}/scripts/lib/TvEnv.psm1' -Force; Import-TvEnv; Get-TvLatestBackup")
-            out = subprocess.run([ps, "-NoProfile", "-Command", cmd], env=self._env(tmp),
+            out = subprocess.run([ps, "-NoProfile"] + (["-ExecutionPolicy", "Bypass"] if os.name == "nt" else []) + ["-Command", cmd], env=self._env(tmp),
                                  capture_output=True, text=True).stdout.strip()
             self.assertEqual(Path(out).name, "2026-01-01_000000")
