@@ -19,11 +19,15 @@ if (-not (Test-Path -LiteralPath $upstream -PathType Leaf)) {
     [Console]::Error.WriteLine('cleanyourtv is not fetched yet. Run scripts/fetch-tools.ps1 first.')
     exit 3
 }
-# Native calls: relax 'Stop' so docker's stderr and non-zero exit are judged by exit code.
-$ErrorActionPreference = 'Continue'
-$null = & docker info 2>&1
-$dockerOk = ($LASTEXITCODE -eq 0)
-$ErrorActionPreference = 'Stop'
+# docker not installed at all is the same setup problem as docker not running (matches the sh twin).
+$dockerOk = $false
+if (Get-Command docker -ErrorAction SilentlyContinue) {
+    # Native call: relax 'Stop' so docker's stderr is judged by exit code.
+    $ErrorActionPreference = 'Continue'
+    $null = & docker info 2>&1
+    $dockerOk = ($LASTEXITCODE -eq 0)
+    $ErrorActionPreference = 'Stop'
+}
 if (-not $dockerOk) {
     [Console]::Error.WriteLine('Docker is not running. Open Docker Desktop and wait until it says running, then run this again.')
     exit 3

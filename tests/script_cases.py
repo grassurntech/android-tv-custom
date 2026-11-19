@@ -81,6 +81,36 @@ def read_lines(path):
     return path.read_text().splitlines() if path.exists() else []
 
 
+def _path_without(path, names, farm_root):
+    """PATH with the named commands made invisible, so a case about a missing tool is deterministic even
+    where the real tool is installed. POSIX: a directory holding one is replaced by a symlink farm of
+    everything else in it. Windows: such a directory (a dedicated tool folder) is dropped."""
+    wanted = set()
+    for n in names:
+        wanted.update({n, n + ".exe", n + ".cmd", n + ".bat", n + ".com"})
+    wanted = {w.lower() for w in wanted} if IS_WINDOWS else wanted
+    out = []
+    for i, d in enumerate(path.split(os.pathsep)):
+        if not d or not os.path.isdir(d):
+            out.append(d)
+            continue
+        entries = os.listdir(d)
+        hit = [e for e in entries if (e.lower() if IS_WINDOWS else e) in wanted]
+        if not hit:
+            out.append(d)
+        elif not IS_WINDOWS:
+            farm = Path(farm_root) / str(i)
+            farm.mkdir(parents=True, exist_ok=True)
+            for e in entries:
+                if e not in hit:
+                    try:
+                        (farm / e).symlink_to(Path(d) / e)
+                    except OSError:
+                        pass
+            out.append(str(farm))
+    return os.pathsep.join(out)
+
+
 def run_case(case, impl_name, ext, argv_prefix, tmp):
     """Run one case; returns (CompletedProcess, adb_lines, bin_lines, repo_dir)."""
     tmp = Path(tmp)
@@ -113,7 +143,10 @@ def run_case(case, impl_name, ext, argv_prefix, tmp):
     bin_log.write_text("")
 
     env = {k: v for k, v in os.environ.items() if k not in CONFIG_ENV}
-    env["PATH"] = str(bindir) + os.pathsep + env.get("PATH", "")
+    path = env.get("PATH", "")
+    if case.get("hide_commands"):
+        path = _path_without(path, case["hide_commands"], tmp / "filtered path")
+    env["PATH"] = str(bindir) + os.pathsep + path
     env["ADB"] = str(bindir / ("adb.cmd" if IS_WINDOWS else "adb"))
     env.update(FAKE_ADB_STATE=str(state_file), FAKE_ADB_LOG=str(adb_log), FAKE_BIN_LOG=str(bin_log))
     for k, v in case.get("env", {}).items():
@@ -180,7 +213,7 @@ def check_expect(test, expect, proc, adb_lines, bin_lines, repo):
 
 
 def load_cases():
-    return json.loads(CASES_FILE.read_text())
+    return json.loads(CASES_FILE.read_text(encoding="utf-8"))
 
 
 class ScriptCases(unittest.TestCase):

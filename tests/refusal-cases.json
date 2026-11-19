@@ -73,7 +73,7 @@
       "TV_IP": null
     },
     "files": {
-      ".env": "﻿TV_IP=10.0.0.9\r\n# tv\r\n"
+      ".env": "\ufeffTV_IP=10.0.0.9\r\n# tv\r\n"
     },
     "tv": {
       "state": "device"
@@ -1631,6 +1631,28 @@
         "user-content/keystore"
       ]
     }
+  },
+  {
+    "script": "build-launcher",
+    "name": "L1d docker not installed is setup missing",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "vendor/cleanyourtv/tools/docker-build.sh": "#!/usr/bin/env bash\nk=\"$HOST_KEY_DIR\"; abs=no; case \"$k\" in /*) abs=yes;; esac; d=no; [ -d \"$k\" ] && d=yes\necho \"docker-build abs=$abs isdir=$d dir=$k\" >> \"$FAKE_BIN_LOG\"\nmkdir -p \"$(dirname \"$0\")/../launcher/app/build/outputs/apk/release\"\n: > \"$(dirname \"$0\")/../launcher/app/build/outputs/apk/release/app-release.apk\"\nexit ${STUB_RC:-0}\n",
+      "vendor/cleanyourtv/tools/docker-build.ps1": "$k = $env:HOST_KEY_DIR\n$abs = if ([System.IO.Path]::IsPathRooted($k)) { \"yes\" } else { \"no\" }\n$d = if (Test-Path -LiteralPath $k -PathType Container) { \"yes\" } else { \"no\" }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"docker-build abs=$abs isdir=$d dir=$k\"\n$out = Join-Path $PSScriptRoot \"../launcher/app/build/outputs/apk/release\"\nNew-Item -ItemType Directory -Force -Path $out | Out-Null\nSet-Content -LiteralPath (Join-Path $out \"app-release.apk\") -Value \"\"\nexit 0\n"
+    },
+    "expect": {
+      "exit": 3,
+      "files_absent": [
+        "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk",
+        "user-content/keystore"
+      ]
+    },
+    "hide_commands": [
+      "docker"
+    ]
   },
   {
     "script": "build-launcher",
