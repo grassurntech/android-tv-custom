@@ -32,6 +32,24 @@ function Read-TvDotEnv {
     }
 }
 
+# Warns (stderr only, never fails) when the backup folder is inside the repo but not under backups/:
+# backups hold serial numbers, and only backups/ is git-ignored. Mirrors _tv_check_backup_dir in tv-env.sh
+# (paths compare case-insensitively on Windows only, where the file system does).
+function Test-TvBackupDirPlace([string]$Backup) {
+    try {
+        $sep = [string][System.IO.Path]::DirectorySeparatorChar
+        $full = [System.IO.Path]::GetFullPath($Backup).TrimEnd('\', '/') + $sep
+        $root = [System.IO.Path]::GetFullPath($script:TvRepoRoot).TrimEnd('\', '/') + $sep
+    } catch {
+        return
+    }
+    $cmp = [System.StringComparison]::Ordinal
+    if ($sep -eq '\') { $cmp = [System.StringComparison]::OrdinalIgnoreCase }
+    if ($full.StartsWith($root, $cmp) -and -not $full.StartsWith($root + 'backups' + $sep, $cmp)) {
+        [Console]::Error.WriteLine("Warning: TV_BACKUP_DIR ($Backup) is inside the project folder but not under backups/, so git may not ignore it. Backups hold serial numbers: move it outside the project or under backups/.")
+    }
+}
+
 # Sets global REPO_ROOT, TV_IP, TV_ADB_PORT, TV_BACKUP_DIR (absolute), ADB, SERIAL. Exits 3 if TV_IP is empty.
 function Import-TvEnv {
     Read-TvDotEnv
@@ -49,6 +67,7 @@ function Import-TvEnv {
         $backup = $backup.Substring(0, $backup.Length - 1)
     }
     if (-not [System.IO.Path]::IsPathRooted($backup)) { $backup = Join-Path $script:TvRepoRoot $backup }
+    Test-TvBackupDirPlace $backup
     $adb = [Environment]::GetEnvironmentVariable('ADB')
     if ([string]::IsNullOrEmpty($adb)) {
         $adb = 'adb'

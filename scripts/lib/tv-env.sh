@@ -41,6 +41,32 @@ _tv_read_dotenv() {
   done < "$file"
 }
 
+# Lexically normalise an absolute /path (drops ".", "..", repeated "/") into TV_NORM. No symlinks resolved.
+_tv_norm() {
+  local IFS=/ part out=""
+  case $- in *f*) local had_f=1 ;; *) local had_f=0 ;; esac
+  set -f
+  for part in $1; do
+    case "$part" in ''|.) ;; ..) out="${out%/*}" ;; *) out="$out/$part" ;; esac
+  done
+  [ "$had_f" -eq 1 ] || set +f
+  TV_NORM="${out:-/}"
+}
+
+# Warns (stderr only, never fails) when TV_BACKUP_DIR is inside the repo but not under backups/:
+# backups hold serial numbers, and only backups/ is git-ignored.
+_tv_check_backup_dir() {
+  local bd rr
+  case "$TV_BACKUP_DIR" in /*) ;; *) return 0 ;; esac
+  _tv_norm "$TV_BACKUP_DIR"; bd="$TV_NORM"
+  _tv_norm "$REPO_ROOT"; rr="$TV_NORM"
+  case "$bd/" in
+    "$rr/backups/"*) ;;
+    "$rr/"*) echo "Warning: TV_BACKUP_DIR ($TV_BACKUP_DIR) is inside the project folder but not under backups/, so git may not ignore it. Backups hold serial numbers: move it outside the project or under backups/." >&2 ;;
+  esac
+  return 0
+}
+
 # Sets REPO_ROOT, TV_IP, TV_ADB_PORT, TV_BACKUP_DIR (absolute), ADB, SERIAL. Exits 3 if TV_IP is empty.
 tv_load_env() {
   _tv_read_dotenv
@@ -57,6 +83,7 @@ tv_load_env() {
     /*|[A-Za-z]:*) ;;
     *) TV_BACKUP_DIR="$REPO_ROOT/$TV_BACKUP_DIR" ;;
   esac
+  _tv_check_backup_dir
   if [ -z "${ADB:-}" ]; then
     if [ -x "$REPO_ROOT/tools/platform-tools/adb" ]; then
       ADB="$REPO_ROOT/tools/platform-tools/adb"

@@ -106,6 +106,74 @@
     }
   },
   {
+    "script": "connect",
+    "name": "C7 TV_BACKUP_DIR inside the repo but outside backups/ warns, still works",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50",
+      "TV_BACKUP_DIR": "my-backups"
+    },
+    "tv": {
+      "state": "device"
+    },
+    "expect": {
+      "exit": 0,
+      "stderr_contains": "Warning: TV_BACKUP_DIR"
+    }
+  },
+  {
+    "script": "connect",
+    "name": "C8 TV_BACKUP_DIR under backups/ does not warn",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50",
+      "TV_BACKUP_DIR": "backups/tv-one"
+    },
+    "tv": {
+      "state": "device"
+    },
+    "expect": {
+      "exit": 0,
+      "stderr_excludes": [
+        "Warning: TV_BACKUP_DIR"
+      ]
+    }
+  },
+  {
+    "script": "connect",
+    "name": "C9 TV_BACKUP_DIR outside the repo does not warn",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50",
+      "TV_BACKUP_DIR": "../outside-backups"
+    },
+    "tv": {
+      "state": "device"
+    },
+    "expect": {
+      "exit": 0,
+      "stderr_excludes": [
+        "Warning: TV_BACKUP_DIR"
+      ]
+    }
+  },
+  {
+    "script": "connect",
+    "name": "C10 TV_BACKUP_DIR that climbs out and back in warns",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50",
+      "TV_BACKUP_DIR": "scripts/../my-backups"
+    },
+    "tv": {
+      "state": "device"
+    },
+    "expect": {
+      "exit": 0,
+      "stderr_contains": "Warning: TV_BACKUP_DIR"
+    }
+  },
+  {
     "script": "backup",
     "name": "B1 no TV_IP",
     "args": [],
