@@ -12,7 +12,7 @@ the same Wi-Fi as your TV.
 
 - It switches off the ads, trackers and junk apps that came with the TV.
 - It gives the TV a new home screen: your photos in the background, a greeting with your name, a clock, and
-  your four favourite apps. Press Down on the remote to see every other app.
+  your favourite apps (1 to 8). Every other app, Play Store installs too, is in the App library.
 
 **What it never does.**
 
@@ -347,11 +347,11 @@ Skip this phase if Phase 3 found the TV too old. Do the Home check after every s
 
 **6.1 Ask the owner, one question at a time:**
 
-- Which folder on this computer holds the photos they want in the background (landscape photos look best).
+- Which folder holds the background photos (landscape looks best). None yet is fine: leave out `--photos`.
 - The name for the greeting ("Good evening, <name>").
-- Their four favourite apps, in order. Offer the installed streaming apps by name, and turn their choices into
-  package names from `packages-all.txt`.
-- A 12-hour clock (3:45 PM) or a 24-hour clock (15:45).
+- Their favourite apps for the dock, 1 to 8, in order. Offer the installed streaming apps by name, and turn their
+  choices into package names from `packages-all.txt`.
+- A 12-hour (3:45 PM) or 24-hour (15:45) clock, or leave it to the TV (`system`, changeable in Launcher settings).
 
 On a Mac, iPhone photos are often HEIC files, which the photo tool may skip. **Say:** "If your photos came from
 an iPhone, export them from the Photos app as JPEG first, or I can convert copies for you." To convert, write
@@ -359,7 +359,7 @@ the copies into `photos/` (it stays on this computer): `sips -s format jpeg <pho
 On Windows, ask the owner to export them as JPEG.
 
 **6.2 Make the theme.**
-`.venv/bin/python scripts/make_theme.py --photos "<folder>" --name "<name>" --apps <p1>,<p2>,<p3>,<p4> --clock <12|24> --out user-content/theme`
+`.venv/bin/python scripts/make_theme.py --photos "<folder>" --name "<name>" --apps <p1>,<p2>,... --clock <12|24|system> --out user-content/theme`
 (Windows: `.venv\Scripts\python scripts\make_theme.py` with the same options). Pass the photo folder as a full
 path; expand `~` yourself. It resizes the photos and strips their location data into `user-content/theme`
 (keep `--out` there). On exit 2, follow the `make_theme` row.
@@ -424,7 +424,7 @@ that state: on some TVs a restart there forced a factory reset.
 
 **6.9 Restart once.** Do the Home check. Only if it passes, wait 15 seconds, run `shell sync`, **say:** "I'm
 restarting the TV once more," and run `reboot`. When it's back, run `connect` and do the Home check again.
-**Say:** "What does the TV show now? You should see your photo, your name, the clock and your four apps."
+**Say:** "What does the TV show now? You should see your photo, your name, the clock and your apps."
 
 **6.10 Remote buttons.** On Google TV, the old home screen answered the app buttons on the remote.
 

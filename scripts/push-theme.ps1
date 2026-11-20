@@ -1,6 +1,6 @@
 # Pushes the owner's theme (user-content/theme, made by make_theme.py) to the TV through cleanyourtv's
 # own theme.ps1. No arguments. Before anything is sent it checks the theme (the same rules as
-# make_theme.py --check-theme): config.json must parse to an object, wallpapers/ must hold at least one .jpg, and no
+# make_theme.py --check-theme): config.json must parse to an object, wallpapers/ must hold a .jpg unless "wallpaper" is false, and no
 # package named anywhere in config.json may match config/forbidden-packages.txt.
 # Exit: 0 pushed, 2 bad arguments or a theme that fails the check (nothing pushed), 3 TV_IP unset, vendor not
 #       fetched, no theme made yet or a package list unreadable; otherwise theme.ps1's own exit code
@@ -53,13 +53,19 @@ if ($null -eq $cfg -or $cfg -isnot [System.Management.Automation.PSCustomObject]
 }
 $wall = Join-Path $theme 'wallpapers'
 $jpgs = @()
-if (Test-Path -LiteralPath $wall -PathType Container) {
+if (Test-Path -LiteralPath $wall) {
     $wallItem = Get-Item -LiteralPath $wall -Force
-    if (-not ($wallItem.Attributes -band [System.IO.FileAttributes]::ReparsePoint)) {
+    if ($wallItem.Attributes -band [System.IO.FileAttributes]::ReparsePoint) {
+        [Console]::Error.WriteLine("The theme's wallpapers folder is a symbolic link. Run make_theme.py again. Nothing was pushed.")
+        exit 2
+    }
+    if ($wallItem.PSIsContainer) {
         $jpgs = @(Get-ChildItem -LiteralPath $wall -File -Force | Where-Object { $_.Extension -ieq '.jpg' })
     }
 }
-if ($jpgs.Count -eq 0) {
+# "wallpaper": false is a theme with no photos yet (make_theme.py without --photos): no .jpg needed.
+$noPhotos = $null -ne $cfg.PSObject.Properties['wallpaper'] -and $cfg.wallpaper -is [bool] -and -not $cfg.wallpaper
+if ($jpgs.Count -eq 0 -and -not $noPhotos) {
     [Console]::Error.WriteLine('The theme has no wallpapers (wallpapers/*.jpg). Run make_theme.py again. Nothing was pushed.')
     exit 2
 }

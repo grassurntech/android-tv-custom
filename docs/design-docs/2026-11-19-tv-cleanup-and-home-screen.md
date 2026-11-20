@@ -9,7 +9,7 @@
 The TCL Android TV's stock software fills the screen with ads, recommendation rows and preinstalled apps nobody asked for. This project gives the owner back a calm TV:
 
 1. **Turn off the junk and ads** that the TV's own software shows.
-2. **Swap the home screen** for one that shows the owner's photos, a small clock, their name and their four favourite apps.
+2. **Swap the home screen** for one that shows the owner's photos, a small clock, their name and their favourite apps.
 
 It's open source. Anyone with an Android TV can fork it and run it on their own set by pasting **one prompt** into an AI coding tool (Claude Code, Cursor, Codex, Antigravity or similar). The AI does the work step by step and asks the owner whenever a choice is theirs.
 
@@ -23,7 +23,7 @@ Someone who **knows no code**. They can install an app (Docker Desktop, an AI to
 
 **Goals**
 - The TV's own ads, recommendation rows and telemetry are switched off.
-- Home shows the owner's photos as the background, a small clock, their name and four app tiles.
+- Home shows the owner's photos as the background, a small clock, their name and their favourite app tiles (1 to 8).
 - **Streaming apps (Netflix, Prime Video, Disney+, YouTube and the rest) keep working exactly as before:** they open, play, stay signed in and update through the Play Store as usual (see §7).
 - Every change can be undone, and the owner gets the steps to undo it.
 - A non-coder finishes in one sitting with one prompt.
@@ -75,9 +75,9 @@ Someone who **knows no code**. They can install an app (Docker Desktop, an AI to
 ```
 
 - **Background:** the owner's photos, pushed to the TV as a theme (cleanyourtv's `theme.sh`). They can be changed later without a rebuild.
-- **Clock:** small, in the corner. 12- or 24-hour, the owner's choice.
+- **Clock:** small, in the corner. 12- or 24-hour, or the TV's setting (`system`, the default), changeable on the TV.
 - **Name:** a greeting with the owner's name (`greeting_name`, `show_greeting`).
-- **Four favourite apps** in the dock (`dock_apps`, `columns` = 4).
+- **1 to 8 favourite apps** in the dock (`dock_apps`, `columns` = max(4, count)); the App library (`app_library`) lists every other app, Play Store installs included.
 - **Everything else** sits in a grid that appears only when the owner presses Down, so the home screen itself shows nothing beyond the items above. *(Our call: this keeps every installed app reachable without crowding the home screen.)*
 
 ## 7. Streaming apps stay normal
@@ -86,7 +86,7 @@ The owner's streaming apps are part of the experience, not part of the cleanup.
 
 - **Never disabled by us.** Major streaming apps go on a third config list, `config/streaming-apps.txt` (Netflix, Prime Video, Disney+, YouTube, Hotstar/JioHotstar, Apple TV, Max, Paramount+, Peacock, Hulu, Plex, Spotify and similar, as package-name patterns). `disable-one.sh` and the Claude hook refuse to disable anything on it, the same way they treat protected packages. If an owner wants a preinstalled streaming app gone, they turn it off themselves in TV Settings → Apps. *(Our call: it keeps the rule simple and stops the AI from guessing what someone watches.)*
 - **Updates and sign-in untouched.** The Play Store, Play Services and the account services they need are already protected, so apps keep updating and stay signed in. We never clear app data.
-- **Launch from Home.** Any of them can be one of the four dock apps, and all of them appear in the Down grid.
+- **Launch from Home.** Any of them can be a dock app, and all of them appear in the App library.
 - **Remote buttons.** On Google TV, the stock launcher is what answers the remote's Netflix, YouTube and Prime buttons. After the new Home is in place, the prompt asks the owner to press each app button. Any that do nothing get remapped through the launcher's key service (`app_keys`). On TCL Google TV builds that service can stop held buttons from repeating (holding volume up moves it one step), so the prompt explains that trade-off and lets the owner choose before switching it on.
 - **What owners lose, said up front:** Google TV's "Continue watching" and recommendation rows belong to the stock home screen, so they go when it does. Each app's own "continue watching" row inside the app is unaffected.
 
@@ -100,7 +100,7 @@ Each phase ends with a short plain-language summary. The agent only moves on aft
 3. **Identify the TV.** Model, Android version, Google TV or older Android TV, which stock launcher it uses, and whether cleanyourtv has notes for that exact model in its `examples/` or `docs/devices/`.
 4. **Back up.** Write to `backups/<date>/`: `packages-all.txt`, the already-disabled list, `getprop`, and `settings list global/secure/system`, plus `tv-id.txt` so a backup is never used on a different TV. Nothing is changed before this exists.
 5. **Clean up.** Sort installed packages into telemetry, ads and recommendations, background extras, preinstalled apps, and streaming apps. The proposed list comes from vetted sources first: cleanyourtv's `examples/` entry for this exact model, plus our own `config/junk-packages.txt` (seeded from our TCL and grown with each tested set). The agent may add a package from neither source only after reading `dumpsys package <name>`, and it marks that package as "my guess" for the owner. *(Our call.)* Show the owner the proposed list in plain words and get a yes. Then call `scripts/disable-one.sh <package>` once per package. It refuses protected, streaming and forbidden packages, refuses without a backup, and appends each change to `backups/<date>/disabled-by-us.txt`. After every few packages, the agent checks the TV still responds (`dumpsys`) and asks the owner whether TV, HDMI and the remote still work. When finished, wait about 15 seconds, sync, reboot once, and check that what we disabled is still disabled.
-6. **Build the home screen.** Ask for the photos folder, the name and the four apps. Fetch cleanyourtv at the pinned tag, build the launcher APK with its `docker-build.sh`, install it, and make it Home (`cmd package set-home-activity`). Then turn off the stock launcher the way the matching `examples/` entry says. **The Google TV setup wizard (`setupwraith`) stays protected and is never disabled by us.** If it takes over Home anyway, the agent first tries the launcher's own redirect (`stock_home_redirect` with the home-key service). If Home still isn't ours, it stops, explains, and leaves the TV on the stock home screen. *(Our call: disabling setupwraith can delete the Wi-Fi network and cut ADB, so we only revisit it with evidence from a real set.)* The launcher is signed with a per-owner key kept in git-ignored `user-content/keystore/`, created on the first build and reused for every rebuild, so updates install over the old version (`adb install -r`) without uninstalling. The summary tells the owner to keep that folder. Without it, a rebuilt launcher can't replace the installed one, and the old one simply keeps working. *(Our call.)* Scale the photos to the TV's resolution on the computer, then push our theme (`config.json` plus wallpapers). Reboot once, and ask the owner what Home shows and whether each remote app button works (§7).
+6. **Build the home screen.** Ask for the photos folder (optional), the name and the dock apps. Fetch cleanyourtv at the pinned tag, build the launcher APK with its `docker-build.sh`, install it, and make it Home (`cmd package set-home-activity`). Then turn off the stock launcher the way the matching `examples/` entry says. **The Google TV setup wizard (`setupwraith`) stays protected and is never disabled by us.** If it takes over Home anyway, the agent first tries the launcher's own redirect (`stock_home_redirect` with the home-key service). If Home still isn't ours, it stops, explains, and leaves the TV on the stock home screen. *(Our call: disabling setupwraith can delete the Wi-Fi network and cut ADB, so we only revisit it with evidence from a real set.)* The launcher is signed with a per-owner key kept in git-ignored `user-content/keystore/`, created on the first build and reused for every rebuild, so updates install over the old version (`adb install -r`) without uninstalling. The summary tells the owner to keep that folder. Without it, a rebuilt launcher can't replace the installed one, and the old one simply keeps working. *(Our call.)* Scale the photos to the TV's resolution on the computer, then push our theme (`config.json` plus wallpapers). Reboot once, and ask the owner what Home shows and whether each remote app button works (§7).
 7. **Finish.** Write a summary of everything changed and how to undo it to `backups/<date>/SUMMARY.md`. Turn off network debugging, and USB debugging too unless the owner wants it kept. Confirm it's off with `connect --check-off` (exit 0 means off, 23 means still on).
 
 **Stop rule:** if the TV refuses a command, or something doesn't come back after a reboot, the agent stops, says what happened in plain words, and points to the undo steps. It never retries in a loop.

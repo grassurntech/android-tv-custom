@@ -84,6 +84,48 @@
   },
   {
     "script": "push-theme",
+    "name": "TH-59a a theme with no photos yet (wallpaper false, no wallpapers/) is pushed",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "vendor/cleanyourtv/tools/theme.sh": "#!/usr/bin/env bash\n: > \"$(dirname \"$0\")/ran.txt\"\necho \"theme.sh TV_HOST=$TV_HOST arg=$1\" >> \"$FAKE_BIN_LOG\"\nexit 7\n",
+      "vendor/cleanyourtv/tools/theme.ps1": "param([string]$TvHost, [string]$ThemeDir)\nSet-Content -LiteralPath (Join-Path $PSScriptRoot \"ran.txt\") -Value \"\"\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"theme.ps1 TvHost=$TvHost arg=$ThemeDir\"\nexit 7\n",
+      "user-content/theme/config.json": "{\"columns\": 4, \"wallpaper\": false, \"dock_apps\": [\"com.a.b\"]}\n"
+    },
+    "expect": {
+      "exit": 7,
+      "bin_calls_include": [
+        "=192.168.1.50:5555 arg="
+      ],
+      "files_contain": {
+        "vendor/cleanyourtv/tools/ran.txt": []
+      }
+    }
+  },
+  {
+    "script": "push-theme",
+    "name": "TH-59b wallpaper given as the string \"false\" still needs photos, nothing pushed",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "vendor/cleanyourtv/tools/theme.sh": "#!/usr/bin/env bash\n: > \"$(dirname \"$0\")/ran.txt\"\necho \"theme.sh TV_HOST=$TV_HOST arg=$1\" >> \"$FAKE_BIN_LOG\"\nexit 7\n",
+      "vendor/cleanyourtv/tools/theme.ps1": "param([string]$TvHost, [string]$ThemeDir)\nSet-Content -LiteralPath (Join-Path $PSScriptRoot \"ran.txt\") -Value \"\"\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"theme.ps1 TvHost=$TvHost arg=$ThemeDir\"\nexit 7\n",
+      "user-content/theme/config.json": "{\"columns\": 4, \"wallpaper\": \"false\"}\n"
+    },
+    "expect": {
+      "exit": 2,
+      "files_absent": [
+        "vendor/cleanyourtv/tools/ran.txt"
+      ],
+      "stderr_contains": "wallpapers"
+    }
+  },
+  {
+    "script": "push-theme",
     "name": "TH-30d wallpapers folder with no jpg is refused",
     "args": [],
     "env": {

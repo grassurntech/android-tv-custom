@@ -1,6 +1,6 @@
 # android-tv-custom
 
-An open-source way to take back your Android TV: switch off the ads and preinstalled junk, and replace the home screen with your own photos, a small clock, your name and your four favourite apps.
+An open-source way to take back your Android TV: switch off the ads and preinstalled junk, and replace the home screen with your own photos, a small clock, your name and your favourite apps.
 
 ![Mock-up of the finished home screen: a clock, a greeting and four app tiles over a calm evening landscape](docs/images/home-mockup.png)
 
@@ -16,7 +16,7 @@ You don't need to know how to code. The AI does the work on your TV step by step
 ## What it does, and what it doesn't
 **It does**
 - **Switch off the junk and ads.** Ad services, trackers and preinstalled apps are disabled from your computer over your home Wi-Fi. Every step can be undone.
-- **Give you your own home screen.** Your photos as the background, plus a clock, your name and four app shortcuts. Press Down on the remote to see every other app.
+- **Give you your own home screen.** Your photos as the background, plus a clock, your name and up to eight app shortcuts. Every other app, including ones you install later from the Play Store, is in the App library at the end of Home.
 
 **It doesn't**
 - **Touch your streaming apps.** Netflix, Prime Video, Disney+, YouTube and the rest are never switched off.
@@ -50,7 +50,7 @@ Your AI tool checks each of these for you and walks you through anything missing
 
 **Ready to hand**
 - [ ] A folder of photos you'd like on your home screen. They stay on your computer and your TV only.
-- [ ] The name you want shown, and your four favourite apps
+- [ ] The name you want shown, and your favourite apps (1 to 8). Photos can wait: the home screen works without them
 
 ### Install Docker
 Docker builds the home-screen app inside a sealed box on your computer, so you don't need to install Java or Android developer tools. You only do this once.

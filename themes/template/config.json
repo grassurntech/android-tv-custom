@@ -16,6 +16,7 @@
   "ambient_glow": false,
   "app_glow": false,
   "fill_dock": false,
+  "app_library": true,
   "dock_apps": [
     "com.netflix.ninja",
     "com.google.android.youtube.tv",

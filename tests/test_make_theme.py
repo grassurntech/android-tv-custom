@@ -114,9 +114,53 @@ class MakeThemeTests(unittest.TestCase):
         self.assertIn("skipped bad.jpg", r.stderr)
         self.assertEqual(len(list((self.out / "wallpapers").iterdir())), 1)
 
-    def test_rejects_three_apps(self):
-        Image.new("RGB", (640, 480), "blue").save(self.photos / "a.jpg")
-        self.assertEqual(self.run_tool(apps="com.a.one,com.b.two,com.c.three").returncode, 2)
+    def test_TH57_one_to_eight_apps_widen_columns(self):
+        self.one_photo()
+        for n, cols in ((1, 4), (3, 4), (6, 6), (8, 8)):
+            apps = ",".join(f"com.app.n{i}" for i in range(n))
+            r = self.run_tool(apps=apps)
+            self.assertEqual(r.returncode, 0, r.stderr)
+            self.assertEqual(self.config()["dock_apps"], apps.split(","))
+            self.assertEqual(self.config()["columns"], cols)
+
+    def test_TH57_rejects_nine_apps_duplicates_and_empty(self):
+        self.one_photo()
+        nine = ",".join(f"com.app.n{i}" for i in range(9))
+        for apps in (nine, "com.a.one,com.a.one", "", "com.a.one,"):
+            r = self.run_tool(apps=apps)
+            self.assertEqual(r.returncode, 2, apps)
+            self.assertNotIn("Traceback", r.stderr)
+
+    def test_TH58_clock_defaults_to_system(self):
+        self.one_photo()
+        r = subprocess.run([sys.executable, str(SCRIPT), "--photos", str(self.photos), "--name", "Sam",
+                            "--apps", APPS, "--out", str(self.out)], capture_output=True, text=True)
+        self.assertEqual(r.returncode, 0, r.stderr)
+        self.assertEqual(self.config()["clock_format"], "system")
+        self.assertEqual(self.run_tool(clock="system").returncode, 0)
+        self.assertEqual(self.config()["clock_format"], "system")
+
+    def test_TH59_no_photos_makes_a_plain_theme_that_passes_the_check(self):
+        cmd = [sys.executable, str(SCRIPT), "--name", "Sam", "--apps", APPS, "--out", str(self.out)]
+        r = subprocess.run(cmd, capture_output=True, text=True)
+        self.assertEqual(r.returncode, 0, r.stderr)
+        cfg = self.config()
+        self.assertIs(cfg["wallpaper"], False)
+        self.assertNotIn("wallpaper_rotation_minutes", cfg)
+        self.assertEqual(list((self.out / "wallpapers").glob("*.jpg")), [])
+        check = subprocess.run([sys.executable, str(SCRIPT), "--check-theme", str(self.out)],
+                               capture_output=True, text=True)
+        self.assertEqual(check.returncode, 0, check.stderr)
+
+    def test_TH59_photos_added_later_replace_the_plain_theme(self):
+        cmd = [sys.executable, str(SCRIPT), "--name", "Sam", "--apps", APPS, "--out", str(self.out)]
+        self.assertEqual(subprocess.run(cmd, capture_output=True, text=True).returncode, 0)
+        self.one_photo()
+        self.assertEqual(self.run_tool().returncode, 0)
+        self.assertIs(self.config()["wallpaper"], True)
+        self.assertEqual([p.name for p in (self.out / "wallpapers").glob("*.jpg")], ["01.jpg"])
+        self.assertEqual(subprocess.run(cmd, capture_output=True, text=True).returncode, 0)
+        self.assertEqual(list((self.out / "wallpapers").glob("*.jpg")), [], "a re-run without photos clears ours")
 
     def test_rejects_bad_package_name(self):
         Image.new("RGB", (640, 480), "blue").save(self.photos / "a.jpg")
@@ -532,6 +576,20 @@ class CheckThemeTests(unittest.TestCase):
         r = self.check()
         self.assertEqual(r.returncode, 2)
         self.assertNotIn("Traceback", r.stderr)
+
+    def test_TH59_wallpaper_false_needs_no_jpg_but_never_a_symlink(self):
+        (self.theme / "wallpapers" / "01.jpg").unlink()
+        (self.theme / "config.json").write_text('{"wallpaper": false, "dock_apps": ["com.a.b"]}')
+        self.assertEqual(self.check().returncode, 0)
+        (self.theme / "wallpapers").rmdir()
+        self.assertEqual(self.check().returncode, 0)
+        (self.theme / "config.json").write_text('{"wallpaper": "false"}')  # not a real false: photos still needed
+        self.assertEqual(self.check().returncode, 2)
+        os.symlink(self.tmp.name, self.theme / "wallpapers")
+        (self.theme / "config.json").write_text('{"wallpaper": false}')
+        r = self.check()
+        self.assertEqual(r.returncode, 2)
+        self.assertIn("symbolic link", r.stderr)
 
     def test_TH31_forbidden_package_anywhere_is_exit_2(self):
         for cfg in ('{"live_tv_package": "com.tcl.factory.view", "boot_to_live_tv": true}',

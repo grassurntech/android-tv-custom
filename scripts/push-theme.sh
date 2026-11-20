@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Pushes the owner's theme (user-content/theme, made by make_theme.py) to the TV through cleanyourtv's
 # own theme.sh. No arguments. Before anything is sent it checks the theme with make_theme.py --check-theme:
-# config.json must parse, wallpapers/ must hold at least one .jpg, and no package named anywhere in config.json
+# config.json must parse, wallpapers/ must hold a .jpg unless "wallpaper" is false, and no package named in config.json
 # may match config/forbidden-packages.txt.
 # Exit: 0 pushed, 2 bad arguments or a theme that fails the check (nothing pushed), 3 TV_IP unset, vendor not
 #       fetched, no theme made yet, Python missing or a package list unreadable; otherwise theme.sh's own exit

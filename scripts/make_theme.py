@@ -1,12 +1,16 @@
 #!/usr/bin/env python3
 """Turns a folder of the owner's photos into a cleanyourtv theme folder.
 
-  python scripts/make_theme.py --photos DIR --name STR --apps p1,p2,p3,p4 --clock 12|24 --out DIR
+  python scripts/make_theme.py --name STR --apps p1,p2[,...] --out DIR [--photos DIR] [--clock 12|24|system]
       [--stock-home-redirect PKG] [--app-key KEYCODE:PKG ...] [--live-tv-package PKG]
       [--power-on home|live-tv] [--key-filter true|false]
   python scripts/make_theme.py --check-theme DIR      (used by push-theme: validate a theme folder only)
 
-Writes OUT/config.json (themes/template/config.json with greeting_name, dock_apps and clock_format
+--apps takes 1 to 8 different apps for the dock, in order; columns becomes max(4, number of apps). --clock defaults
+to system (follow the TV; the owner can change it on the TV in Launcher settings > Clock). Without --photos the
+theme has no pictures: wallpaper is false and wallpapers/ is emptied of our NN.jpg files.
+
+Writes OUT/config.json (themes/template/config.json with greeting_name, dock_apps, columns and clock_format
 overridden, plus only the optional keys whose flags are given) and OUT/wallpapers/01.jpg, 02.jpg, ...: each photo
 turned upright by its EXIF orientation, flattened onto black if it has transparency, cover-cropped to 1920x1080,
 saved as a fresh RGB JPEG with no metadata at all (no EXIF/GPS, no comment, no ICC, no XMP) and under 300 KB.
@@ -71,6 +75,7 @@ def _max_bytes():
 
 MAX_BYTES = LIMIT_BYTES  # main() lowers it if the test knob is set
 MAX_PHOTOS = 100  # the launcher considers at most 100 pictures
+MAX_APPS = 8  # the launcher's columns key goes up to 8, and the dock is one row
 EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp", ".heic", ".heif"}
 REPO = Path(__file__).resolve().parent.parent
 TEMPLATE = REPO / "themes" / "template" / "config.json"
@@ -157,10 +162,11 @@ def parse_args(argv):
             fail(2, f"make_theme.py: {message}")
 
     p = Parser(prog="make_theme.py", description="Build a cleanyourtv theme from photos.")
-    p.add_argument("--photos", required=True, help="folder with the photos")
+    p.add_argument("--photos", help="folder with the photos (leave out for a theme with no pictures yet)")
     p.add_argument("--name", required=True, help="name shown after the greeting (1 to 40 characters)")
-    p.add_argument("--apps", required=True, help="exactly 4 package names, comma separated")
-    p.add_argument("--clock", required=True, choices=["12", "24"])
+    p.add_argument("--apps", required=True, help=f"1 to {MAX_APPS} package names, comma separated, in dock order")
+    p.add_argument("--clock", choices=["12", "24", "system"], default="system",
+                   help="12- or 24-hour clock, or system (default: follow the TV; changeable on the TV)")
     p.add_argument("--out", required=True, help="theme folder to write")
     p.add_argument("--stock-home-redirect", metavar="PKG", help="stock launcher package to send back to ours")
     p.add_argument("--app-key", metavar="KEYCODE:PKG", action="append", default=[],
@@ -174,8 +180,8 @@ def parse_args(argv):
         fail(2, "--name must be 1 to 40 visible characters, with no control or direction-changing characters")
     args.name = name
     apps = [a.strip() for a in args.apps.split(",")]
-    if len(apps) != 4 or len(set(apps)) != 4:
-        fail(2, "--apps needs exactly 4 different package names, comma separated")
+    if not 1 <= len(apps) <= MAX_APPS or len(set(apps)) != len(apps):
+        fail(2, f"--apps needs 1 to {MAX_APPS} different package names, comma separated")
     for a in apps:
         if not PKG_RE.match(a):
             fail(2, f"--apps: '{a}' does not look like a package name (for example com.example.app)")
@@ -236,8 +242,8 @@ def check_out(args):
     if out.exists() and not out.is_dir():
         fail(3, f"--out: '{args.out}' is a file, not a folder. Give a folder (for example user-content/theme).")
     out_r = out.resolve()
-    photos_r = Path(args.photos).resolve()
-    if _inside(out_r, photos_r) or _inside(photos_r, out_r):
+    photos_r = Path(args.photos).resolve() if args.photos is not None else None
+    if photos_r is not None and (_inside(out_r, photos_r) or _inside(photos_r, out_r)):
         fail(2, "--out and --photos overlap (one is inside the other). Write the theme to its own folder, "
                 "for example user-content/theme. Nothing was changed.")
     try:
@@ -325,7 +331,8 @@ def write_theme(out, outputs, config):
 
 
 def check_theme(folder):
-    """push-theme's pre-flight: config.json parses to an object, wallpapers/ holds a .jpg, no forbidden package."""
+    """push-theme's pre-flight: config.json parses to an object, wallpapers/ holds a .jpg unless the theme says
+    "wallpaper": false (no photos yet), and no forbidden package."""
     folder = Path(folder)
     try:
         config = json.loads((folder / "config.json").read_bytes().decode("utf-8-sig"))
@@ -336,8 +343,10 @@ def check_theme(folder):
     if not isinstance(config, dict):
         fail(2, "The theme's config.json is not valid. Run make_theme.py again. Nothing was pushed.")
     wall = folder / "wallpapers"
-    if not wall.is_dir() or os.path.islink(wall) or not any(
-            f.suffix.lower() == ".jpg" and f.is_file() for f in wall.iterdir()):
+    if os.path.islink(wall):
+        fail(2, "The theme's wallpapers folder is a symbolic link. Run make_theme.py again. Nothing was pushed.")
+    if config.get("wallpaper") is not False and (not wall.is_dir() or not any(
+            f.suffix.lower() == ".jpg" and f.is_file() for f in wall.iterdir())):
         fail(2, "The theme has no wallpapers (wallpapers/*.jpg). Run make_theme.py again. Nothing was pushed.")
     forbidden = read_list(FORBIDDEN_LIST)
 
@@ -373,12 +382,12 @@ def main(argv):
     except ImportError:
         fail(3, "Pillow is missing. Run: python -m pip install -r requirements.txt")
 
-    photos = Path(args.photos)
-    if not photos.is_dir():
+    photos = Path(args.photos) if args.photos is not None else None
+    if photos is not None and not photos.is_dir():
         fail(2, f"--photos: '{args.photos}' is not a folder")
     out = check_out(args)
     files = []
-    for f in sorted(photos.iterdir(), key=lambda f: f.name.lower()):
+    for f in sorted(photos.iterdir() if photos is not None else [], key=lambda f: f.name.lower()):
         if not f.is_file():
             continue
         if f.name.startswith("."):
@@ -397,7 +406,7 @@ def main(argv):
             outputs.append(encode(load_image(f)))
         except Exception as exc:  # unreadable, truncated, unsupported: skip it
             print(f"Warning: skipped {f.name} ({type(exc).__name__})", file=sys.stderr)
-    if not outputs:
+    if photos is not None and not outputs:
         fail(2, "No usable photos (JPEG, PNG, WebP) found in the photos folder")
 
     try:
@@ -406,7 +415,11 @@ def main(argv):
         fail(3, "Missing or unreadable themes/template/config.json")
     config["greeting_name"] = args.name
     config["dock_apps"] = args.apps
+    config["columns"] = max(int(config.get("columns", 4)), len(args.apps))
     config["clock_format"] = args.clock
+    if not outputs:
+        config["wallpaper"] = False  # no photos yet: plain background, nothing to rotate
+        config.pop("wallpaper_rotation_minutes", None)
     for key in ("stock_home_redirect", "app_keys", "live_tv_package", "power_on_home", "boot_to_live_tv",
                 "key_filter"):
         config.pop(key, None)  # only what this run's flags say

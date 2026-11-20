@@ -4,7 +4,7 @@
 >
 > **Results 2026-11-19:** the `.sh` cases ran; PowerShell was not installed, so the `.ps1` twins of TH-30..54 and TH-56 were mirrored by reading only and run wherever CI has PowerShell.
 >
-> **Last updated:** 2026-11-19
+> **Last updated:** 2026-11-20
 
 ## make_theme.py: files and privacy
 
@@ -24,6 +24,9 @@
 |---|---|---|---|---|---|
 | TH-10 | M | `--apps` including `com.tcl.factory` (forbidden) or protected packages; `--app-key 190:com.tcl.factory`; `--live-tv-package com.tcl.factory.view` | exit 2 for forbidden packages anywhere | PASS (exit 2; lists read with the scripts' rules, fail closed with exit 3) | `tests/test_make_theme.py` |
 | TH-11 | M | `--stock-home-redirect com.android.tv.settings` (protected, not a launcher) or `com.gathin.tvhome` (ours) | exit 2 | PASS | `tests/test_make_theme.py` |
+| TH-57 | M | `--apps` with 1, 3, 6 or 8 apps; 9 apps, a duplicate, an empty entry | 0 with `columns` = max(4, count); exit 2 for the rest | PASS 2026-11-20 | `tests/test_make_theme.py` |
+| TH-58 | L | `--clock` left out, or `system` | `clock_format` = `system` (the owner sets it on the TV) | PASS 2026-11-20 | `tests/test_make_theme.py` |
+| TH-59 | M | No `--photos`; photos added later; `wallpaper: false` theme pushed with no `.jpg`; `"false"` as a string; `wallpapers` symlink | plain theme passes the check and is pushed; a later run with photos fills it and a run without clears ours; the string still needs photos; symlink refused | PASS (sh) 2026-11-20; ps1 unverified until CI | `tests/test_make_theme.py`, `tests/cases-launcher.json` TH-59a/b |
 | TH-12 | M | `--app-key` on Back, Home, Power, D-pad centre (`KEYCODE_BACK`, `3`, `KEYCODE_POWER`, `23`) | exit 2 | PASS (also Enter, Menu and their scan codes) | `tests/test_make_theme.py` |
 | TH-13 | M | The same key mapped twice (`190:a.b` and `190:c.d`) | exit 2 | PASS | `tests/test_make_theme.py` |
 | TH-14 | M | `--power-on live-tv` without `--live-tv-package` | exit 2 | PASS | `tests/test_make_theme.py` |

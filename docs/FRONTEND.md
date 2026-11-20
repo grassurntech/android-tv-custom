@@ -2,7 +2,7 @@
 
 > **Purpose:** UI architecture, component conventions, TV/remote-navigation (focus) rules, and performance budgets.
 >
-> **Last updated:** 2026-11-19
+> **Last updated:** 2026-11-20
 
 We write no UI code. The home screen is the cleanyourtv launcher (see [references/cleanyourtv.md](references/cleanyourtv.md)); we supply a **theme** only.
 
@@ -11,8 +11,9 @@ We write no UI code. The home screen is the cleanyourtv launcher (see [reference
   | Flag | Config key | Rule |
   |---|---|---|
   | `--name` | `greeting_name` | 1 to 40 visible characters; no control, direction or line-separator characters |
-  | `--apps p1,p2,p3,p4` | `dock_apps` | exactly 4 different packages |
-  | `--clock 12\|24` | `clock_format` | |
+  | `--apps p1,p2,...` | `dock_apps`, `columns` | 1 to 8 different packages; `columns` = max(4, count) |
+  | `--clock 12\|24\|system` | `clock_format` | optional, default `system` (follows the TV; the owner can change it in Launcher settings → Clock) |
+  | `--photos DIR` | `wallpapers/`, `wallpaper` | optional: without it `wallpaper` is `false` and `push-theme` needs no `.jpg` |
   | `--stock-home-redirect PKG` | `stock_home_redirect` | not protected, not `com.gathin.tvhome` |
   | `--app-key KEYCODE:PKG` (repeatable) | `app_keys` | not Back, Home, Power, D-pad centre, Enter or Menu (names, numbers or scan codes); one key, one app |
   | `--live-tv-package PKG` | `live_tv_package` | |
