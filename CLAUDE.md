@@ -96,4 +96,4 @@ Run this every time a PR is successfully committed and pushed. Do not skip it, a
 ## Status
 
 Project scaffold created 2026-11-18. Repo: `grassurntech/android-tv-custom` (remote `origin` via SSH), default branch `main`. Public, open source.
-v1 implementation (scripts, launcher theme, `PROMPT.md`, visitor docs) is in progress on branch `feat/v1-tv-cleanup`: Milestones A–B and the prompt are done; on-TV testing is pending.
+v1 implementation (scripts, launcher theme, `PROMPT.md`, visitor docs) is on branch `feat/v1-tv-cleanup`, with a PR open into `main`. Milestones A–B, the prompt and QA round 1 (see `docs/test-cases/`) are done; on-TV testing is pending.

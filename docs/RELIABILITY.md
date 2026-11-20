@@ -2,7 +2,7 @@
 
 > **Purpose:** Uptime/perf targets, failure modes, monitoring, and incident learnings.
 >
-> **Last updated:** 2026-11-19
+> **Last updated:** 2026-11-20
 
 There is no service to monitor. Reliability means the TV never ends up unusable.
 
@@ -16,8 +16,9 @@ There is no service to monitor. Reliability means the TV never ends up unusable.
 | Exit | Failure | What happens |
 |---|---|---|
 | 3 | `.env`/`TV_IP` missing, Docker off, tools not fetched | Nothing changed; fix and rerun |
-| 10 / 11 / 12 | Package protected / streaming / forbidden | Refused, nothing changed |
-| 13 / 14 | No backup / package not in backup | Refused, nothing changed |
-| 20 | TV refused the command | Stop, no retry; offer `restore` |
+| 10 / 11 / 12 | Package protected (or the current Home app) / streaming / forbidden | Refused, nothing changed |
+| 13 / 14 | No backup, or a backup from a different TV / package not in backup | Refused, nothing changed |
+| 20 | TV refused, didn't answer, or didn't confirm the change | Refused: nothing changed, no retry. Didn't confirm: the package is already in the undo log; stop and offer `restore` |
 | 21 / 22 | TV unreachable / debugging not allowed | `connect` once, then stop |
+| 23 | `connect --check-off` only: debugging is still on | Owner turns off Network debugging; never press Allow |
 | 30 | Upstream download doesn't match the pinned commit | Deleted, nothing used |

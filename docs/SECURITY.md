@@ -2,7 +2,7 @@
 
 > **Purpose:** Secrets policy, safety rules for changes made to users' TVs, and how to report a vulnerability.
 >
-> **Last updated:** 2026-11-19
+> **Last updated:** 2026-11-20
 
 This is a **public, forkable** repo. Treat everything committed as published to the world, permanently.
 
@@ -17,9 +17,9 @@ This is a **public, forkable** repo. Treat everything committed as published to 
 |---|---|
 | `.gitignore` | Keeps `.env`, keystores, build output, photos, backups and screenshots out of git |
 | `scripts/hooks/pre-commit` | Blocks secret files and user photos/backups/screenshots from being committed, and runs gitleaks if installed |
-| `scripts/disable-one.*` | Product enforcement layer: refuses protected, streaming and forbidden packages and requires a backup. Works with any AI tool |
+| `scripts/disable-one.*` | Product enforcement layer: refuses protected, streaming and forbidden packages and the current Home app, and requires a backup of this same TV. An unreadable safety list stops it (exit 3). Works with any AI tool |
 | `scripts/fetch-tools.*` | Refuses upstream code that doesn't match the pinned commit in `config/upstream.env` (exit 30) |
-| `.github/workflows/tests.yml` | Runs the whole test suite, including every refusal case, on Linux and Windows for each push and PR |
+| `.github/workflows/tests.yml` | Runs the whole test suite, including every refusal case, on Linux, macOS (bash 3.2) and Windows for each push and PR |
 | `.github/workflows/secret-scan.yml` | Scans the full history with gitleaks on every push and PR, and fails if user content is tracked |
 | `.claude/settings.json` | Stops Claude Code from reading `.env`, keystores, photos and screenshots |
 | `.claude/hooks/tv-safety.py` | Blocks unsafe TV commands before they run (see below) |
@@ -35,7 +35,7 @@ The rules live in `CLAUDE.md` under "Rule: TV safety". They bind every script in
 - ADB over the network gives full control of the TV, so the docs must tell users to switch off network debugging after setup.
 - Never ship anything that sends user data off the TV or computer. No telemetry, no analytics.
 
-**What `tv-safety.py` blocks:** uninstall, `pm clear/hide/suspend`, plain `pm disable`, root/`su`, fastboot and bootloader/recovery reboots, wipes, disabling more than one package or using loops, disabling a protected package, disabling before a backup exists, launching factory/service-menu apps, and uploading `photos/`, `backups/` or `screenshots/`. It only sees commands Claude runs directly, so product scripts enforce the same checks themselves (`scripts/disable-one.*`).
+**What `tv-safety.py` blocks:** uninstall, `pm clear/hide/suspend`, plain `pm disable`, root/`su`, fastboot and bootloader/recovery reboots, wipes, disabling more than one package or using loops, disabling a protected package, disabling before a backup exists, launching factory/service-menu apps, and uploading `photos/`, `backups/` or `screenshots/`. It also blocks reading or globbing `.env`, `git --no-verify` and other hook bypasses, and adb host verbs such as `tcpip`, `root` and `install`. TV-side commands must be on an allowlist (read-only `pm`, `dumpsys`, `getprop` and `settings get`, a checked `disable-user`, `input keyevent`, plain `reboot`), and any command it can't parse is blocked. Scripts in `scripts/` and `tests/` are exempt only when committed and unchanged; edited ones get the same checks. It only sees commands Claude runs directly, so product scripts enforce the same checks themselves (`scripts/disable-one.*`).
 
 ## If a secret is committed
 1. **Rotate or revoke it first.** Assume it is already compromised.

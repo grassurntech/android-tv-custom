@@ -2,7 +2,7 @@
 
 > **Status:** accepted (approved 2026-11-19)
 >
-> **Last updated:** 2026-11-19
+> **Last updated:** 2026-11-20
 
 ## 1. Intent
 
@@ -98,10 +98,10 @@ Each phase ends with a short plain-language summary. The agent only moves on aft
 1. **Check the computer.** AI tool, Docker running, Git, Python 3, disk space. Download Google's official Android platform-tools (`adb`) into a git-ignored folder if it's missing. Walk the owner through anything else that's missing.
 2. **Connect to the TV.** Read `TV_IP` and `TV_ADB_PORT` from `.env` (the agent helps the owner create `.env` from `.env.example`). Guide them through developer mode and the "Allow debugging?" prompt.
 3. **Identify the TV.** Model, Android version, Google TV or older Android TV, which stock launcher it uses, and whether cleanyourtv has notes for that exact model in its `examples/` or `docs/devices/`.
-4. **Back up.** Write to `backups/<date>/`: `packages-all.txt`, the already-disabled list, `getprop`, and `settings list global/secure/system`. Nothing is changed before this exists.
+4. **Back up.** Write to `backups/<date>/`: `packages-all.txt`, the already-disabled list, `getprop`, and `settings list global/secure/system`, plus `tv-id.txt` so a backup is never used on a different TV. Nothing is changed before this exists.
 5. **Clean up.** Sort installed packages into telemetry, ads and recommendations, background extras, preinstalled apps, and streaming apps. The proposed list comes from vetted sources first: cleanyourtv's `examples/` entry for this exact model, plus our own `config/junk-packages.txt` (seeded from our TCL and grown with each tested set). The agent may add a package from neither source only after reading `dumpsys package <name>`, and it marks that package as "my guess" for the owner. *(Our call.)* Show the owner the proposed list in plain words and get a yes. Then call `scripts/disable-one.sh <package>` once per package. It refuses protected, streaming and forbidden packages, refuses without a backup, and appends each change to `backups/<date>/disabled-by-us.txt`. After every few packages, the agent checks the TV still responds (`dumpsys`) and asks the owner whether TV, HDMI and the remote still work. When finished, wait about 15 seconds, sync, reboot once, and check that what we disabled is still disabled.
 6. **Build the home screen.** Ask for the photos folder, the name and the four apps. Fetch cleanyourtv at the pinned tag, build the launcher APK with its `docker-build.sh`, install it, and make it Home (`cmd package set-home-activity`). Then turn off the stock launcher the way the matching `examples/` entry says. **The Google TV setup wizard (`setupwraith`) stays protected and is never disabled by us.** If it takes over Home anyway, the agent first tries the launcher's own redirect (`stock_home_redirect` with the home-key service). If Home still isn't ours, it stops, explains, and leaves the TV on the stock home screen. *(Our call: disabling setupwraith can delete the Wi-Fi network and cut ADB, so we only revisit it with evidence from a real set.)* The launcher is signed with a per-owner key kept in git-ignored `user-content/keystore/`, created on the first build and reused for every rebuild, so updates install over the old version (`adb install -r`) without uninstalling. The summary tells the owner to keep that folder. Without it, a rebuilt launcher can't replace the installed one, and the old one simply keeps working. *(Our call.)* Scale the photos to the TV's resolution on the computer, then push our theme (`config.json` plus wallpapers). Reboot once, and ask the owner what Home shows and whether each remote app button works (§7).
-7. **Finish.** Write a summary of everything changed and how to undo it to `backups/<date>/SUMMARY.md`. Turn off network debugging, and USB debugging too unless the owner wants it kept. Confirm it's off.
+7. **Finish.** Write a summary of everything changed and how to undo it to `backups/<date>/SUMMARY.md`. Turn off network debugging, and USB debugging too unless the owner wants it kept. Confirm it's off with `connect --check-off` (exit 0 means off, 23 means still on).
 
 **Stop rule:** if the TV refuses a command, or something doesn't come back after a reboot, the agent stops, says what happened in plain words, and points to the undo steps. It never retries in a loop.
 
