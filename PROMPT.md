@@ -368,8 +368,8 @@ Never open or edit anything in `user-content/` yourself: every later setting is 
 `--power-on home` or `--power-on live-tv`, and `--key-filter true|false`. `make_theme` rebuilds the theme from
 scratch every time, so each run must carry the full set of flags decided so far. Keep that list in your notes
 (and later in `SUMMARY.md`). Whenever a step below adds a setting, re-run this command with the whole list plus
-the new flag. If the matching example sets `key_filter`, add `--key-filter` with its value (TCL Google TV
-examples use `false`).
+the new flag. In redirect mode (6.5) use `--key-filter true` (with `false` Home stays on Google TV's screen),
+plus `--consume-volume-keys` on TCL so held volume still ramps; otherwise follow the example's `key_filter`.
 
 **6.3 Pick the Home path.** Use the stock launcher you noted in Phase 3.
 

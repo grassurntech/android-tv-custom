@@ -230,6 +230,19 @@ class MakeThemeTests(unittest.TestCase):
                                                      "KEYCODE_BUTTON_3:com.netflix.ninja",
                                                      "scan:490:com.wbd.hbomax"])
 
+    def test_TH61_consume_volume_keys_needs_key_filter_true(self):
+        self.one_photo()
+        r = self.run_tool(extra=["--key-filter", "true", "--consume-volume-keys"])
+        self.assertEqual(r.returncode, 0, r.stderr)
+        self.assertIs(self.config()["consume_volume_keys"], True)
+        self.assertIs(self.config()["key_filter"], True)
+        self.assertEqual(self.run_tool().returncode, 0)
+        self.assertNotIn("consume_volume_keys", self.config(), "a re-run without the flag drops it")
+        for extra in (["--consume-volume-keys"], ["--key-filter", "false", "--consume-volume-keys"]):
+            r = self.run_tool(extra=extra)
+            self.assertEqual(r.returncode, 2, extra)
+            self.assertIn("--key-filter true", r.stderr)
+
     def test_app_keys_rejects_bad_entries(self):
         self.one_photo()
         for bad in ("190", "190:", ":com.a.b", "abc:com.a.b", "keycode_x:com.a.b", "scan:x:com.a.b",

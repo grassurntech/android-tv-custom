@@ -18,7 +18,8 @@ We write no UI code. The home screen is the cleanyourtv launcher (see [reference
   | `--app-key KEYCODE:PKG` (repeatable) | `app_keys` | not Back, Home, Power, D-pad centre, Enter or Menu (names, numbers or scan codes); one key, one app |
   | `--live-tv-package PKG` | `live_tv_package` | |
   | `--power-on home\|live-tv` | `power_on_home` or `boot_to_live_tv` | `live-tv` needs `--live-tv-package` |
-  | `--key-filter true\|false` | `key_filter` | `false` with `--app-key` warns |
+  | `--key-filter true\|false` | `key_filter` | `false` with `--app-key` warns; redirect mode needs `true` (with `false` a Home press on the stock home stays there) |
+  | `--consume-volume-keys` | `consume_volume_keys` | needs `--key-filter true`; the helpers repeat a held volume key themselves (TCL G03/BeyondTV4) |
 
   No package anywhere may match `config/forbidden-packages.txt` (exit 2; an unreadable list is exit 3). `--out` must not overlap `--photos`, be a symlink, or sit in the repo un-ignored (use `user-content/theme`); an existing non-empty `--out` must carry the `.made-by-make_theme` marker, and only its `NN.jpg` files are ever deleted. `make_theme.py --check-theme DIR` is the check `push-theme` runs before sending (valid `config.json`, at least one `wallpapers/*.jpg`, no forbidden package).
 - **Wallpapers:** 1920×1080 JPEG, under 300 KB each, all metadata stripped (EXIF/GPS, comments, ICC, XMP); transparency flattened onto black.

@@ -3,7 +3,7 @@
 
   python scripts/make_theme.py --name STR --apps p1,p2[,...] --out DIR [--photos DIR] [--clock 12|24|system]
       [--stock-home-redirect PKG] [--app-key KEYCODE:PKG ...] [--live-tv-package PKG]
-      [--power-on home|live-tv] [--key-filter true|false]
+      [--power-on home|live-tv] [--key-filter true|false] [--consume-volume-keys]
   python scripts/make_theme.py --check-theme DIR      (used by push-theme: validate a theme folder only)
 
 --apps takes 1 to 8 different apps for the dock, in order; columns becomes max(4, number of apps). --clock defaults
@@ -20,7 +20,8 @@ is gone from config.json. config.json is never meant to be edited by hand.
 Optional keys: --stock-home-redirect -> stock_home_redirect, --app-key (repeatable) -> app_keys (a list of
 "KEYCODE:PKG" strings; KEYCODE is digits, KEYCODE_NAME or scan:digits), --live-tv-package -> live_tv_package,
 --power-on home -> power_on_home: true or live-tv -> boot_to_live_tv: true (never both; live-tv needs
---live-tv-package), --key-filter -> key_filter (true or false).
+--live-tv-package), --key-filter -> key_filter (true or false), --consume-volume-keys -> consume_volume_keys: true
+(the helpers repeat a held volume key themselves; needs --key-filter true).
 
 Safety:
 - No package anywhere (--apps, --app-key, --live-tv-package, --stock-home-redirect) may match
@@ -174,6 +175,8 @@ def parse_args(argv):
     p.add_argument("--live-tv-package", metavar="PKG", help="the TV's Live TV app")
     p.add_argument("--power-on", choices=["home", "live-tv"], help="what the TV shows at power-on")
     p.add_argument("--key-filter", choices=["true", "false"], help="whether the key helpers filter keys")
+    p.add_argument("--consume-volume-keys", action="store_true",
+                   help="the key helpers repeat a held volume key themselves (needs --key-filter true)")
     args = p.parse_args(argv)
     name = args.name.strip()
     if not name or len(name) > 40 or bad_name(args.name):
@@ -205,6 +208,8 @@ def parse_args(argv):
         seen[nk] = entry
     if args.power_on == "live-tv" and args.live_tv_package is None:
         fail(2, "--power-on live-tv needs --live-tv-package (the TV's Live TV app)")
+    if args.consume_volume_keys and args.key_filter != "true":
+        fail(2, "--consume-volume-keys needs --key-filter true (the helpers only see volume keys while filtering)")
     if args.key_filter == "false" and args.app_key:
         print("Warning: --key-filter false with --app-key: the app buttons may not work while key filtering is off",
               file=sys.stderr)
@@ -421,7 +426,7 @@ def main(argv):
         config["wallpaper"] = False  # no photos yet: plain background, nothing to rotate
         config.pop("wallpaper_rotation_minutes", None)
     for key in ("stock_home_redirect", "app_keys", "live_tv_package", "power_on_home", "boot_to_live_tv",
-                "key_filter"):
+                "key_filter", "consume_volume_keys"):
         config.pop(key, None)  # only what this run's flags say
     if args.stock_home_redirect is not None:
         config["stock_home_redirect"] = args.stock_home_redirect
@@ -435,6 +440,8 @@ def main(argv):
         config["boot_to_live_tv"] = True
     if args.key_filter is not None:
         config["key_filter"] = args.key_filter == "true"
+    if args.consume_volume_keys:
+        config["consume_volume_keys"] = True
 
     try:
         write_theme(out, outputs, config)
