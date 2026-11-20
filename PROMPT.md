@@ -334,8 +334,7 @@ switch anything off until you say yes to the list." Wait for yes.
    still work in an app?" If anything is wrong, stop and go to "If something goes wrong".
 8. When the list is done, do the Home check. Only if it passes, wait 15 seconds (Android saves these changes
    about ten seconds later), run `shell sync`, **say:** "I'm restarting the TV once to check everything
-   sticks," and run `reboot`. When the owner says the TV is back, run `connect` and do the Home check again,
-   then ask the quick check from step 7 once more (volume has failed after a restart on one TV).
+   sticks," and run `reboot`. When the TV is back, run `connect`, then do the Home check and step 7's check again.
 9. Compare `pm list packages -d` with `disabled-by-us.txt` in the backup folder. Some TVs switch a few apps back
    on at every start. Note any that came back for the summary. Never switch them off again.
 
