@@ -1,0 +1,996 @@
+[
+  {
+    "script": "push-theme",
+    "name": "TH-30a invalid config.json is refused, nothing pushed",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "vendor/cleanyourtv/tools/theme.sh": "#!/usr/bin/env bash\n: > \"$(dirname \"$0\")/ran.txt\"\necho \"theme.sh TV_HOST=$TV_HOST arg=$1\" >> \"$FAKE_BIN_LOG\"\nexit 7\n",
+      "vendor/cleanyourtv/tools/theme.ps1": "param([string]$TvHost, [string]$ThemeDir)\nSet-Content -LiteralPath (Join-Path $PSScriptRoot \"ran.txt\") -Value \"\"\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"theme.ps1 TvHost=$TvHost arg=$ThemeDir\"\nexit 7\n",
+      "user-content/theme/config.json": "{\"columns\": 4,\n",
+      "user-content/theme/wallpapers/01.jpg": "x\n"
+    },
+    "expect": {
+      "exit": 2,
+      "files_absent": [
+        "vendor/cleanyourtv/tools/ran.txt"
+      ],
+      "stderr_contains": "Nothing was pushed"
+    }
+  },
+  {
+    "script": "push-theme",
+    "name": "TH-30b config.json that is not an object is refused",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "vendor/cleanyourtv/tools/theme.sh": "#!/usr/bin/env bash\n: > \"$(dirname \"$0\")/ran.txt\"\necho \"theme.sh TV_HOST=$TV_HOST arg=$1\" >> \"$FAKE_BIN_LOG\"\nexit 7\n",
+      "vendor/cleanyourtv/tools/theme.ps1": "param([string]$TvHost, [string]$ThemeDir)\nSet-Content -LiteralPath (Join-Path $PSScriptRoot \"ran.txt\") -Value \"\"\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"theme.ps1 TvHost=$TvHost arg=$ThemeDir\"\nexit 7\n",
+      "user-content/theme/config.json": "[1, 2]\n",
+      "user-content/theme/wallpapers/01.jpg": "x\n"
+    },
+    "expect": {
+      "exit": 2,
+      "files_absent": [
+        "vendor/cleanyourtv/tools/ran.txt"
+      ],
+      "stderr_contains": "Nothing was pushed"
+    }
+  },
+  {
+    "script": "push-theme",
+    "name": "TH-30d config.json that is a one-object array is refused (pwsh 7 unwraps it)",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "vendor/cleanyourtv/tools/theme.sh": "#!/usr/bin/env bash\n: > \"$(dirname \"$0\")/ran.txt\"\necho \"theme.sh TV_HOST=$TV_HOST arg=$1\" >> \"$FAKE_BIN_LOG\"\nexit 7\n",
+      "vendor/cleanyourtv/tools/theme.ps1": "param([string]$TvHost, [string]$ThemeDir)\nSet-Content -LiteralPath (Join-Path $PSScriptRoot \"ran.txt\") -Value \"\"\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"theme.ps1 TvHost=$TvHost arg=$ThemeDir\"\nexit 7\n",
+      "user-content/theme/config.json": "[{\"columns\": 4}]\n",
+      "user-content/theme/wallpapers/01.jpg": "x\n"
+    },
+    "expect": {
+      "exit": 2,
+      "files_absent": [
+        "vendor/cleanyourtv/tools/ran.txt"
+      ],
+      "stderr_contains": "Nothing was pushed"
+    }
+  },
+  {
+    "script": "push-theme",
+    "name": "TH-30c no wallpapers folder is refused, nothing pushed",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "vendor/cleanyourtv/tools/theme.sh": "#!/usr/bin/env bash\n: > \"$(dirname \"$0\")/ran.txt\"\necho \"theme.sh TV_HOST=$TV_HOST arg=$1\" >> \"$FAKE_BIN_LOG\"\nexit 7\n",
+      "vendor/cleanyourtv/tools/theme.ps1": "param([string]$TvHost, [string]$ThemeDir)\nSet-Content -LiteralPath (Join-Path $PSScriptRoot \"ran.txt\") -Value \"\"\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"theme.ps1 TvHost=$TvHost arg=$ThemeDir\"\nexit 7\n",
+      "user-content/theme/config.json": "{\"columns\": 4}\n"
+    },
+    "expect": {
+      "exit": 2,
+      "files_absent": [
+        "vendor/cleanyourtv/tools/ran.txt"
+      ],
+      "stderr_contains": "wallpapers"
+    }
+  },
+  {
+    "script": "push-theme",
+    "name": "TH-30d wallpapers folder with no jpg is refused",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "vendor/cleanyourtv/tools/theme.sh": "#!/usr/bin/env bash\n: > \"$(dirname \"$0\")/ran.txt\"\necho \"theme.sh TV_HOST=$TV_HOST arg=$1\" >> \"$FAKE_BIN_LOG\"\nexit 7\n",
+      "vendor/cleanyourtv/tools/theme.ps1": "param([string]$TvHost, [string]$ThemeDir)\nSet-Content -LiteralPath (Join-Path $PSScriptRoot \"ran.txt\") -Value \"\"\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"theme.ps1 TvHost=$TvHost arg=$ThemeDir\"\nexit 7\n",
+      "user-content/theme/config.json": "{\"columns\": 4}\n",
+      "user-content/theme/wallpapers/notes.txt": "x\n"
+    },
+    "expect": {
+      "exit": 2,
+      "files_absent": [
+        "vendor/cleanyourtv/tools/ran.txt"
+      ],
+      "stderr_contains": "wallpapers"
+    }
+  },
+  {
+    "script": "push-theme",
+    "name": "TH-31a forbidden live TV target is refused, nothing pushed",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "vendor/cleanyourtv/tools/theme.sh": "#!/usr/bin/env bash\n: > \"$(dirname \"$0\")/ran.txt\"\necho \"theme.sh TV_HOST=$TV_HOST arg=$1\" >> \"$FAKE_BIN_LOG\"\nexit 7\n",
+      "vendor/cleanyourtv/tools/theme.ps1": "param([string]$TvHost, [string]$ThemeDir)\nSet-Content -LiteralPath (Join-Path $PSScriptRoot \"ran.txt\") -Value \"\"\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"theme.ps1 TvHost=$TvHost arg=$ThemeDir\"\nexit 7\n",
+      "user-content/theme/config.json": "{\"boot_to_live_tv\": true, \"live_tv_package\": \"com.tcl.factory.view\"}\n",
+      "user-content/theme/wallpapers/01.jpg": "x\n"
+    },
+    "expect": {
+      "exit": 2,
+      "files_absent": [
+        "vendor/cleanyourtv/tools/ran.txt"
+      ],
+      "stderr_contains": "com.tcl.factory.view"
+    }
+  },
+  {
+    "script": "push-theme",
+    "name": "TH-31b forbidden app key target is refused",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "vendor/cleanyourtv/tools/theme.sh": "#!/usr/bin/env bash\n: > \"$(dirname \"$0\")/ran.txt\"\necho \"theme.sh TV_HOST=$TV_HOST arg=$1\" >> \"$FAKE_BIN_LOG\"\nexit 7\n",
+      "vendor/cleanyourtv/tools/theme.ps1": "param([string]$TvHost, [string]$ThemeDir)\nSet-Content -LiteralPath (Join-Path $PSScriptRoot \"ran.txt\") -Value \"\"\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"theme.ps1 TvHost=$TvHost arg=$ThemeDir\"\nexit 7\n",
+      "user-content/theme/config.json": "{\"app_keys\": [\"190:com.tcl.servicemenu\"]}\n",
+      "user-content/theme/wallpapers/01.jpg": "x\n"
+    },
+    "expect": {
+      "exit": 2,
+      "files_absent": [
+        "vendor/cleanyourtv/tools/ran.txt"
+      ],
+      "stderr_contains": "com.tcl.servicemenu"
+    }
+  },
+  {
+    "script": "push-theme",
+    "name": "TH-31c forbidden dock app (any case) is refused",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "vendor/cleanyourtv/tools/theme.sh": "#!/usr/bin/env bash\n: > \"$(dirname \"$0\")/ran.txt\"\necho \"theme.sh TV_HOST=$TV_HOST arg=$1\" >> \"$FAKE_BIN_LOG\"\nexit 7\n",
+      "vendor/cleanyourtv/tools/theme.ps1": "param([string]$TvHost, [string]$ThemeDir)\nSet-Content -LiteralPath (Join-Path $PSScriptRoot \"ran.txt\") -Value \"\"\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"theme.ps1 TvHost=$TvHost arg=$ThemeDir\"\nexit 7\n",
+      "user-content/theme/config.json": "{\"dock_apps\": [\"com.a.b\", \"COM.TCL.FACTORY\"]}\n",
+      "user-content/theme/wallpapers/01.jpg": "x\n"
+    },
+    "expect": {
+      "exit": 2,
+      "files_absent": [
+        "vendor/cleanyourtv/tools/ran.txt"
+      ],
+      "stderr_contains": "COM.TCL.FACTORY"
+    }
+  },
+  {
+    "script": "push-theme",
+    "name": "TH-30e a good theme passes the check and is pushed",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "vendor/cleanyourtv/tools/theme.sh": "#!/usr/bin/env bash\n: > \"$(dirname \"$0\")/ran.txt\"\necho \"theme.sh TV_HOST=$TV_HOST arg=$1\" >> \"$FAKE_BIN_LOG\"\nexit 7\n",
+      "vendor/cleanyourtv/tools/theme.ps1": "param([string]$TvHost, [string]$ThemeDir)\nSet-Content -LiteralPath (Join-Path $PSScriptRoot \"ran.txt\") -Value \"\"\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"theme.ps1 TvHost=$TvHost arg=$ThemeDir\"\nexit 7\n",
+      "user-content/theme/config.json": "{\"columns\": 4, \"dock_apps\": [\"com.a.b\"], \"app_keys\": [\"190:com.c.d\"]}\n",
+      "user-content/theme/wallpapers/01.jpg": "fake jpeg\n"
+    },
+    "expect": {
+      "exit": 7,
+      "bin_calls_include": [
+        "=192.168.1.50:5555 arg="
+      ],
+      "files_contain": {
+        "vendor/cleanyourtv/tools/ran.txt": []
+      }
+    }
+  },
+  {
+    "script": "build-launcher",
+    "name": "TH-41a upstream exits 0 but writes no APK while an old one exists: exit 1",
+    "args": [],
+    "env": {},
+    "files": {
+      "vendor/cleanyourtv/tools/docker-build.sh": "#!/usr/bin/env bash\necho \"docker-build ran\" >> \"$FAKE_BIN_LOG\"\nexit 0\n",
+      "vendor/cleanyourtv/tools/docker-build.ps1": "Add-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"docker-build ran\"\nexit 0\n",
+      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "PK old apk\n"
+    },
+    "bin": {
+      "docker": {
+        "exit": 0
+      }
+    },
+    "expect": {
+      "exit": 1,
+      "bin_calls_include": [
+        "docker-build ran"
+      ],
+      "stderr_contains": "build produced no APK",
+      "files_contain": {
+        "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": [
+          "PK old apk"
+        ]
+      },
+      "files_absent": [
+        "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk.previous"
+      ]
+    }
+  },
+  {
+    "script": "build-launcher",
+    "name": "TH-41b upstream writes an empty APK: exit 1",
+    "args": [],
+    "env": {},
+    "files": {
+      "vendor/cleanyourtv/tools/docker-build.sh": "#!/usr/bin/env bash\necho \"docker-build ran\" >> \"$FAKE_BIN_LOG\"\nd=\"$(dirname \"$0\")/../launcher/app/build/outputs/apk/release\"\nmkdir -p \"$d\"\n: > \"$d/app-release.apk\"\nexit 0\n",
+      "vendor/cleanyourtv/tools/docker-build.ps1": "Add-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"docker-build ran\"\n$d = Join-Path $PSScriptRoot \"../launcher/app/build/outputs/apk/release\"\nNew-Item -ItemType Directory -Force -Path $d | Out-Null\n[System.IO.File]::WriteAllBytes((Join-Path $d \"app-release.apk\"), [byte[]]@())\nexit 0\n"
+    },
+    "bin": {
+      "docker": {
+        "exit": 0
+      }
+    },
+    "expect": {
+      "exit": 1,
+      "stderr_contains": "build produced no APK",
+      "files_absent": [
+        "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk"
+      ]
+    }
+  },
+  {
+    "script": "build-launcher",
+    "name": "TH-40a no keystore but an earlier install is recorded: loud warning",
+    "args": [],
+    "env": {},
+    "files": {
+      "vendor/cleanyourtv/tools/docker-build.sh": "#!/usr/bin/env bash\nk=\"$HOST_KEY_DIR\"; abs=no; case \"$k\" in /*) abs=yes;; esac; d=no; [ -d \"$k\" ] && d=yes\necho \"docker-build abs=$abs isdir=$d dir=$k\" >> \"$FAKE_BIN_LOG\"\nmkdir -p \"$(dirname \"$0\")/../launcher/app/build/outputs/apk/release\"\nprintf 'PK fake apk\\n' > \"$(dirname \"$0\")/../launcher/app/build/outputs/apk/release/app-release.apk\"\nexit ${STUB_RC:-0}\n",
+      "vendor/cleanyourtv/tools/docker-build.ps1": "$k = $env:HOST_KEY_DIR\n$abs = if ([System.IO.Path]::IsPathRooted($k)) { \"yes\" } else { \"no\" }\n$d = if (Test-Path -LiteralPath $k -PathType Container) { \"yes\" } else { \"no\" }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"docker-build abs=$abs isdir=$d dir=$k\"\n$out = Join-Path $PSScriptRoot \"../launcher/app/build/outputs/apk/release\"\nNew-Item -ItemType Directory -Force -Path $out | Out-Null\nSet-Content -LiteralPath (Join-Path $out \"app-release.apk\") -Value \"\"\nexit 0\n",
+      "backups/2026-11-18_090000/installed-by-us.txt": "com.gathin.tvhome\n",
+      "backups/2026-11-18_090000/packages-all.txt": "package:a.b.c\n",
+      "backups/2026-11-18_090000/packages-disabled.txt": "",
+      "backups/2026-11-18_090000/getprop.txt": "",
+      "backups/2026-11-18_090000/settings-global.txt": "",
+      "backups/2026-11-18_090000/settings-secure.txt": "",
+      "backups/2026-11-18_090000/settings-system.txt": "",
+      "backups/2026-11-18_090000/home-activity.txt": "",
+      "backups/2026-11-18_090000/tv-id.txt": "adb:192.168.1.50:5555\n"
+    },
+    "bin": {
+      "docker": {
+        "exit": 0
+      }
+    },
+    "expect": {
+      "exit": 0,
+      "stderr_contains": "NEW key"
+    }
+  },
+  {
+    "script": "build-launcher",
+    "name": "TH-40b keystore present: no warning",
+    "args": [],
+    "env": {},
+    "files": {
+      "vendor/cleanyourtv/tools/docker-build.sh": "#!/usr/bin/env bash\nk=\"$HOST_KEY_DIR\"; abs=no; case \"$k\" in /*) abs=yes;; esac; d=no; [ -d \"$k\" ] && d=yes\necho \"docker-build abs=$abs isdir=$d dir=$k\" >> \"$FAKE_BIN_LOG\"\nmkdir -p \"$(dirname \"$0\")/../launcher/app/build/outputs/apk/release\"\nprintf 'PK fake apk\\n' > \"$(dirname \"$0\")/../launcher/app/build/outputs/apk/release/app-release.apk\"\nexit ${STUB_RC:-0}\n",
+      "vendor/cleanyourtv/tools/docker-build.ps1": "$k = $env:HOST_KEY_DIR\n$abs = if ([System.IO.Path]::IsPathRooted($k)) { \"yes\" } else { \"no\" }\n$d = if (Test-Path -LiteralPath $k -PathType Container) { \"yes\" } else { \"no\" }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"docker-build abs=$abs isdir=$d dir=$k\"\n$out = Join-Path $PSScriptRoot \"../launcher/app/build/outputs/apk/release\"\nNew-Item -ItemType Directory -Force -Path $out | Out-Null\nSet-Content -LiteralPath (Join-Path $out \"app-release.apk\") -Value \"\"\nexit 0\n",
+      "backups/2026-11-18_090000/installed-by-us.txt": "com.gathin.tvhome\n",
+      "user-content/keystore/debug.keystore": "fake key\n"
+    },
+    "bin": {
+      "docker": {
+        "exit": 0
+      }
+    },
+    "expect": {
+      "exit": 0,
+      "stderr_excludes": [
+        "NEW key"
+      ]
+    }
+  },
+  {
+    "script": "build-launcher",
+    "name": "TH-40c first build with no earlier install: no warning",
+    "args": [],
+    "env": {},
+    "files": {
+      "vendor/cleanyourtv/tools/docker-build.sh": "#!/usr/bin/env bash\nk=\"$HOST_KEY_DIR\"; abs=no; case \"$k\" in /*) abs=yes;; esac; d=no; [ -d \"$k\" ] && d=yes\necho \"docker-build abs=$abs isdir=$d dir=$k\" >> \"$FAKE_BIN_LOG\"\nmkdir -p \"$(dirname \"$0\")/../launcher/app/build/outputs/apk/release\"\nprintf 'PK fake apk\\n' > \"$(dirname \"$0\")/../launcher/app/build/outputs/apk/release/app-release.apk\"\nexit ${STUB_RC:-0}\n",
+      "vendor/cleanyourtv/tools/docker-build.ps1": "$k = $env:HOST_KEY_DIR\n$abs = if ([System.IO.Path]::IsPathRooted($k)) { \"yes\" } else { \"no\" }\n$d = if (Test-Path -LiteralPath $k -PathType Container) { \"yes\" } else { \"no\" }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"docker-build abs=$abs isdir=$d dir=$k\"\n$out = Join-Path $PSScriptRoot \"../launcher/app/build/outputs/apk/release\"\nNew-Item -ItemType Directory -Force -Path $out | Out-Null\nSet-Content -LiteralPath (Join-Path $out \"app-release.apk\") -Value \"\"\nexit 0\n"
+    },
+    "bin": {
+      "docker": {
+        "exit": 0
+      }
+    },
+    "expect": {
+      "exit": 0,
+      "stderr_excludes": [
+        "NEW key"
+      ]
+    }
+  },
+  {
+    "script": "build-launcher",
+    "name": "TH-42 docker not installed says so",
+    "args": [],
+    "env": {},
+    "files": {
+      "vendor/cleanyourtv/tools/docker-build.sh": "#!/usr/bin/env bash\nk=\"$HOST_KEY_DIR\"; abs=no; case \"$k\" in /*) abs=yes;; esac; d=no; [ -d \"$k\" ] && d=yes\necho \"docker-build abs=$abs isdir=$d dir=$k\" >> \"$FAKE_BIN_LOG\"\nmkdir -p \"$(dirname \"$0\")/../launcher/app/build/outputs/apk/release\"\nprintf 'PK fake apk\\n' > \"$(dirname \"$0\")/../launcher/app/build/outputs/apk/release/app-release.apk\"\nexit ${STUB_RC:-0}\n",
+      "vendor/cleanyourtv/tools/docker-build.ps1": "$k = $env:HOST_KEY_DIR\n$abs = if ([System.IO.Path]::IsPathRooted($k)) { \"yes\" } else { \"no\" }\n$d = if (Test-Path -LiteralPath $k -PathType Container) { \"yes\" } else { \"no\" }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"docker-build abs=$abs isdir=$d dir=$k\"\n$out = Join-Path $PSScriptRoot \"../launcher/app/build/outputs/apk/release\"\nNew-Item -ItemType Directory -Force -Path $out | Out-Null\nSet-Content -LiteralPath (Join-Path $out \"app-release.apk\") -Value \"\"\nexit 0\n"
+    },
+    "bin": {},
+    "expect": {
+      "exit": 3,
+      "stderr_contains": "isn't installed",
+      "files_absent": [
+        "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk",
+        "user-content/keystore"
+      ]
+    },
+    "hide_commands": [
+      "docker"
+    ]
+  },
+  {
+    "script": "install-launcher",
+    "name": "TH-50a Home is com.google.android.setupwizard/.SetupWizardActivity: refused with 3, nothing recorded or installed",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "vendor/cleanyourtv/launcher/build-and-install.sh": "#!/usr/bin/env bash\n: > ran.txt\nhk=0; [ -n \"${HOME_KEY_SERVICE:-}\" ] && hk=1\nik=0; [ -n \"${INPUT_KEY_SERVICE:-}\" ] && ik=1\necho \"upstream cwd=$(basename \"$(pwd)\") TV_HOST=$TV_HOST SKIP_BUILD=$SKIP_BUILD STOCK_LAUNCHER=$STOCK_LAUNCHER homekey=$hk inputkey=$ik\" >> \"$FAKE_BIN_LOG\"\nexit 0\n",
+      "vendor/cleanyourtv/launcher/build-and-install.ps1": "param([string]$TvHost, [string]$StockLauncher, [switch]$HomeKeyService, [switch]$InputKeyService)\nSet-Content -LiteralPath ran.txt -Value \"\"\n$hk = if ($HomeKeyService) { 1 } else { 0 }\n$ik = if ($InputKeyService) { 1 } else { 0 }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"upstream cwd=$(Split-Path -Leaf (Get-Location).Path) TV_HOST=$TvHost SKIP_BUILD=$env:SKIP_BUILD STOCK_LAUNCHER=$StockLauncher homekey=$hk inputkey=$ik\"\nexit 0\n",
+      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "PK\u0003\u0004 fake apk\n",
+      "vendor/cleanyourtv/tools/venv/pyvenv.cfg": "home = /usr/bin\n",
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "a.b.c"
+      ],
+      "home": "com.google.android.setupwizard/.SetupWizardActivity"
+    },
+    "expect": {
+      "exit": 3,
+      "stderr_contains": "isn't a normal launcher",
+      "files_absent": [
+        "vendor/cleanyourtv/launcher/ran.txt",
+        "backups/2026-11-19_100000/home-state.txt",
+        "backups/2026-11-19_100000/installed-by-us.txt"
+      ]
+    }
+  },
+  {
+    "script": "install-launcher",
+    "name": "TH-50b Home is com.android.provision/.DefaultActivity: refused with 3, nothing recorded or installed",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "vendor/cleanyourtv/launcher/build-and-install.sh": "#!/usr/bin/env bash\n: > ran.txt\nhk=0; [ -n \"${HOME_KEY_SERVICE:-}\" ] && hk=1\nik=0; [ -n \"${INPUT_KEY_SERVICE:-}\" ] && ik=1\necho \"upstream cwd=$(basename \"$(pwd)\") TV_HOST=$TV_HOST SKIP_BUILD=$SKIP_BUILD STOCK_LAUNCHER=$STOCK_LAUNCHER homekey=$hk inputkey=$ik\" >> \"$FAKE_BIN_LOG\"\nexit 0\n",
+      "vendor/cleanyourtv/launcher/build-and-install.ps1": "param([string]$TvHost, [string]$StockLauncher, [switch]$HomeKeyService, [switch]$InputKeyService)\nSet-Content -LiteralPath ran.txt -Value \"\"\n$hk = if ($HomeKeyService) { 1 } else { 0 }\n$ik = if ($InputKeyService) { 1 } else { 0 }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"upstream cwd=$(Split-Path -Leaf (Get-Location).Path) TV_HOST=$TvHost SKIP_BUILD=$env:SKIP_BUILD STOCK_LAUNCHER=$StockLauncher homekey=$hk inputkey=$ik\"\nexit 0\n",
+      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "PK\u0003\u0004 fake apk\n",
+      "vendor/cleanyourtv/tools/venv/pyvenv.cfg": "home = /usr/bin\n",
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "a.b.c"
+      ],
+      "home": "com.android.provision/.DefaultActivity"
+    },
+    "expect": {
+      "exit": 3,
+      "stderr_contains": "isn't a normal launcher",
+      "files_absent": [
+        "vendor/cleanyourtv/launcher/ran.txt",
+        "backups/2026-11-19_100000/home-state.txt",
+        "backups/2026-11-19_100000/installed-by-us.txt"
+      ]
+    }
+  },
+  {
+    "script": "install-launcher",
+    "name": "TH-50c Home is com.tcl.initsetup/.SetupActivity: refused with 3, nothing recorded or installed",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "vendor/cleanyourtv/launcher/build-and-install.sh": "#!/usr/bin/env bash\n: > ran.txt\nhk=0; [ -n \"${HOME_KEY_SERVICE:-}\" ] && hk=1\nik=0; [ -n \"${INPUT_KEY_SERVICE:-}\" ] && ik=1\necho \"upstream cwd=$(basename \"$(pwd)\") TV_HOST=$TV_HOST SKIP_BUILD=$SKIP_BUILD STOCK_LAUNCHER=$STOCK_LAUNCHER homekey=$hk inputkey=$ik\" >> \"$FAKE_BIN_LOG\"\nexit 0\n",
+      "vendor/cleanyourtv/launcher/build-and-install.ps1": "param([string]$TvHost, [string]$StockLauncher, [switch]$HomeKeyService, [switch]$InputKeyService)\nSet-Content -LiteralPath ran.txt -Value \"\"\n$hk = if ($HomeKeyService) { 1 } else { 0 }\n$ik = if ($InputKeyService) { 1 } else { 0 }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"upstream cwd=$(Split-Path -Leaf (Get-Location).Path) TV_HOST=$TvHost SKIP_BUILD=$env:SKIP_BUILD STOCK_LAUNCHER=$StockLauncher homekey=$hk inputkey=$ik\"\nexit 0\n",
+      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "PK\u0003\u0004 fake apk\n",
+      "vendor/cleanyourtv/tools/venv/pyvenv.cfg": "home = /usr/bin\n",
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "a.b.c"
+      ],
+      "home": "com.tcl.initsetup/.SetupActivity"
+    },
+    "expect": {
+      "exit": 3,
+      "stderr_contains": "isn't a normal launcher",
+      "files_absent": [
+        "vendor/cleanyourtv/launcher/ran.txt",
+        "backups/2026-11-19_100000/home-state.txt",
+        "backups/2026-11-19_100000/installed-by-us.txt"
+      ]
+    }
+  },
+  {
+    "script": "install-launcher",
+    "name": "TH-50d Home is android/com.android.internal.app.ResolverActivity: refused with 3, nothing recorded or installed",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "vendor/cleanyourtv/launcher/build-and-install.sh": "#!/usr/bin/env bash\n: > ran.txt\nhk=0; [ -n \"${HOME_KEY_SERVICE:-}\" ] && hk=1\nik=0; [ -n \"${INPUT_KEY_SERVICE:-}\" ] && ik=1\necho \"upstream cwd=$(basename \"$(pwd)\") TV_HOST=$TV_HOST SKIP_BUILD=$SKIP_BUILD STOCK_LAUNCHER=$STOCK_LAUNCHER homekey=$hk inputkey=$ik\" >> \"$FAKE_BIN_LOG\"\nexit 0\n",
+      "vendor/cleanyourtv/launcher/build-and-install.ps1": "param([string]$TvHost, [string]$StockLauncher, [switch]$HomeKeyService, [switch]$InputKeyService)\nSet-Content -LiteralPath ran.txt -Value \"\"\n$hk = if ($HomeKeyService) { 1 } else { 0 }\n$ik = if ($InputKeyService) { 1 } else { 0 }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"upstream cwd=$(Split-Path -Leaf (Get-Location).Path) TV_HOST=$TvHost SKIP_BUILD=$env:SKIP_BUILD STOCK_LAUNCHER=$StockLauncher homekey=$hk inputkey=$ik\"\nexit 0\n",
+      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "PK\u0003\u0004 fake apk\n",
+      "vendor/cleanyourtv/tools/venv/pyvenv.cfg": "home = /usr/bin\n",
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "a.b.c"
+      ],
+      "home": "android/com.android.internal.app.ResolverActivity"
+    },
+    "expect": {
+      "exit": 3,
+      "stderr_contains": "isn't a normal launcher",
+      "files_absent": [
+        "vendor/cleanyourtv/launcher/ran.txt",
+        "backups/2026-11-19_100000/home-state.txt",
+        "backups/2026-11-19_100000/installed-by-us.txt"
+      ]
+    }
+  },
+  {
+    "script": "install-launcher",
+    "name": "TH-51a Home is com.tcl.factory.home/.FactoryHome: refused with 3, nothing recorded or installed",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "vendor/cleanyourtv/launcher/build-and-install.sh": "#!/usr/bin/env bash\n: > ran.txt\nhk=0; [ -n \"${HOME_KEY_SERVICE:-}\" ] && hk=1\nik=0; [ -n \"${INPUT_KEY_SERVICE:-}\" ] && ik=1\necho \"upstream cwd=$(basename \"$(pwd)\") TV_HOST=$TV_HOST SKIP_BUILD=$SKIP_BUILD STOCK_LAUNCHER=$STOCK_LAUNCHER homekey=$hk inputkey=$ik\" >> \"$FAKE_BIN_LOG\"\nexit 0\n",
+      "vendor/cleanyourtv/launcher/build-and-install.ps1": "param([string]$TvHost, [string]$StockLauncher, [switch]$HomeKeyService, [switch]$InputKeyService)\nSet-Content -LiteralPath ran.txt -Value \"\"\n$hk = if ($HomeKeyService) { 1 } else { 0 }\n$ik = if ($InputKeyService) { 1 } else { 0 }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"upstream cwd=$(Split-Path -Leaf (Get-Location).Path) TV_HOST=$TvHost SKIP_BUILD=$env:SKIP_BUILD STOCK_LAUNCHER=$StockLauncher homekey=$hk inputkey=$ik\"\nexit 0\n",
+      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "PK\u0003\u0004 fake apk\n",
+      "vendor/cleanyourtv/tools/venv/pyvenv.cfg": "home = /usr/bin\n",
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "a.b.c"
+      ],
+      "home": "com.tcl.factory.home/.FactoryHome"
+    },
+    "expect": {
+      "exit": 3,
+      "stderr_contains": "isn't a normal launcher",
+      "files_absent": [
+        "vendor/cleanyourtv/launcher/ran.txt",
+        "backups/2026-11-19_100000/home-state.txt",
+        "backups/2026-11-19_100000/installed-by-us.txt"
+      ]
+    }
+  },
+  {
+    "script": "install-launcher",
+    "name": "TH-51b Home is com.android.tv.settings/.MainSettings: refused with 3, nothing recorded or installed",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "vendor/cleanyourtv/launcher/build-and-install.sh": "#!/usr/bin/env bash\n: > ran.txt\nhk=0; [ -n \"${HOME_KEY_SERVICE:-}\" ] && hk=1\nik=0; [ -n \"${INPUT_KEY_SERVICE:-}\" ] && ik=1\necho \"upstream cwd=$(basename \"$(pwd)\") TV_HOST=$TV_HOST SKIP_BUILD=$SKIP_BUILD STOCK_LAUNCHER=$STOCK_LAUNCHER homekey=$hk inputkey=$ik\" >> \"$FAKE_BIN_LOG\"\nexit 0\n",
+      "vendor/cleanyourtv/launcher/build-and-install.ps1": "param([string]$TvHost, [string]$StockLauncher, [switch]$HomeKeyService, [switch]$InputKeyService)\nSet-Content -LiteralPath ran.txt -Value \"\"\n$hk = if ($HomeKeyService) { 1 } else { 0 }\n$ik = if ($InputKeyService) { 1 } else { 0 }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"upstream cwd=$(Split-Path -Leaf (Get-Location).Path) TV_HOST=$TvHost SKIP_BUILD=$env:SKIP_BUILD STOCK_LAUNCHER=$StockLauncher homekey=$hk inputkey=$ik\"\nexit 0\n",
+      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "PK\u0003\u0004 fake apk\n",
+      "vendor/cleanyourtv/tools/venv/pyvenv.cfg": "home = /usr/bin\n",
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "a.b.c"
+      ],
+      "home": "com.android.tv.settings/.MainSettings"
+    },
+    "expect": {
+      "exit": 3,
+      "stderr_contains": "isn't a normal launcher",
+      "files_absent": [
+        "vendor/cleanyourtv/launcher/ran.txt",
+        "backups/2026-11-19_100000/home-state.txt",
+        "backups/2026-11-19_100000/installed-by-us.txt"
+      ]
+    }
+  },
+  {
+    "script": "install-launcher",
+    "name": "TH-52 resolve-activity names two components: exit 3, nothing recorded",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "vendor/cleanyourtv/launcher/build-and-install.sh": "#!/usr/bin/env bash\n: > ran.txt\nhk=0; [ -n \"${HOME_KEY_SERVICE:-}\" ] && hk=1\nik=0; [ -n \"${INPUT_KEY_SERVICE:-}\" ] && ik=1\necho \"upstream cwd=$(basename \"$(pwd)\") TV_HOST=$TV_HOST SKIP_BUILD=$SKIP_BUILD STOCK_LAUNCHER=$STOCK_LAUNCHER homekey=$hk inputkey=$ik\" >> \"$FAKE_BIN_LOG\"\nexit 0\n",
+      "vendor/cleanyourtv/launcher/build-and-install.ps1": "param([string]$TvHost, [string]$StockLauncher, [switch]$HomeKeyService, [switch]$InputKeyService)\nSet-Content -LiteralPath ran.txt -Value \"\"\n$hk = if ($HomeKeyService) { 1 } else { 0 }\n$ik = if ($InputKeyService) { 1 } else { 0 }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"upstream cwd=$(Split-Path -Leaf (Get-Location).Path) TV_HOST=$TvHost SKIP_BUILD=$env:SKIP_BUILD STOCK_LAUNCHER=$StockLauncher homekey=$hk inputkey=$ik\"\nexit 0\n",
+      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "PK\u0003\u0004 fake apk\n",
+      "vendor/cleanyourtv/tools/venv/pyvenv.cfg": "home = /usr/bin\n",
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "a.b.c"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity",
+      "resolve_home": "com.a.launcher/.Main\ncom.b.launcher/.Main"
+    },
+    "expect": {
+      "exit": 3,
+      "stderr_contains": "more than one Home",
+      "files_absent": [
+        "vendor/cleanyourtv/launcher/ran.txt",
+        "backups/2026-11-19_100000/home-state.txt"
+      ]
+    }
+  },
+  {
+    "script": "install-launcher",
+    "name": "TH-53a upstream fails and the filtered list fails: the unfiltered list finds ours",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "vendor/cleanyourtv/launcher/build-and-install.sh": "#!/usr/bin/env bash\n: > ran.txt\nhk=0; [ -n \"${HOME_KEY_SERVICE:-}\" ] && hk=1\nik=0; [ -n \"${INPUT_KEY_SERVICE:-}\" ] && ik=1\necho \"upstream cwd=$(basename \"$(pwd)\") TV_HOST=$TV_HOST SKIP_BUILD=$SKIP_BUILD STOCK_LAUNCHER=$STOCK_LAUNCHER homekey=$hk inputkey=$ik\" >> \"$FAKE_BIN_LOG\"\nexit 1\n",
+      "vendor/cleanyourtv/launcher/build-and-install.ps1": "param([string]$TvHost, [string]$StockLauncher, [switch]$HomeKeyService, [switch]$InputKeyService)\nSet-Content -LiteralPath ran.txt -Value \"\"\n$hk = if ($HomeKeyService) { 1 } else { 0 }\n$ik = if ($InputKeyService) { 1 } else { 0 }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"upstream cwd=$(Split-Path -Leaf (Get-Location).Path) TV_HOST=$TvHost SKIP_BUILD=$env:SKIP_BUILD STOCK_LAUNCHER=$StockLauncher homekey=$hk inputkey=$ik\"\nexit 1\n",
+      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "PK\u0003\u0004 fake apk\n",
+      "vendor/cleanyourtv/tools/venv/pyvenv.cfg": "home = /usr/bin\n",
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "a.b.c",
+        "com.gathin.tvhome"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity",
+      "fail_list_filter": true
+    },
+    "expect": {
+      "exit": 1,
+      "adb_calls_include": [
+        "pm list packages com.gathin.tvhome"
+      ],
+      "files_match": {
+        "backups/2026-11-19_100000/installed-by-us.txt": "com\\.gathin\\.tvhome\\n"
+      }
+    }
+  },
+  {
+    "script": "install-launcher",
+    "name": "TH-53b upstream fails and the TV can't answer at all: ours is still listed, with a warning",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "vendor/cleanyourtv/launcher/build-and-install.sh": "#!/usr/bin/env bash\n: > ran.txt\nhk=0; [ -n \"${HOME_KEY_SERVICE:-}\" ] && hk=1\nik=0; [ -n \"${INPUT_KEY_SERVICE:-}\" ] && ik=1\necho \"upstream cwd=$(basename \"$(pwd)\") TV_HOST=$TV_HOST SKIP_BUILD=$SKIP_BUILD STOCK_LAUNCHER=$STOCK_LAUNCHER homekey=$hk inputkey=$ik\" >> \"$FAKE_BIN_LOG\"\nexit 1\n",
+      "vendor/cleanyourtv/launcher/build-and-install.ps1": "param([string]$TvHost, [string]$StockLauncher, [switch]$HomeKeyService, [switch]$InputKeyService)\nSet-Content -LiteralPath ran.txt -Value \"\"\n$hk = if ($HomeKeyService) { 1 } else { 0 }\n$ik = if ($InputKeyService) { 1 } else { 0 }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"upstream cwd=$(Split-Path -Leaf (Get-Location).Path) TV_HOST=$TvHost SKIP_BUILD=$env:SKIP_BUILD STOCK_LAUNCHER=$StockLauncher homekey=$hk inputkey=$ik\"\nexit 1\n",
+      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "PK\u0003\u0004 fake apk\n",
+      "vendor/cleanyourtv/tools/venv/pyvenv.cfg": "home = /usr/bin\n",
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "a.b.c"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity",
+      "offline_after": 2
+    },
+    "expect": {
+      "exit": 1,
+      "stderr_contains": "could not say whether our launcher",
+      "files_match": {
+        "backups/2026-11-19_100000/installed-by-us.txt": "com\\.gathin\\.tvhome\\n"
+      }
+    }
+  },
+  {
+    "script": "install-launcher",
+    "name": "TH-53c upstream fails, filtered list fails, unfiltered list lacks ours: nothing listed",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "vendor/cleanyourtv/launcher/build-and-install.sh": "#!/usr/bin/env bash\n: > ran.txt\nhk=0; [ -n \"${HOME_KEY_SERVICE:-}\" ] && hk=1\nik=0; [ -n \"${INPUT_KEY_SERVICE:-}\" ] && ik=1\necho \"upstream cwd=$(basename \"$(pwd)\") TV_HOST=$TV_HOST SKIP_BUILD=$SKIP_BUILD STOCK_LAUNCHER=$STOCK_LAUNCHER homekey=$hk inputkey=$ik\" >> \"$FAKE_BIN_LOG\"\nexit 1\n",
+      "vendor/cleanyourtv/launcher/build-and-install.ps1": "param([string]$TvHost, [string]$StockLauncher, [switch]$HomeKeyService, [switch]$InputKeyService)\nSet-Content -LiteralPath ran.txt -Value \"\"\n$hk = if ($HomeKeyService) { 1 } else { 0 }\n$ik = if ($InputKeyService) { 1 } else { 0 }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"upstream cwd=$(Split-Path -Leaf (Get-Location).Path) TV_HOST=$TvHost SKIP_BUILD=$env:SKIP_BUILD STOCK_LAUNCHER=$StockLauncher homekey=$hk inputkey=$ik\"\nexit 1\n",
+      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "PK\u0003\u0004 fake apk\n",
+      "vendor/cleanyourtv/tools/venv/pyvenv.cfg": "home = /usr/bin\n",
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "a.b.c"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity",
+      "fail_list_filter": true
+    },
+    "expect": {
+      "exit": 1,
+      "files_absent": [
+        "backups/2026-11-19_100000/installed-by-us.txt"
+      ]
+    }
+  },
+  {
+    "script": "install-launcher",
+    "name": "TH-54 a 0-byte APK is refused before any install",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "vendor/cleanyourtv/launcher/build-and-install.sh": "#!/usr/bin/env bash\n: > ran.txt\nhk=0; [ -n \"${HOME_KEY_SERVICE:-}\" ] && hk=1\nik=0; [ -n \"${INPUT_KEY_SERVICE:-}\" ] && ik=1\necho \"upstream cwd=$(basename \"$(pwd)\") TV_HOST=$TV_HOST SKIP_BUILD=$SKIP_BUILD STOCK_LAUNCHER=$STOCK_LAUNCHER homekey=$hk inputkey=$ik\" >> \"$FAKE_BIN_LOG\"\nexit 0\n",
+      "vendor/cleanyourtv/launcher/build-and-install.ps1": "param([string]$TvHost, [string]$StockLauncher, [switch]$HomeKeyService, [switch]$InputKeyService)\nSet-Content -LiteralPath ran.txt -Value \"\"\n$hk = if ($HomeKeyService) { 1 } else { 0 }\n$ik = if ($InputKeyService) { 1 } else { 0 }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"upstream cwd=$(Split-Path -Leaf (Get-Location).Path) TV_HOST=$TvHost SKIP_BUILD=$env:SKIP_BUILD STOCK_LAUNCHER=$StockLauncher homekey=$hk inputkey=$ik\"\nexit 0\n",
+      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "",
+      "vendor/cleanyourtv/tools/venv/pyvenv.cfg": "home = /usr/bin\n",
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "a.b.c"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
+    },
+    "expect": {
+      "exit": 3,
+      "files_absent": [
+        "vendor/cleanyourtv/launcher/ran.txt",
+        "backups/2026-11-19_100000/home-state.txt"
+      ],
+      "adb_calls_exclude": [
+        "resolve-activity"
+      ]
+    }
+  },
+  {
+    "script": "install-launcher",
+    "name": "PA-05 HOME_KEY_SERVICE=yes is refused with 2 before anything",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50",
+      "HOME_KEY_SERVICE": "yes"
+    },
+    "files": {
+      "vendor/cleanyourtv/launcher/build-and-install.sh": "#!/usr/bin/env bash\n: > ran.txt\nhk=0; [ -n \"${HOME_KEY_SERVICE:-}\" ] && hk=1\nik=0; [ -n \"${INPUT_KEY_SERVICE:-}\" ] && ik=1\necho \"upstream cwd=$(basename \"$(pwd)\") TV_HOST=$TV_HOST SKIP_BUILD=$SKIP_BUILD STOCK_LAUNCHER=$STOCK_LAUNCHER homekey=$hk inputkey=$ik\" >> \"$FAKE_BIN_LOG\"\nexit 0\n",
+      "vendor/cleanyourtv/launcher/build-and-install.ps1": "param([string]$TvHost, [string]$StockLauncher, [switch]$HomeKeyService, [switch]$InputKeyService)\nSet-Content -LiteralPath ran.txt -Value \"\"\n$hk = if ($HomeKeyService) { 1 } else { 0 }\n$ik = if ($InputKeyService) { 1 } else { 0 }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"upstream cwd=$(Split-Path -Leaf (Get-Location).Path) TV_HOST=$TvHost SKIP_BUILD=$env:SKIP_BUILD STOCK_LAUNCHER=$StockLauncher homekey=$hk inputkey=$ik\"\nexit 0\n",
+      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "PK\u0003\u0004 fake apk\n",
+      "vendor/cleanyourtv/tools/venv/pyvenv.cfg": "home = /usr/bin\n",
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "a.b.c"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
+    },
+    "expect": {
+      "exit": 2,
+      "stderr_contains": "HOME_KEY_SERVICE",
+      "files_absent": [
+        "vendor/cleanyourtv/launcher/ran.txt"
+      ]
+    }
+  },
+  {
+    "script": "install-launcher",
+    "name": "PA-05 INPUT_KEY_SERVICE=2 is refused with 2 before anything",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50",
+      "INPUT_KEY_SERVICE": "2"
+    },
+    "files": {
+      "vendor/cleanyourtv/launcher/build-and-install.sh": "#!/usr/bin/env bash\n: > ran.txt\nhk=0; [ -n \"${HOME_KEY_SERVICE:-}\" ] && hk=1\nik=0; [ -n \"${INPUT_KEY_SERVICE:-}\" ] && ik=1\necho \"upstream cwd=$(basename \"$(pwd)\") TV_HOST=$TV_HOST SKIP_BUILD=$SKIP_BUILD STOCK_LAUNCHER=$STOCK_LAUNCHER homekey=$hk inputkey=$ik\" >> \"$FAKE_BIN_LOG\"\nexit 0\n",
+      "vendor/cleanyourtv/launcher/build-and-install.ps1": "param([string]$TvHost, [string]$StockLauncher, [switch]$HomeKeyService, [switch]$InputKeyService)\nSet-Content -LiteralPath ran.txt -Value \"\"\n$hk = if ($HomeKeyService) { 1 } else { 0 }\n$ik = if ($InputKeyService) { 1 } else { 0 }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"upstream cwd=$(Split-Path -Leaf (Get-Location).Path) TV_HOST=$TvHost SKIP_BUILD=$env:SKIP_BUILD STOCK_LAUNCHER=$StockLauncher homekey=$hk inputkey=$ik\"\nexit 0\n",
+      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "PK\u0003\u0004 fake apk\n",
+      "vendor/cleanyourtv/tools/venv/pyvenv.cfg": "home = /usr/bin\n",
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "a.b.c"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
+    },
+    "expect": {
+      "exit": 2,
+      "stderr_contains": "INPUT_KEY_SERVICE",
+      "files_absent": [
+        "vendor/cleanyourtv/launcher/ran.txt"
+      ]
+    }
+  },
+  {
+    "script": "install-launcher",
+    "name": "PA-05 HOME_KEY_SERVICE=true is refused with 2 before anything",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50",
+      "HOME_KEY_SERVICE": "true"
+    },
+    "files": {
+      "vendor/cleanyourtv/launcher/build-and-install.sh": "#!/usr/bin/env bash\n: > ran.txt\nhk=0; [ -n \"${HOME_KEY_SERVICE:-}\" ] && hk=1\nik=0; [ -n \"${INPUT_KEY_SERVICE:-}\" ] && ik=1\necho \"upstream cwd=$(basename \"$(pwd)\") TV_HOST=$TV_HOST SKIP_BUILD=$SKIP_BUILD STOCK_LAUNCHER=$STOCK_LAUNCHER homekey=$hk inputkey=$ik\" >> \"$FAKE_BIN_LOG\"\nexit 0\n",
+      "vendor/cleanyourtv/launcher/build-and-install.ps1": "param([string]$TvHost, [string]$StockLauncher, [switch]$HomeKeyService, [switch]$InputKeyService)\nSet-Content -LiteralPath ran.txt -Value \"\"\n$hk = if ($HomeKeyService) { 1 } else { 0 }\n$ik = if ($InputKeyService) { 1 } else { 0 }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"upstream cwd=$(Split-Path -Leaf (Get-Location).Path) TV_HOST=$TvHost SKIP_BUILD=$env:SKIP_BUILD STOCK_LAUNCHER=$StockLauncher homekey=$hk inputkey=$ik\"\nexit 0\n",
+      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "PK\u0003\u0004 fake apk\n",
+      "vendor/cleanyourtv/tools/venv/pyvenv.cfg": "home = /usr/bin\n",
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "a.b.c"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
+    },
+    "expect": {
+      "exit": 2,
+      "stderr_contains": "HOME_KEY_SERVICE",
+      "files_absent": [
+        "vendor/cleanyourtv/launcher/ran.txt"
+      ]
+    }
+  },
+  {
+    "script": "install-launcher",
+    "name": "PA-05b HOME_KEY_SERVICE=0 and INPUT_KEY_SERVICE=0 pass nothing to upstream",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50",
+      "HOME_KEY_SERVICE": "0",
+      "INPUT_KEY_SERVICE": "0"
+    },
+    "files": {
+      "vendor/cleanyourtv/launcher/build-and-install.sh": "#!/usr/bin/env bash\n: > ran.txt\nhk=0; [ -n \"${HOME_KEY_SERVICE:-}\" ] && hk=1\nik=0; [ -n \"${INPUT_KEY_SERVICE:-}\" ] && ik=1\necho \"upstream cwd=$(basename \"$(pwd)\") TV_HOST=$TV_HOST SKIP_BUILD=$SKIP_BUILD STOCK_LAUNCHER=$STOCK_LAUNCHER homekey=$hk inputkey=$ik\" >> \"$FAKE_BIN_LOG\"\nexit 0\n",
+      "vendor/cleanyourtv/launcher/build-and-install.ps1": "param([string]$TvHost, [string]$StockLauncher, [switch]$HomeKeyService, [switch]$InputKeyService)\nSet-Content -LiteralPath ran.txt -Value \"\"\n$hk = if ($HomeKeyService) { 1 } else { 0 }\n$ik = if ($InputKeyService) { 1 } else { 0 }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"upstream cwd=$(Split-Path -Leaf (Get-Location).Path) TV_HOST=$TvHost SKIP_BUILD=$env:SKIP_BUILD STOCK_LAUNCHER=$StockLauncher homekey=$hk inputkey=$ik\"\nexit 0\n",
+      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "PK\u0003\u0004 fake apk\n",
+      "vendor/cleanyourtv/tools/venv/pyvenv.cfg": "home = /usr/bin\n",
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "a.b.c"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
+    },
+    "expect": {
+      "exit": 0,
+      "bin_calls_include": [
+        "homekey=0 inputkey=0"
+      ]
+    }
+  },
+  {
+    "script": "install-launcher",
+    "name": "RG-14 PA-06 RESTORE_KEY_SERVICES=1 in the environment reaches upstream as 0 in both shells",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50",
+      "RESTORE_KEY_SERVICES": "1"
+    },
+    "files": {
+      "vendor/cleanyourtv/launcher/build-and-install.sh": "#!/usr/bin/env bash\necho \"upstream restorekey=${RESTORE_KEY_SERVICES:-unset}\" >> \"$FAKE_BIN_LOG\"\nexit 0\n",
+      "vendor/cleanyourtv/launcher/build-and-install.ps1": "param([string]$TvHost, [string]$StockLauncher, [switch]$HomeKeyService, [switch]$InputKeyService, [switch]$RestoreKeyServices)\n$rk = $env:RESTORE_KEY_SERVICES\nif ($RestoreKeyServices) { $rk = \"switch\" }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"upstream restorekey=$rk\"\nexit 0\n",
+      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "PK\u0003\u0004 fake apk\n",
+      "vendor/cleanyourtv/tools/venv/pyvenv.cfg": "home = /usr/bin\n",
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "a.b.c"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
+    },
+    "expect": {
+      "exit": 0,
+      "bin_calls_include": [
+        "upstream restorekey=0"
+      ]
+    }
+  },
+  {
+    "script": "install-launcher",
+    "name": "PF-02 install keeps the original stock launcher (second session, Home not recorded again)",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "vendor/cleanyourtv/launcher/build-and-install.sh": "#!/usr/bin/env bash\n: > ran.txt\nhk=0; [ -n \"${HOME_KEY_SERVICE:-}\" ] && hk=1\nik=0; [ -n \"${INPUT_KEY_SERVICE:-}\" ] && ik=1\necho \"upstream cwd=$(basename \"$(pwd)\") TV_HOST=$TV_HOST SKIP_BUILD=$SKIP_BUILD STOCK_LAUNCHER=$STOCK_LAUNCHER homekey=$hk inputkey=$ik\" >> \"$FAKE_BIN_LOG\"\nexit 0\n",
+      "vendor/cleanyourtv/launcher/build-and-install.ps1": "param([string]$TvHost, [string]$StockLauncher, [switch]$HomeKeyService, [switch]$InputKeyService)\nSet-Content -LiteralPath ran.txt -Value \"\"\n$hk = if ($HomeKeyService) { 1 } else { 0 }\n$ik = if ($InputKeyService) { 1 } else { 0 }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"upstream cwd=$(Split-Path -Leaf (Get-Location).Path) TV_HOST=$TvHost SKIP_BUILD=$env:SKIP_BUILD STOCK_LAUNCHER=$StockLauncher homekey=$hk inputkey=$ik\"\nexit 0\n",
+      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "PK\u0003\u0004 fake apk\n",
+      "vendor/cleanyourtv/tools/venv/pyvenv.cfg": "home = /usr/bin\n",
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n",
+      "backups/2026-11-18_090000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n",
+      "backups/2026-11-18_090000/home-state.txt": "stock_package=com.google.android.tvlauncher\nstock_component=com.google.android.tvlauncher/.MainActivity\nours=com.gathin.tvhome\n",
+      "backups/2026-11-18_090000/packages-disabled.txt": "",
+      "backups/2026-11-18_090000/getprop.txt": "",
+      "backups/2026-11-18_090000/settings-global.txt": "",
+      "backups/2026-11-18_090000/settings-secure.txt": "",
+      "backups/2026-11-18_090000/settings-system.txt": "",
+      "backups/2026-11-18_090000/home-activity.txt": "",
+      "backups/2026-11-18_090000/tv-id.txt": "adb:192.168.1.50:5555\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "a.b.c",
+        "com.gathin.tvhome"
+      ],
+      "home": "com.other.launcher/.Main"
+    },
+    "expect": {
+      "exit": 0,
+      "stdout_contains": [
+        "already recorded"
+      ],
+      "adb_calls_exclude": [
+        "resolve-activity"
+      ],
+      "files_absent": [
+        "backups/2026-11-19_100000/home-state.txt"
+      ],
+      "files_match": {
+        "backups/2026-11-18_090000/home-state.txt": "stock_package=com\\.google\\.android\\.tvlauncher\\nstock_component=com\\.google\\.android\\.tvlauncher/\\.MainActivity\\nours=com\\.gathin\\.tvhome\\n",
+        "backups/2026-11-19_100000/installed-by-us.txt": "com\\.gathin\\.tvhome\\n"
+      }
+    }
+  }
+]

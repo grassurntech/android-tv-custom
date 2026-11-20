@@ -67,6 +67,10 @@ Details: [docs/SECURITY.md](docs/SECURITY.md), [CONTRIBUTING.md](CONTRIBUTING.md
 - [index.md](docs/product-specs/index.md) — catalog of specs + status
 - [new-user-onboarding.md](docs/product-specs/new-user-onboarding.md)
 
+### `docs/test-cases/`
+- [index.md](docs/test-cases/index.md) — master QA test-case list by category; re-run after every fix round
+- [hook.md](docs/test-cases/hook.md), [scripts.md](docs/test-cases/scripts.md), [theme-launcher.md](docs/test-cases/theme-launcher.md), [integration-regression.md](docs/test-cases/integration-regression.md), [prompt.md](docs/test-cases/prompt.md)
+
 ### `docs/references/` (external, read-only)
 - [cleanyourtv.md](docs/references/cleanyourtv.md) — upstream launcher we build on: pinned tag/commit and the files we rely on
 

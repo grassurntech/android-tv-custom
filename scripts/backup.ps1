@@ -1,6 +1,8 @@
 # Backs up the TV's package lists, properties and settings to TV_BACKUP_DIR/<YYYY-MM-DD_HHMMSS>/.
-# Read-only on the TV. Prints the backup folder as the last stdout line.
-# Exit: 0 done, 2 bad arguments, 3 setup missing, 20 TV refused / empty result, 21 unreachable, 22 unauthorized.
+# Read-only on the TV. Prints the backup folder as the last stdout line. Also records which TV it is
+# (tv-id.txt) so disable-one and restore never use one TV's backup on another.
+# Exit: 0 done, 2 bad arguments, 3 setup missing or the backup folder can't be written,
+#       20 TV refused / empty or error result (no folder kept), 21 unreachable, 22 unauthorized.
 Set-StrictMode -Version 2
 $ErrorActionPreference = 'Stop'
 Import-Module (Join-Path $PSScriptRoot 'lib/TvEnv.psm1') -Force
@@ -40,9 +42,24 @@ function Save-TvOutput {
     return $true
 }
 
-$code = 0
+# $true if every non-empty line is a package: line (and, with -NeedOne, there is at least one).
+function Test-ListFileOk([string]$File, [bool]$NeedOne) {
+    $lines = [System.IO.File]::ReadAllLines($File)
+    if ((Get-TvListState $lines '-') -eq 2) { return $false }
+    if (-not $NeedOne) { return $true }
+    foreach ($l in $lines) { if ($l.TrimStart([char]0xFEFF).Trim().StartsWith('package:', [System.StringComparison]::Ordinal)) { return $true } }
+    return $false
+}
+
 try {
     $null = New-Item -ItemType Directory -Path $partial -Force
+} catch {
+    [Console]::Error.WriteLine("Can't create the backup folder $partial. Check TV_BACKUP_DIR and its permissions.")
+    exit 3
+}
+
+$code = 0
+try {
     $steps = @(
         @('packages-disabled.txt', @('pm', 'list', 'packages', '-d')),
         @('getprop.txt', @('getprop')),
@@ -56,14 +73,39 @@ try {
         if (-not (Save-TvOutput $step[0] $step[1])) { $code = 20; break }
     }
     if ($code -eq 0) {
-        $pkgFile = Join-Path $partial 'packages-all.txt'
-        if ((Get-Item -LiteralPath $pkgFile).Length -le 0) {
-            [Console]::Error.WriteLine('The TV returned an empty package list; no backup was kept.')
+        if (-not (Test-ListFileOk (Join-Path $partial 'packages-all.txt') $true)) {
+            [Console]::Error.WriteLine('The TV returned an empty package list or an error message instead of one; no backup was kept.')
             $code = 20
         }
     }
     if ($code -eq 0) {
-        Move-Item -LiteralPath $partial -Destination $final
+        if (-not (Test-ListFileOk (Join-Path $partial 'packages-disabled.txt') $false)) {
+            [Console]::Error.WriteLine("The TV returned an error message instead of its list of switched-off apps; no backup was kept.")
+            $code = 20
+        }
+    }
+    if ($code -eq 0) {
+        if ((Get-TvIdentity) -ne 0) {
+            [Console]::Error.WriteLine("The TV didn't say which TV it is; no backup was kept.")
+            $code = 20
+        }
+    }
+    if ($code -eq 0) {
+        try {
+            # UTF-8 without BOM, LF line ending: byte-identical to the shell version.
+            [System.IO.File]::WriteAllText((Join-Path $partial 'tv-id.txt'), "$($global:TV_ID)`n", (New-Object System.Text.UTF8Encoding($false)))
+        } catch {
+            [Console]::Error.WriteLine("Can't write $partial/tv-id.txt; no backup was kept.")
+            $code = 3
+        }
+    }
+    if ($code -eq 0) {
+        try {
+            Move-Item -LiteralPath $partial -Destination $final
+        } catch {
+            [Console]::Error.WriteLine("Can't finish the backup folder $final.")
+            $code = 3
+        }
     }
 } catch {
     [Console]::Error.WriteLine("Backup failed: $($_.Exception.Message)")

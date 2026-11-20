@@ -9,3 +9,4 @@
 *engineeringmode*
 *designmenu*
 *.mmitest*
+*engmode*

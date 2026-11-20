@@ -1,19 +1,31 @@
 # Undoes what this tool changed on the TV. Never uninstalls anything.
 #   restore.ps1 [--home-only | --packages-only]     (default: both, Home first)
-# Home:     turn the stock launcher back on, switch OUR launcher off (through disable-one.ps1, the only
-#           script that disables anything; skipped if it was never installed), make the stock launcher
-#           Home, then read Home back. Only a matching read-back counts as done.
+# Only backups taken on the connected TV are used (tv-id.txt); the newest must match, else exit 13.
+# Home:     the stock launcher comes from the OLDEST home-state.txt (a later install can record our own
+#           launcher as "stock"). It must still be installed; it is turned back on, made Home, then OUR
+#           launcher is switched off (through disable-one.ps1, the only script that disables anything, which
+#           refuses the current Home app; skipped if ours was never installed), the stock launcher is made
+#           Home again (switching ours off drops the Home choice), then Home is read back. Only a matching
+#           read-back counts as done.
 # Packages: turn back on every package listed in any backup's disabled-by-us.txt that the TV currently
 #           shows as disabled (each distinct package once; restored.txt is only a record), one `pm enable` at a time, newest backup first. A TV refusal stops it.
 #           Our launcher and the stock launcher from home-state.txt are skipped: the Home step owns both.
-# Exit: 0 done (or nothing to do), 2 bad arguments, 3 setup missing or a file is unreadable,
-#       13 no usable backup, 20 TV refused (or Home did not read back as the stock launcher),
-#       21 unreachable, 22 unauthorized; a failed Home disable passes disable-one's own exit code up unchanged.
+#           A logged app that is on already is reported "already on"; one no longer installed is skipped.
+# Exit: 0 done (or nothing to do), 2 bad arguments, 3 setup missing or a local file is unreadable or
+#       can't be written (restored.txt: the TV work still completes first), 13 no usable backup or the
+#       backup is from another TV, 20 TV refused or gave no trustworthy answer (or Home did not read back as
+#       the stock launcher), 21 unreachable (also mid-run), 22 unauthorized; a failed Home disable passes
+#       disable-one's own exit code up unchanged. Mirrors restore.sh.
 Set-StrictMode -Version 2
 $ErrorActionPreference = 'Stop'
 Import-Module (Join-Path $PSScriptRoot 'lib/TvEnv.psm1') -Force
 
 function Write-Err([string]$Text) { [Console]::Error.WriteLine($Text) }
+# Any unexpected PowerShell error (an unreadable file, say) is a local problem: exit 3, never 1.
+trap {
+    [Console]::Error.WriteLine("Unexpected local error: $($_.Exception.Message). Check the TV before doing anything else. Stopping.")
+    exit 3
+}
 
 $OurLauncher = 'com.gathin.tvhome'
 $PkgRe = '^[A-Za-z][A-Za-z0-9_]*(\.[A-Za-z0-9_]+)+\z'
@@ -31,8 +43,9 @@ if ($args.Count -eq 1 -and [string]$args[0] -ceq '--home-only') {
     exit 2
 }
 
-# 2. Config, then at least one usable backup.
+# 2. Config, then at least one usable backup (every backup file readable, else exit 3).
 Import-TvEnv
+Assert-TvBackupsReadable
 $backups = @(Get-TvBackups | Where-Object { $_ })
 if ($backups.Count -eq 0) {
     Write-Err 'No backup found, so there is nothing to restore from. Nothing was changed. Stopping.'
@@ -51,27 +64,36 @@ if ($rc -eq 21) {
 }
 if ($rc -ne 0) { exit $rc }
 
-# Runs a command on the TV (each element is one literal argument). Sets $script:AdbRc and returns stdout lines.
-# Windows PowerShell 5.1 turns native stderr into terminating errors under 'Stop', so relax it here.
+# 4. Only backups of this TV; the newest must be one of them (sets $global:TV_ID).
+Assert-TvIdentity ([string]$backups[0])
+$mine = @()
+foreach ($folder in $backups) {
+    if ((Get-TvBackupId ([string]$folder)) -ceq $global:TV_ID) { $mine += [string]$folder }
+}
+$backups = $mine
+
+# Runs a command on the TV (each element is one literal argument). Sets $script:AdbRc and returns stdout
+# lines only: stderr is dropped, never parsed (a warning on stderr must not change a read-back).
 $script:AdbRc = 0
 function Invoke-Adb([string[]]$Cmd) {
-    $ErrorActionPreference = 'Continue'
-    $out = & $global:ADB -s $global:SERIAL shell @Cmd 2>&1
-    $script:AdbRc = $LASTEXITCODE
-    # foreach, not a pipeline: empty output ($null) must not reach ToString() on 5.1.
-    $lines = @()
-    foreach ($o in $out) { if ($null -ne $o) { $lines += $o.ToString() } }
-    return $lines
+    $lines = Invoke-TvAdbLines $Cmd
+    $script:AdbRc = Get-TvAdbRc
+    return ,$lines
 }
 
-# Returns 0 if $Name is disabled, 1 if not, 2 if the TV could not answer.
+# Returns 0 if $Name is disabled, 1 if not, 2 if the TV could not answer (failed, or printed something that isn't a list).
 function Get-DisabledState([string]$Name) {
-    $lines = @(Invoke-Adb @('pm', 'list', 'packages', '-d'))
+    $lines = Invoke-Adb @('pm', 'list', 'packages', '-d')
     if ($script:AdbRc -ne 0) { return 2 }
-    foreach ($l in $lines) {
-        if ($l.Trim() -ceq "package:$Name") { return 0 }
+    return (Get-TvListState $lines $Name)
+}
+
+# After a failed read-back: exit 21 if the TV has gone, else return.
+function Exit-IfUnreachable([string]$What) {
+    if ((Test-TvReachable) -eq 21) {
+        Write-Err "Can't reach the TV at $($global:TV_IP) any more. $What Stopping."
+        exit 21
     }
-    return 1
 }
 
 # The text before the first tab, trimmed, without a BOM.
@@ -89,9 +111,15 @@ function Test-InRestored([string]$File, [string]$Name) {
     return $false
 }
 
-# The value of the first `key=value` line, or $null.
+# The value of the first `key=value` line, or $null. Exits 3 if the file can't be read.
 function Get-StateValue([string]$File, [string]$Key) {
-    foreach ($raw in [System.IO.File]::ReadAllLines($File)) {
+    try {
+        $all = [System.IO.File]::ReadAllLines($File)
+    } catch {
+        Write-Err "Can't read $File. Nothing was changed. Stopping."
+        exit 3
+    }
+    foreach ($raw in $all) {
         $line = $raw.TrimStart([char]0xFEFF).Trim()
         if ($line.StartsWith("$Key=", [System.StringComparison]::Ordinal)) {
             return $line.Substring($Key.Length + 1).Trim()
@@ -105,28 +133,29 @@ $StayOn = "Please leave the TV switched on. Don't unplug it or restart it."
 
 # Returns 0 if the TV lists $Name (exact line), 1 if not, 2 if the TV could not answer.
 function Get-InstalledState([string]$Name) {
-    $lines = @(Invoke-Adb @('pm', 'list', 'packages', $Name))
+    $lines = Invoke-Adb @('pm', 'list', 'packages', $Name)
     if ($script:AdbRc -ne 0) { return 2 }
-    foreach ($l in $lines) {
-        if ($l.Trim() -ceq "package:$Name") { return 0 }
-    }
-    return 1
+    return (Get-TvListState $lines $Name)
 }
 
-# The newest backup's home-state.txt, or $null.
+# The OLDEST backup's home-state.txt in $script:HsOld and the newest in $script:HsNew ($null if none).
+# The oldest records the launcher the TV came with; a later install can record our own launcher as stock.
 function Find-HomeState {
+    $script:HsOld = $null
+    $script:HsNew = $null
     foreach ($folder in $backups) {
         $candidate = Join-Path ([string]$folder) 'home-state.txt'
-        if (Test-Path -LiteralPath $candidate -PathType Leaf) { return $candidate }
+        if (Test-Path -LiteralPath $candidate -PathType Leaf) {
+            $script:HsOld = $candidate
+            if ($null -eq $script:HsNew) { $script:HsNew = $candidate }
+        }
     }
-    return $null
 }
 
 # ---- Home ------------------------------------------------------------------------------------
-# Order: stock launcher on, ours off, stock made Home, then read Home back. Switching ours off changes
-# the set of Home apps, which makes Android drop the Home choice, so Home is set only after that.
 function Restore-Home {
-    $hs = Find-HomeState
+    Find-HomeState
+    $hs = $script:HsOld
     if ($null -eq $hs) {
         Write-Output 'No home-state.txt in any backup, so the Home screen was never changed. Skipping the Home step.'
         return
@@ -139,16 +168,36 @@ function Restore-Home {
         Write-Err "$hs is missing or has a bad stock_package, stock_component or ours line. Nothing was changed. Stopping."
         exit 3
     }
+    if ($script:HsNew -ne $hs) {
+        $newestStock = [string](Get-StateValue $script:HsNew 'stock_component')
+        if ($newestStock -cne $stockComp) {
+            $shown = $newestStock
+            if ($shown.Length -eq 0) { $shown = 'nothing' }
+            Write-Output "Backups disagree about the original launcher; using the oldest record ($hs`: $stockComp), not the newest ($($script:HsNew): $shown)."
+        }
+    }
 
-    # 1. The stock launcher back on.
+    # 1. The stock launcher must still be installed, then back on. Until it is, ours is never touched.
+    $inst = Get-InstalledState $stockPkg
+    if ($inst -eq 2) {
+        Write-Err "The TV didn't say whether the original launcher ($stockPkg) is installed, so its state is unknown. Nothing was changed. Stopping."
+        exit 20
+    }
+    if ($inst -eq 1) {
+        Write-Err "The original launcher ($stockPkg) is no longer installed on the TV, so our launcher stays on as the Home screen. Nothing was changed. Stopping."
+        exit 20
+    }
     $null = Invoke-Adb @('pm', 'enable', $stockPkg)
-    if ((Get-DisabledState $stockPkg) -ne 1) {
+    $st = Get-DisabledState $stockPkg
+    if ($st -ne 1) {
+        if ($st -eq 2) { Exit-IfUnreachable "The original launcher ($stockPkg) may or may not be on again; nothing else was changed." }
         Write-Err "The TV would not turn the original launcher ($stockPkg) back on. Home was left as it was and nothing else was restored. Stopping."
         exit 20
     }
     Write-Output "The original launcher ($stockPkg) is on again."
 
-    # 2. Our launcher off, through disable-one (skipped when it never got installed).
+    # 2. Our launcher off, through disable-one (skipped when it never got installed). disable-one refuses the
+    # current Home app, so the stock launcher is made Home first.
     $installed = Get-InstalledState $script:ours
     if ($installed -eq 2) {
         Write-Err "The original launcher is on again, but the TV didn't say whether our launcher ($($script:ours)) is installed, so its state is unknown. Home was not changed and packages were not restored. Stopping."
@@ -157,6 +206,11 @@ function Restore-Home {
     if ($installed -eq 1) {
         Write-Output "Our launcher ($($script:ours)) is not installed on the TV, so there is nothing to switch off."
     } else {
+        $null = Invoke-Adb @('cmd', 'package', 'set-home-activity', '--user', '0', $stockComp)
+        if ($script:AdbRc -ne 0) {
+            Write-Err "The original launcher ($stockPkg) is on again, but the TV would not make it the Home screen, so our launcher ($($script:ours)) was left on. Packages were not restored. Stopping."
+            exit 20
+        }
         # Child process, so disable-one's own exit code comes back to us unchanged.
         $ErrorActionPreference = 'Continue'
         $psExe = (Get-Process -Id $PID).Path
@@ -167,20 +221,20 @@ function Restore-Home {
         $childRc = $LASTEXITCODE
         $ErrorActionPreference = 'Stop'
         if ($childRc -ne 0) {
-            # Say what the TV really looks like now (disable-one may have switched it off before failing to log).
+            # Say what the TV really looks like now (disable-one may have switched it off before failing to confirm).
             $now = Get-DisabledState $script:ours
             if ($now -eq 0) {
-                Write-Err "The original launcher is on again and our launcher ($($script:ours)) is off, but disable-one reported a problem afterwards. Home was not set and packages were not restored. $StayOn Stopping."
+                Write-Err "The original launcher is on again and our launcher ($($script:ours)) is off, but disable-one reported a problem afterwards. Home was not confirmed and packages were not restored. $StayOn Stopping."
             } elseif ($now -eq 1) {
-                Write-Err "The original launcher is on again, but our launcher ($($script:ours)) is still on, so Home was not changed. Packages were not restored. Stopping."
+                Write-Err "The original launcher is on again, but our launcher ($($script:ours)) is still on, so Home was not confirmed. Packages were not restored. Stopping."
             } else {
-                Write-Err "The original launcher is on again, but the TV didn't say whether our launcher ($($script:ours)) is off, so its state is unknown. Home was not set and packages were not restored. $StayOn Stopping."
+                Write-Err "The original launcher is on again, but the TV didn't say whether our launcher ($($script:ours)) is off, so its state is unknown. Home was not confirmed and packages were not restored. $StayOn Stopping."
             }
             exit $childRc
         }
     }
 
-    # 3. Make the stock launcher Home.
+    # 3. Make the stock launcher Home (again: switching ours off changes the set of Home apps).
     $null = Invoke-Adb @('cmd', 'package', 'set-home-activity', '--user', '0', $stockComp)
     if ($script:AdbRc -ne 0) {
         Write-Err "The TV would not make the original launcher ($stockComp) the Home screen. Packages were not restored. $StayOn Stopping."
@@ -188,7 +242,7 @@ function Restore-Home {
     }
 
     # 4. Read Home back: the last non-empty line must be the stock component.
-    $lines = @(Invoke-Adb @('cmd', 'package', 'resolve-activity', '--brief', '-a', 'android.intent.action.MAIN', '-c', 'android.intent.category.HOME'))
+    $lines = Invoke-Adb @('cmd', 'package', 'resolve-activity', '--brief', '-a', 'android.intent.action.MAIN', '-c', 'android.intent.category.HOME')
     $readRc = $script:AdbRc
     $comp = ''
     foreach ($l in $lines) {
@@ -205,6 +259,7 @@ function Restore-Home {
 }
 
 # ---- Packages --------------------------------------------------------------------------------
+$script:recFail = $false
 function Restore-Packages {
     $n = 0
     $skipped = 0
@@ -214,7 +269,8 @@ function Restore-Packages {
     # The stock launcher belongs to the Home step: switching it on while ours is Home can drop the Home choice.
     $stock = ''
     $leftStock = $false
-    $hsFile = Find-HomeState
+    Find-HomeState
+    $hsFile = $script:HsOld
     if ($null -ne $hsFile) {
         $stock = [string](Get-StateValue $hsFile 'stock_package')
         if ($stock -cnotmatch $PkgRe) {
@@ -226,8 +282,14 @@ function Restore-Packages {
         $log = Join-Path ([string]$folder) 'disabled-by-us.txt'
         $res = Join-Path ([string]$folder) 'restored.txt'
         if (-not (Test-Path -LiteralPath $log -PathType Leaf)) { continue }
+        try {
+            $logLines = [System.IO.File]::ReadAllLines($log)
+        } catch {
+            Write-Err "Can't read the undo log $log. Restored $n so far. Stopping."
+            exit 3
+        }
         $lineno = 0
-        foreach ($raw in [System.IO.File]::ReadAllLines($log)) {
+        foreach ($raw in $logLines) {
             $lineno++
             $pkg = Get-FirstField $raw
             if ($pkg.Length -eq 0) { continue }
@@ -248,24 +310,40 @@ function Restore-Packages {
             }
             if ($state -eq 0) {
                 $null = Invoke-Adb @('pm', 'enable', $pkg)
-                if ((Get-DisabledState $pkg) -ne 1) {
+                $after = Get-DisabledState $pkg
+                if ($after -eq 2) {
+                    Exit-IfUnreachable "$pkg may or may not be on again. Restored $n so far; run restore again once the TV is back."
+                    Write-Err "The TV didn't confirm whether $pkg is back on. Restored $n so far. Not restored: $pkg and everything after it in the log. Stopping."
+                    exit 20
+                }
+                if ($after -ne 1) {
                     Write-Err "The TV refused to turn $pkg back on. Restored $n so far. Not restored: $pkg and everything after it in the log. Stopping."
                     exit 20
                 }
                 Write-Output "Turned $pkg back on"
             } else {
+                $inst = Get-InstalledState $pkg
+                if ($inst -eq 2) {
+                    Write-Err "The TV didn't answer when asked about $pkg. Restored $n so far. Not restored: $pkg and everything after it. Stopping."
+                    exit 20
+                }
+                if ($inst -eq 1) {
+                    Write-Output "$pkg is no longer installed on the TV, so there is nothing to turn back on."
+                    continue
+                }
                 Write-Output "$pkg was already on."
                 if (Test-InRestored $res $pkg) { continue }
             }
+            $n++
             $stamp = (Get-Date).ToUniversalTime().ToString("yyyy-MM-dd'T'HH:mm:ss'Z'", [System.Globalization.CultureInfo]::InvariantCulture)
             try {
                 # UTF-8 without BOM, LF line ending: byte-identical to the shell version.
                 [System.IO.File]::AppendAllText($res, "$pkg`t$stamp`n", $utf8)
             } catch {
-                Write-Err "The TV DID turn $pkg back on, but $res could not be written. Restored $n so far. Stopping."
-                exit 20
+                # Only a record: keep going with the TV work and report the file problem at the end (exit 3).
+                Write-Err "Couldn't write $res (only a record; $pkg is on). Carrying on."
+                $script:recFail = $true
             }
-            $n++
         }
     }
     if ($skipped -gt 0) {
@@ -283,4 +361,8 @@ function Restore-Packages {
 
 if ($doHome) { Restore-Home }
 if ($doPkgs) { Restore-Packages }
+if ($script:recFail) {
+    Write-Err 'The TV restore finished, but the record file restored.txt could not be written. Fix its permissions; running restore again is safe.'
+    exit 3
+}
 exit 0

@@ -286,7 +286,14 @@
       "TV_IP": "192.168.1.50"
     },
     "files": {
-      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n"
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
     },
     "tv": {
       "state": "device",
@@ -294,7 +301,8 @@
         "com.tcl.ad.service",
         "com.android.systemui",
         "com.netflix.ninja"
-      ]
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
     },
     "expect": {
       "exit": 2,
@@ -314,7 +322,14 @@
       "TV_IP": "192.168.1.50"
     },
     "files": {
-      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n"
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
     },
     "tv": {
       "state": "device",
@@ -322,7 +337,8 @@
         "com.tcl.ad.service",
         "com.android.systemui",
         "com.netflix.ninja"
-      ]
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
     },
     "expect": {
       "exit": 2,
@@ -341,7 +357,14 @@
       "TV_IP": "192.168.1.50"
     },
     "files": {
-      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n"
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
     },
     "tv": {
       "state": "device",
@@ -349,7 +372,8 @@
         "com.tcl.ad.service",
         "com.android.systemui",
         "com.netflix.ninja"
-      ]
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
     },
     "expect": {
       "exit": 2,
@@ -368,7 +392,14 @@
       "TV_IP": "192.168.1.50"
     },
     "files": {
-      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n"
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
     },
     "tv": {
       "state": "device",
@@ -376,7 +407,8 @@
         "com.tcl.ad.service",
         "com.android.systemui",
         "com.netflix.ninja"
-      ]
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
     },
     "expect": {
       "exit": 2,
@@ -395,7 +427,14 @@
       "TV_IP": null
     },
     "files": {
-      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n"
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
     },
     "tv": {
       "state": "device",
@@ -403,7 +442,8 @@
         "com.tcl.ad.service",
         "com.android.systemui",
         "com.netflix.ninja"
-      ]
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
     },
     "expect": {
       "exit": 3,
@@ -422,7 +462,14 @@
       "TV_IP": "192.168.1.50"
     },
     "files": {
-      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n"
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
     },
     "tv": {
       "state": "device",
@@ -430,7 +477,8 @@
         "com.tcl.ad.service",
         "com.android.systemui",
         "com.netflix.ninja"
-      ]
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
     },
     "expect": {
       "exit": 10,
@@ -453,7 +501,14 @@
       "TV_IP": "192.168.1.50"
     },
     "files": {
-      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n"
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
     },
     "tv": {
       "state": "device",
@@ -461,7 +516,8 @@
         "com.tcl.ad.service",
         "com.android.systemui",
         "com.netflix.ninja"
-      ]
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
     },
     "expect": {
       "exit": 10,
@@ -484,7 +540,14 @@
       "TV_IP": "192.168.1.50"
     },
     "files": {
-      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n"
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
     },
     "tv": {
       "state": "device",
@@ -492,7 +555,8 @@
         "com.tcl.ad.service",
         "com.android.systemui",
         "com.netflix.ninja"
-      ]
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
     },
     "expect": {
       "exit": 11,
@@ -515,7 +579,14 @@
       "TV_IP": "192.168.1.50"
     },
     "files": {
-      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n"
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
     },
     "tv": {
       "state": "device",
@@ -523,7 +594,8 @@
         "com.tcl.ad.service",
         "com.android.systemui",
         "com.netflix.ninja"
-      ]
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
     },
     "expect": {
       "exit": 11,
@@ -546,7 +618,14 @@
       "TV_IP": "192.168.1.50"
     },
     "files": {
-      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n"
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
     },
     "tv": {
       "state": "device",
@@ -554,7 +633,8 @@
         "com.tcl.ad.service",
         "com.android.systemui",
         "com.netflix.ninja"
-      ]
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
     },
     "expect": {
       "exit": 12,
@@ -583,7 +663,8 @@
         "com.tcl.ad.service",
         "com.android.systemui",
         "com.netflix.ninja"
-      ]
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
     },
     "expect": {
       "exit": 13,
@@ -602,7 +683,14 @@
       "TV_IP": "192.168.1.50"
     },
     "files": {
-      "backups/2026-11-19_100000/packages-all.txt": ""
+      "backups/2026-11-19_100000/packages-all.txt": "",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
     },
     "tv": {
       "state": "device",
@@ -610,7 +698,8 @@
         "com.tcl.ad.service",
         "com.android.systemui",
         "com.netflix.ninja"
-      ]
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
     },
     "expect": {
       "exit": 13,
@@ -632,7 +721,14 @@
       "TV_IP": "192.168.1.50"
     },
     "files": {
-      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n"
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
     },
     "tv": {
       "state": "device",
@@ -640,7 +736,8 @@
         "com.tcl.ad.service",
         "com.android.systemui",
         "com.netflix.ninja"
-      ]
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
     },
     "expect": {
       "exit": 14,
@@ -663,6 +760,13 @@
     },
     "files": {
       "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n",
       "backups/2026-11-19_100000/installed-by-us.txt": "com.gathin.tvhome\n"
     },
     "tv": {
@@ -672,7 +776,8 @@
         "com.android.systemui",
         "com.netflix.ninja",
         "com.gathin.tvhome"
-      ]
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
     },
     "expect": {
       "exit": 0,
@@ -694,7 +799,14 @@
       "TV_IP": "192.168.1.50"
     },
     "files": {
-      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n"
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
     },
     "tv": {
       "state": "offline",
@@ -702,7 +814,8 @@
         "com.tcl.ad.service",
         "com.android.systemui",
         "com.netflix.ninja"
-      ]
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
     },
     "expect": {
       "exit": 21,
@@ -724,7 +837,14 @@
       "TV_IP": "192.168.1.50"
     },
     "files": {
-      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n"
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
     },
     "tv": {
       "state": "device",
@@ -735,7 +855,8 @@
       ],
       "refuse": [
         "com.tcl.ad.service"
-      ]
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
     },
     "expect": {
       "exit": 20,
@@ -758,7 +879,14 @@
       "TV_IP": "192.168.1.50"
     },
     "files": {
-      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n"
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
     },
     "tv": {
       "state": "device",
@@ -766,7 +894,8 @@
         "com.tcl.ad.service",
         "com.android.systemui",
         "com.netflix.ninja"
-      ]
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
     },
     "expect": {
       "exit": 0,
@@ -792,6 +921,13 @@
     },
     "files": {
       "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n",
       "backups/2026-11-19_100000/disabled-by-us.txt": "com.tcl.ad.service\t2026-11-18T10:00:00Z\n"
     },
     "tv": {
@@ -803,7 +939,8 @@
       ],
       "disabled": [
         "com.tcl.ad.service"
-      ]
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
     },
     "expect": {
       "exit": 0,
@@ -826,6 +963,13 @@
     },
     "files": {
       "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n",
       "config/protected-packages.txt": "# crlf\r\ncom.android.systemui\r\nandroid\r\n"
     },
     "tv": {
@@ -834,7 +978,8 @@
         "com.tcl.ad.service",
         "com.android.systemui",
         "com.netflix.ninja"
-      ]
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
     },
     "expect": {
       "exit": 10,
@@ -854,7 +999,21 @@
     },
     "files": {
       "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
-      "backups/2026-11-18_090000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n"
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n",
+      "backups/2026-11-18_090000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-18_090000/packages-disabled.txt": "",
+      "backups/2026-11-18_090000/getprop.txt": "",
+      "backups/2026-11-18_090000/settings-global.txt": "",
+      "backups/2026-11-18_090000/settings-secure.txt": "",
+      "backups/2026-11-18_090000/settings-system.txt": "",
+      "backups/2026-11-18_090000/home-activity.txt": "",
+      "backups/2026-11-18_090000/tv-id.txt": "adb:192.168.1.50:5555\n"
     },
     "tv": {
       "state": "device",
@@ -862,7 +1021,8 @@
         "com.tcl.ad.service",
         "com.android.systemui",
         "com.netflix.ninja"
-      ]
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
     },
     "expect": {
       "exit": 0,
@@ -885,6 +1045,13 @@
     },
     "files": {
       "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n",
       "config/streaming-apps.txt": null
     },
     "tv": {
@@ -893,7 +1060,8 @@
         "com.tcl.ad.service",
         "com.android.systemui",
         "com.netflix.ninja"
-      ]
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
     },
     "expect": {
       "exit": 3,
@@ -912,7 +1080,14 @@
       "TV_IP": "192.168.1.50"
     },
     "files": {
-      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n"
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
     },
     "tv": {
       "state": "device",
@@ -920,7 +1095,8 @@
         "com.tcl.ad.service",
         "com.android.systemui",
         "com.netflix.ninja"
-      ]
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
     },
     "expect": {
       "exit": 14,
@@ -939,7 +1115,14 @@
       "TV_IP": "192.168.1.50"
     },
     "files": {
-      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n"
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
     },
     "tv": {
       "state": "device",
@@ -951,7 +1134,8 @@
       ],
       "disabled": [
         "com.tcl.ad.service.x"
-      ]
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
     },
     "expect": {
       "exit": 0,
@@ -973,7 +1157,14 @@
       "TV_IP": "192.168.1.50"
     },
     "files": {
-      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n"
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
     },
     "tv": {
       "state": "unauthorized",
@@ -981,7 +1172,8 @@
         "com.tcl.ad.service",
         "com.android.systemui",
         "com.netflix.ninja"
-      ]
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
     },
     "expect": {
       "exit": 22,
@@ -1004,6 +1196,13 @@
     },
     "files": {
       "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n",
       "backups/2026-11-19_100000/disabled-by-us.txt/keep": ""
     },
     "tv": {
@@ -1012,7 +1211,8 @@
         "com.tcl.ad.service",
         "com.android.systemui",
         "com.netflix.ninja"
-      ]
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
     },
     "expect": {
       "exit": 3,
@@ -1049,6 +1249,13 @@
     },
     "files": {
       "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:d.e.f\npackage:com.google.android.apps.tv.launcherx\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n",
       "backups/2026-11-19_100000/disabled-by-us.txt": "a.b.c\t2026-11-19T10:05:00Z\nd.e.f\t2026-11-19T10:06:00Z\n"
     },
     "tv": {
@@ -1086,6 +1293,13 @@
     },
     "files": {
       "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:d.e.f\npackage:com.google.android.apps.tv.launcherx\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n",
       "backups/2026-11-19_100000/disabled-by-us.txt": "a.b.c\t2026-11-19T10:05:00Z\nd.e.f\t2026-11-19T10:06:00Z\n"
     },
     "tv": {
@@ -1123,6 +1337,13 @@
     },
     "files": {
       "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:d.e.f\npackage:com.google.android.apps.tv.launcherx\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n",
       "backups/2026-11-19_100000/disabled-by-us.txt": "a.b.c\t2026-11-19T10:05:00Z\nd.e.f\t2026-11-19T10:06:00Z\n",
       "backups/2026-11-19_100000/restored.txt": "a.b.c\t2026-11-19T11:00:00Z\nd.e.f\t2026-11-19T11:00:01Z\n"
     },
@@ -1145,7 +1366,7 @@
   },
   {
     "script": "restore",
-    "name": "R5 home only, in order: stock on, ours off, stock made Home, Home read back",
+    "name": "R5 home only, in order: stock checked and on, stock made Home, ours off, stock made Home again, Home read back",
     "args": [
       "--home-only"
     ],
@@ -1154,6 +1375,13 @@
     },
     "files": {
       "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:d.e.f\npackage:com.google.android.apps.tv.launcherx\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n",
       "backups/2026-11-19_100000/installed-by-us.txt": "com.gathin.tvhome\n",
       "backups/2026-11-19_100000/home-state.txt": "stock_package=com.google.android.apps.tv.launcherx\nstock_component=com.google.android.apps.tv.launcherx/.MainActivity\nours=com.gathin.tvhome\n"
     },
@@ -1172,8 +1400,10 @@
     "expect": {
       "exit": 0,
       "adb_calls_in_order": [
+        "shell pm list packages com.google.android.apps.tv.launcherx",
         "shell pm enable com.google.android.apps.tv.launcherx",
         "shell pm list packages com.gathin.tvhome",
+        "shell cmd package set-home-activity --user 0 com.google.android.apps.tv.launcherx/.MainActivity",
         "shell pm disable-user --user 0 com.gathin.tvhome",
         "shell cmd package set-home-activity --user 0 com.google.android.apps.tv.launcherx/.MainActivity",
         "shell cmd package resolve-activity --brief -a android.intent.action.MAIN -c android.intent.category.HOME"
@@ -1181,7 +1411,7 @@
       "adb_call_count": {
         "pm enable a.b.c": 0,
         "disable-user": 1,
-        "set-home-activity": 1
+        "set-home-activity": 2
       },
       "stdout_contains": [
         "(com.google.android.apps.tv.launcherx) is back as the Home screen."
@@ -1197,6 +1427,13 @@
     },
     "files": {
       "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:d.e.f\npackage:com.google.android.apps.tv.launcherx\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n",
       "backups/2026-11-19_100000/disabled-by-us.txt": "a.b.c\t2026-11-19T10:05:00Z\nd.e.f\t2026-11-19T10:06:00Z\n"
     },
     "tv": {
@@ -1225,6 +1462,13 @@
     },
     "files": {
       "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:d.e.f\npackage:com.google.android.apps.tv.launcherx\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n",
       "backups/2026-11-19_100000/disabled-by-us.txt": "a.b.c\t2026-11-19T10:05:00Z\nd.e.f\t2026-11-19T10:06:00Z\n"
     },
     "tv": {
@@ -1250,6 +1494,13 @@
     },
     "files": {
       "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:d.e.f\npackage:com.google.android.apps.tv.launcherx\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n",
       "backups/2026-11-19_100000/disabled-by-us.txt": "a.b.c\t2026-11-19T10:05:00Z\nd.e.f\t2026-11-19T10:06:00Z\n"
     },
     "tv": {
@@ -1284,8 +1535,22 @@
     },
     "files": {
       "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:d.e.f\npackage:com.google.android.apps.tv.launcherx\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n",
       "backups/2026-11-19_100000/disabled-by-us.txt": "d.e.f\t2026-11-19T10:06:00Z\n",
       "backups/2026-11-18_090000/packages-all.txt": "package:a.b.c\npackage:d.e.f\npackage:com.google.android.apps.tv.launcherx\n",
+      "backups/2026-11-18_090000/packages-disabled.txt": "",
+      "backups/2026-11-18_090000/getprop.txt": "",
+      "backups/2026-11-18_090000/settings-global.txt": "",
+      "backups/2026-11-18_090000/settings-secure.txt": "",
+      "backups/2026-11-18_090000/settings-system.txt": "",
+      "backups/2026-11-18_090000/home-activity.txt": "",
+      "backups/2026-11-18_090000/tv-id.txt": "adb:192.168.1.50:5555\n",
       "backups/2026-11-18_090000/disabled-by-us.txt": "a.b.c\t2026-11-18T10:06:00Z\n",
       "backups/2026-11-17_080000.partial/disabled-by-us.txt": "x.y.z\t2026-11-17T10:06:00Z\n"
     },
@@ -1328,7 +1593,14 @@
       "TV_IP": "192.168.1.50"
     },
     "files": {
-      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:d.e.f\npackage:com.google.android.apps.tv.launcherx\n"
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:d.e.f\npackage:com.google.android.apps.tv.launcherx\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
     },
     "tv": {
       "state": "device"
@@ -1350,7 +1622,14 @@
       "TV_IP": "192.168.1.50"
     },
     "files": {
-      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:d.e.f\npackage:com.google.android.apps.tv.launcherx\n"
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:d.e.f\npackage:com.google.android.apps.tv.launcherx\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
     },
     "tv": {
       "state": "device"
@@ -1372,7 +1651,14 @@
       "TV_IP": "192.168.1.50"
     },
     "files": {
-      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:d.e.f\npackage:com.google.android.apps.tv.launcherx\n"
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:d.e.f\npackage:com.google.android.apps.tv.launcherx\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
     },
     "tv": {
       "state": "device",
@@ -1403,6 +1689,13 @@
     },
     "files": {
       "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:d.e.f\npackage:com.google.android.apps.tv.launcherx\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n",
       "backups/2026-11-19_100000/installed-by-us.txt": "com.gathin.tvhome\n",
       "backups/2026-11-19_100000/home-state.txt": "stock_package=com.google.android.apps.tv.launcherx\nstock_component=com.google.android.apps.tv.launcherx/.MainActivity\nours=com.gathin.tvhome\n"
     },
@@ -1425,7 +1718,7 @@
       "exit": 20,
       "adb_call_count": {
         "disable-user": 1,
-        "set-home-activity": 0
+        "set-home-activity": 1
       },
       "stderr_contains": "our launcher (com.gathin.tvhome) is still on"
     }
@@ -1439,6 +1732,13 @@
     },
     "files": {
       "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:d.e.f\npackage:com.google.android.apps.tv.launcherx\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n",
       "backups/2026-11-19_100000/installed-by-us.txt": "com.gathin.tvhome\n",
       "backups/2026-11-19_100000/home-state.txt": "stock_package=com.google.android.apps.tv.launcherx\nstock_component=com.google.android.apps.tv.launcherx/.MainActivity\nours=com.gathin.tvhome\n",
       "backups/2026-11-19_100000/disabled-by-us.txt": "a.b.c\t2026-11-19T10:05:00Z\ncom.gathin.tvhome\t2026-11-19T10:06:00Z\n"
@@ -1484,6 +1784,13 @@
     },
     "files": {
       "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:d.e.f\npackage:com.google.android.apps.tv.launcherx\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n",
       "backups/2026-11-19_100000/home-state.txt": "stock_package=com.google.android.apps.tv.launcherx\n"
     },
     "tv": {
@@ -1511,7 +1818,14 @@
       "TV_IP": null
     },
     "files": {
-      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:d.e.f\npackage:com.google.android.apps.tv.launcherx\n"
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:d.e.f\npackage:com.google.android.apps.tv.launcherx\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
     },
     "tv": {
       "state": "device"
@@ -1532,6 +1846,13 @@
     },
     "files": {
       "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:d.e.f\npackage:com.google.android.apps.tv.launcherx\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n",
       "backups/2026-11-19_100000/disabled-by-us.txt": "a.b.c;reboot\t2026-11-19T10:05:00Z\n"
     },
     "tv": {
@@ -1553,6 +1874,13 @@
     },
     "files": {
       "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:d.e.f\npackage:com.google.android.apps.tv.launcherx\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n",
       "backups/2026-11-19_100000/disabled-by-us.txt": "a.b.c\t2026-11-19T10:05:00Z\na.b.c\t2026-11-19T12:00:00Z\n",
       "backups/2026-11-19_100000/restored.txt": "a.b.c\t2026-11-19T11:00:00Z\n"
     },
@@ -1581,6 +1909,13 @@
     },
     "files": {
       "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:d.e.f\npackage:com.google.android.apps.tv.launcherx\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n",
       "backups/2026-11-19_100000/disabled-by-us.txt": "a.b.c\t2026-11-19T10:05:00Z\n",
       "backups/2026-11-19_100000/restored.txt": "a.b.c.d\t2026-11-19T11:00:00Z\n"
     },
@@ -1610,6 +1945,13 @@
     },
     "files": {
       "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.junk.ads\npackage:com.google.android.apps.tv.launcherx\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n",
       "backups/2026-11-19_100000/home-state.txt": "stock_package=com.google.android.apps.tv.launcherx\nstock_component=com.google.android.apps.tv.launcherx/.MainActivity\nours=com.gathin.tvhome\n",
       "backups/2026-11-19_100000/disabled-by-us.txt": "com.junk.ads\t2026-11-19T10:05:00Z\n"
     },
@@ -1659,6 +2001,13 @@
     },
     "files": {
       "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.junk.ads\npackage:com.google.android.apps.tv.launcherx\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n",
       "backups/2026-11-19_100000/home-state.txt": "stock_package=com.google.android.apps.tv.launcherx\nstock_component=com.google.android.apps.tv.launcherx/.MainActivity\nours=com.gathin.tvhome\n",
       "backups/2026-11-19_100000/disabled-by-us.txt": "com.junk.ads\t2026-11-19T10:05:00Z\n",
       "backups/2026-11-19_100000/installed-by-us.txt": "com.gathin.tvhome\n"
@@ -1705,6 +2054,13 @@
     },
     "files": {
       "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.junk.ads\npackage:com.google.android.apps.tv.launcherx\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n",
       "backups/2026-11-19_100000/home-state.txt": "stock_package=com.google.android.apps.tv.launcherx\nstock_component=com.google.android.apps.tv.launcherx/.MainActivity\nours=com.gathin.tvhome\n",
       "backups/2026-11-19_100000/disabled-by-us.txt": "com.junk.ads\t2026-11-19T10:05:00Z\n",
       "backups/2026-11-19_100000/installed-by-us.txt": "com.gathin.tvhome\n"
@@ -1738,13 +2094,20 @@
   },
   {
     "script": "restore",
-    "name": "R23 set-home-activity fails: 20, stay-on warning, no read-back",
+    "name": "R23 set-home-activity fails: 20, our launcher left on, no read-back",
     "args": [],
     "env": {
       "TV_IP": "192.168.1.50"
     },
     "files": {
       "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.junk.ads\npackage:com.google.android.apps.tv.launcherx\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n",
       "backups/2026-11-19_100000/home-state.txt": "stock_package=com.google.android.apps.tv.launcherx\nstock_component=com.google.android.apps.tv.launcherx/.MainActivity\nours=com.gathin.tvhome\n",
       "backups/2026-11-19_100000/disabled-by-us.txt": "com.junk.ads\t2026-11-19T10:05:00Z\n",
       "backups/2026-11-19_100000/installed-by-us.txt": "com.gathin.tvhome\n"
@@ -1765,14 +2128,14 @@
     },
     "expect": {
       "exit": 20,
-      "stderr_contains": "Please leave the TV switched on. Don't unplug it or restart it.",
+      "stderr_contains": "would not make it the Home screen, so our launcher (com.gathin.tvhome) was left on",
       "adb_calls_in_order": [
         "pm enable com.google.android.apps.tv.launcherx",
-        "disable-user --user 0 com.gathin.tvhome",
         "set-home-activity --user 0 com.google.android.apps.tv.launcherx/.MainActivity"
       ],
       "adb_call_count": {
         "resolve-activity": 0,
+        "disable-user": 0,
         "pm enable com.junk.ads": 0
       },
       "stdout_excludes": [
@@ -1791,6 +2154,13 @@
     },
     "files": {
       "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.junk.ads\npackage:com.google.android.apps.tv.launcherx\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n",
       "backups/2026-11-19_100000/home-state.txt": "stock_package=com.google.android.apps.tv.launcherx\nstock_component=com.google.android.apps.tv.launcherx/.MainActivity\nours=com.gathin.tvhome\n",
       "backups/2026-11-19_100000/disabled-by-us.txt": "com.junk.ads\t2026-11-19T10:05:00Z\n",
       "backups/2026-11-19_100000/installed-by-us.txt": "com.gathin.tvhome\n"
@@ -1831,6 +2201,13 @@
     },
     "files": {
       "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.junk.ads\npackage:com.google.android.apps.tv.launcherx\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n",
       "backups/2026-11-19_100000/home-state.txt": "stock_package=com.google.android.apps.tv.launcherx\nstock_component=com.google.android.apps.tv.launcherx/.MainActivity\nours=com.gathin.tvhome\n",
       "backups/2026-11-19_100000/disabled-by-us.txt": "com.junk.ads\t2026-11-19T10:05:00Z\ncom.google.android.apps.tv.launcherx\t2026-11-19T10:06:00Z\n",
       "backups/2026-11-19_100000/installed-by-us.txt": "com.gathin.tvhome\n"
@@ -1924,7 +2301,8 @@
     "files": {
       "user-content/theme/config.json": "{\"columns\": 4}\n",
       "vendor/cleanyourtv/tools/theme.sh": "#!/usr/bin/env bash\necho \"theme.sh TV_HOST=$TV_HOST arg=$1\" >> \"$FAKE_BIN_LOG\"\nexit 7\n",
-      "vendor/cleanyourtv/tools/theme.ps1": "param([string]$TvHost, [string]$ThemeDir)\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"theme.ps1 TvHost=$TvHost arg=$ThemeDir\"\nexit 7\n"
+      "vendor/cleanyourtv/tools/theme.ps1": "param([string]$TvHost, [string]$ThemeDir)\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"theme.ps1 TvHost=$TvHost arg=$ThemeDir\"\nexit 7\n",
+      "user-content/theme/wallpapers/01.jpg": "fake jpeg\n"
     },
     "expect": {
       "exit": 7,
@@ -1945,7 +2323,8 @@
     "files": {
       "user-content/theme/config.json": "{\"columns\": 4}\n",
       "vendor/cleanyourtv/tools/theme.sh": "#!/usr/bin/env bash\necho \"theme.sh TV_HOST=$TV_HOST arg=$1\" >> \"$FAKE_BIN_LOG\"\nexit 7\n",
-      "vendor/cleanyourtv/tools/theme.ps1": "param([string]$TvHost, [string]$ThemeDir)\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"theme.ps1 TvHost=$TvHost arg=$ThemeDir\"\nexit 7\n"
+      "vendor/cleanyourtv/tools/theme.ps1": "param([string]$TvHost, [string]$ThemeDir)\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"theme.ps1 TvHost=$TvHost arg=$ThemeDir\"\nexit 7\n",
+      "user-content/theme/wallpapers/01.jpg": "fake jpeg\n"
     },
     "expect": {
       "exit": 7,
@@ -1975,7 +2354,7 @@
       "TV_IP": "192.168.1.50"
     },
     "files": {
-      "vendor/cleanyourtv/tools/docker-build.sh": "#!/usr/bin/env bash\nk=\"$HOST_KEY_DIR\"; abs=no; case \"$k\" in /*) abs=yes;; esac; d=no; [ -d \"$k\" ] && d=yes\necho \"docker-build abs=$abs isdir=$d dir=$k\" >> \"$FAKE_BIN_LOG\"\nmkdir -p \"$(dirname \"$0\")/../launcher/app/build/outputs/apk/release\"\n: > \"$(dirname \"$0\")/../launcher/app/build/outputs/apk/release/app-release.apk\"\nexit ${STUB_RC:-0}\n",
+      "vendor/cleanyourtv/tools/docker-build.sh": "#!/usr/bin/env bash\nk=\"$HOST_KEY_DIR\"; abs=no; case \"$k\" in /*) abs=yes;; esac; d=no; [ -d \"$k\" ] && d=yes\necho \"docker-build abs=$abs isdir=$d dir=$k\" >> \"$FAKE_BIN_LOG\"\nmkdir -p \"$(dirname \"$0\")/../launcher/app/build/outputs/apk/release\"\nprintf 'PK fake apk\\n' > \"$(dirname \"$0\")/../launcher/app/build/outputs/apk/release/app-release.apk\"\nexit ${STUB_RC:-0}\n",
       "vendor/cleanyourtv/tools/docker-build.ps1": "$k = $env:HOST_KEY_DIR\n$abs = if ([System.IO.Path]::IsPathRooted($k)) { \"yes\" } else { \"no\" }\n$d = if (Test-Path -LiteralPath $k -PathType Container) { \"yes\" } else { \"no\" }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"docker-build abs=$abs isdir=$d dir=$k\"\n$out = Join-Path $PSScriptRoot \"../launcher/app/build/outputs/apk/release\"\nNew-Item -ItemType Directory -Force -Path $out | Out-Null\nSet-Content -LiteralPath (Join-Path $out \"app-release.apk\") -Value \"\"\nexit 0\n"
     },
     "bin": {
@@ -2002,7 +2381,7 @@
       "TV_IP": "192.168.1.50"
     },
     "files": {
-      "vendor/cleanyourtv/tools/docker-build.sh": "#!/usr/bin/env bash\nk=\"$HOST_KEY_DIR\"; abs=no; case \"$k\" in /*) abs=yes;; esac; d=no; [ -d \"$k\" ] && d=yes\necho \"docker-build abs=$abs isdir=$d dir=$k\" >> \"$FAKE_BIN_LOG\"\nmkdir -p \"$(dirname \"$0\")/../launcher/app/build/outputs/apk/release\"\n: > \"$(dirname \"$0\")/../launcher/app/build/outputs/apk/release/app-release.apk\"\nexit ${STUB_RC:-0}\n",
+      "vendor/cleanyourtv/tools/docker-build.sh": "#!/usr/bin/env bash\nk=\"$HOST_KEY_DIR\"; abs=no; case \"$k\" in /*) abs=yes;; esac; d=no; [ -d \"$k\" ] && d=yes\necho \"docker-build abs=$abs isdir=$d dir=$k\" >> \"$FAKE_BIN_LOG\"\nmkdir -p \"$(dirname \"$0\")/../launcher/app/build/outputs/apk/release\"\nprintf 'PK fake apk\\n' > \"$(dirname \"$0\")/../launcher/app/build/outputs/apk/release/app-release.apk\"\nexit ${STUB_RC:-0}\n",
       "vendor/cleanyourtv/tools/docker-build.ps1": "$k = $env:HOST_KEY_DIR\n$abs = if ([System.IO.Path]::IsPathRooted($k)) { \"yes\" } else { \"no\" }\n$d = if (Test-Path -LiteralPath $k -PathType Container) { \"yes\" } else { \"no\" }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"docker-build abs=$abs isdir=$d dir=$k\"\n$out = Join-Path $PSScriptRoot \"../launcher/app/build/outputs/apk/release\"\nNew-Item -ItemType Directory -Force -Path $out | Out-Null\nSet-Content -LiteralPath (Join-Path $out \"app-release.apk\") -Value \"\"\nexit 0\n"
     },
     "expect": {
@@ -2042,7 +2421,7 @@
       "TV_IP": "192.168.1.50"
     },
     "files": {
-      "vendor/cleanyourtv/tools/docker-build.sh": "#!/usr/bin/env bash\nk=\"$HOST_KEY_DIR\"; abs=no; case \"$k\" in /*) abs=yes;; esac; d=no; [ -d \"$k\" ] && d=yes\necho \"docker-build abs=$abs isdir=$d dir=$k\" >> \"$FAKE_BIN_LOG\"\nmkdir -p \"$(dirname \"$0\")/../launcher/app/build/outputs/apk/release\"\n: > \"$(dirname \"$0\")/../launcher/app/build/outputs/apk/release/app-release.apk\"\nexit ${STUB_RC:-0}\n",
+      "vendor/cleanyourtv/tools/docker-build.sh": "#!/usr/bin/env bash\nk=\"$HOST_KEY_DIR\"; abs=no; case \"$k\" in /*) abs=yes;; esac; d=no; [ -d \"$k\" ] && d=yes\necho \"docker-build abs=$abs isdir=$d dir=$k\" >> \"$FAKE_BIN_LOG\"\nmkdir -p \"$(dirname \"$0\")/../launcher/app/build/outputs/apk/release\"\nprintf 'PK fake apk\\n' > \"$(dirname \"$0\")/../launcher/app/build/outputs/apk/release/app-release.apk\"\nexit ${STUB_RC:-0}\n",
       "vendor/cleanyourtv/tools/docker-build.ps1": "$k = $env:HOST_KEY_DIR\n$abs = if ([System.IO.Path]::IsPathRooted($k)) { \"yes\" } else { \"no\" }\n$d = if (Test-Path -LiteralPath $k -PathType Container) { \"yes\" } else { \"no\" }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"docker-build abs=$abs isdir=$d dir=$k\"\n$out = Join-Path $PSScriptRoot \"../launcher/app/build/outputs/apk/release\"\nNew-Item -ItemType Directory -Force -Path $out | Out-Null\nSet-Content -LiteralPath (Join-Path $out \"app-release.apk\") -Value \"\"\nexit 0\n"
     },
     "bin": {
@@ -2060,7 +2439,7 @@
     "args": [],
     "env": {},
     "files": {
-      "vendor/cleanyourtv/tools/docker-build.sh": "#!/usr/bin/env bash\nk=\"$HOST_KEY_DIR\"; abs=no; case \"$k\" in /*) abs=yes;; esac; d=no; [ -d \"$k\" ] && d=yes\necho \"docker-build abs=$abs isdir=$d dir=$k\" >> \"$FAKE_BIN_LOG\"\nmkdir -p \"$(dirname \"$0\")/../launcher/app/build/outputs/apk/release\"\n: > \"$(dirname \"$0\")/../launcher/app/build/outputs/apk/release/app-release.apk\"\nexit ${STUB_RC:-0}\n",
+      "vendor/cleanyourtv/tools/docker-build.sh": "#!/usr/bin/env bash\nk=\"$HOST_KEY_DIR\"; abs=no; case \"$k\" in /*) abs=yes;; esac; d=no; [ -d \"$k\" ] && d=yes\necho \"docker-build abs=$abs isdir=$d dir=$k\" >> \"$FAKE_BIN_LOG\"\nmkdir -p \"$(dirname \"$0\")/../launcher/app/build/outputs/apk/release\"\nprintf 'PK fake apk\\n' > \"$(dirname \"$0\")/../launcher/app/build/outputs/apk/release/app-release.apk\"\nexit ${STUB_RC:-0}\n",
       "vendor/cleanyourtv/tools/docker-build.ps1": "$k = $env:HOST_KEY_DIR\n$abs = if ([System.IO.Path]::IsPathRooted($k)) { \"yes\" } else { \"no\" }\n$d = if (Test-Path -LiteralPath $k -PathType Container) { \"yes\" } else { \"no\" }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"docker-build abs=$abs isdir=$d dir=$k\"\n$out = Join-Path $PSScriptRoot \"../launcher/app/build/outputs/apk/release\"\nNew-Item -ItemType Directory -Force -Path $out | Out-Null\nSet-Content -LiteralPath (Join-Path $out \"app-release.apk\") -Value \"\"\nexit 0\n"
     },
     "bin": {
@@ -2087,7 +2466,7 @@
     "files": {
       "vendor/cleanyourtv/launcher/build-and-install.sh": "#!/usr/bin/env bash\n: > ran.txt\nhk=0; [ -n \"${HOME_KEY_SERVICE:-}\" ] && hk=1\nik=0; [ -n \"${INPUT_KEY_SERVICE:-}\" ] && ik=1\necho \"upstream cwd=$(basename \"$(pwd)\") TV_HOST=$TV_HOST SKIP_BUILD=$SKIP_BUILD STOCK_LAUNCHER=$STOCK_LAUNCHER homekey=$hk inputkey=$ik\" >> \"$FAKE_BIN_LOG\"\nexit 7\n",
       "vendor/cleanyourtv/launcher/build-and-install.ps1": "param([string]$TvHost, [string]$StockLauncher, [switch]$HomeKeyService, [switch]$InputKeyService)\nSet-Content -LiteralPath ran.txt -Value \"\"\n$hk = if ($HomeKeyService) { 1 } else { 0 }\n$ik = if ($InputKeyService) { 1 } else { 0 }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"upstream cwd=$(Split-Path -Leaf (Get-Location).Path) TV_HOST=$TvHost SKIP_BUILD=$env:SKIP_BUILD STOCK_LAUNCHER=$StockLauncher homekey=$hk inputkey=$ik\"\nexit 7\n",
-      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "",
+      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "PK\u0003\u0004 fake apk\n",
       "vendor/cleanyourtv/tools/venv/pyvenv.cfg": "home = /usr/bin\n"
     },
     "tv": {
@@ -2116,9 +2495,16 @@
     "files": {
       "vendor/cleanyourtv/launcher/build-and-install.sh": "#!/usr/bin/env bash\n: > ran.txt\nhk=0; [ -n \"${HOME_KEY_SERVICE:-}\" ] && hk=1\nik=0; [ -n \"${INPUT_KEY_SERVICE:-}\" ] && ik=1\necho \"upstream cwd=$(basename \"$(pwd)\") TV_HOST=$TV_HOST SKIP_BUILD=$SKIP_BUILD STOCK_LAUNCHER=$STOCK_LAUNCHER homekey=$hk inputkey=$ik\" >> \"$FAKE_BIN_LOG\"\nexit 7\n",
       "vendor/cleanyourtv/launcher/build-and-install.ps1": "param([string]$TvHost, [string]$StockLauncher, [switch]$HomeKeyService, [switch]$InputKeyService)\nSet-Content -LiteralPath ran.txt -Value \"\"\n$hk = if ($HomeKeyService) { 1 } else { 0 }\n$ik = if ($InputKeyService) { 1 } else { 0 }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"upstream cwd=$(Split-Path -Leaf (Get-Location).Path) TV_HOST=$TvHost SKIP_BUILD=$env:SKIP_BUILD STOCK_LAUNCHER=$StockLauncher homekey=$hk inputkey=$ik\"\nexit 7\n",
-      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "",
+      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "PK\u0003\u0004 fake apk\n",
       "vendor/cleanyourtv/tools/venv/pyvenv.cfg": "home = /usr/bin\n",
-      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n"
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
     },
     "tv": {
       "state": "device",
@@ -2141,9 +2527,16 @@
     "files": {
       "vendor/cleanyourtv/launcher/build-and-install.sh": "#!/usr/bin/env bash\n: > ran.txt\nhk=0; [ -n \"${HOME_KEY_SERVICE:-}\" ] && hk=1\nik=0; [ -n \"${INPUT_KEY_SERVICE:-}\" ] && ik=1\necho \"upstream cwd=$(basename \"$(pwd)\") TV_HOST=$TV_HOST SKIP_BUILD=$SKIP_BUILD STOCK_LAUNCHER=$STOCK_LAUNCHER homekey=$hk inputkey=$ik\" >> \"$FAKE_BIN_LOG\"\nexit 7\n",
       "vendor/cleanyourtv/launcher/build-and-install.ps1": "param([string]$TvHost, [string]$StockLauncher, [switch]$HomeKeyService, [switch]$InputKeyService)\nSet-Content -LiteralPath ran.txt -Value \"\"\n$hk = if ($HomeKeyService) { 1 } else { 0 }\n$ik = if ($InputKeyService) { 1 } else { 0 }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"upstream cwd=$(Split-Path -Leaf (Get-Location).Path) TV_HOST=$TvHost SKIP_BUILD=$env:SKIP_BUILD STOCK_LAUNCHER=$StockLauncher homekey=$hk inputkey=$ik\"\nexit 7\n",
-      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "",
+      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "PK\u0003\u0004 fake apk\n",
       "vendor/cleanyourtv/tools/venv/pyvenv.cfg": "home = /usr/bin\n",
-      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n"
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
     },
     "tv": {
       "state": "device",
@@ -2166,8 +2559,15 @@
     "files": {
       "vendor/cleanyourtv/launcher/build-and-install.sh": "#!/usr/bin/env bash\n: > ran.txt\nhk=0; [ -n \"${HOME_KEY_SERVICE:-}\" ] && hk=1\nik=0; [ -n \"${INPUT_KEY_SERVICE:-}\" ] && ik=1\necho \"upstream cwd=$(basename \"$(pwd)\") TV_HOST=$TV_HOST SKIP_BUILD=$SKIP_BUILD STOCK_LAUNCHER=$STOCK_LAUNCHER homekey=$hk inputkey=$ik\" >> \"$FAKE_BIN_LOG\"\nexit 7\n",
       "vendor/cleanyourtv/launcher/build-and-install.ps1": "param([string]$TvHost, [string]$StockLauncher, [switch]$HomeKeyService, [switch]$InputKeyService)\nSet-Content -LiteralPath ran.txt -Value \"\"\n$hk = if ($HomeKeyService) { 1 } else { 0 }\n$ik = if ($InputKeyService) { 1 } else { 0 }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"upstream cwd=$(Split-Path -Leaf (Get-Location).Path) TV_HOST=$TvHost SKIP_BUILD=$env:SKIP_BUILD STOCK_LAUNCHER=$StockLauncher homekey=$hk inputkey=$ik\"\nexit 7\n",
-      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "",
-      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n"
+      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "PK\u0003\u0004 fake apk\n",
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
     },
     "tv": {
       "state": "device",
@@ -2195,7 +2595,14 @@
       "vendor/cleanyourtv/launcher/build-and-install.sh": "#!/usr/bin/env bash\n: > ran.txt\nhk=0; [ -n \"${HOME_KEY_SERVICE:-}\" ] && hk=1\nik=0; [ -n \"${INPUT_KEY_SERVICE:-}\" ] && ik=1\necho \"upstream cwd=$(basename \"$(pwd)\") TV_HOST=$TV_HOST SKIP_BUILD=$SKIP_BUILD STOCK_LAUNCHER=$STOCK_LAUNCHER homekey=$hk inputkey=$ik\" >> \"$FAKE_BIN_LOG\"\nexit 7\n",
       "vendor/cleanyourtv/launcher/build-and-install.ps1": "param([string]$TvHost, [string]$StockLauncher, [switch]$HomeKeyService, [switch]$InputKeyService)\nSet-Content -LiteralPath ran.txt -Value \"\"\n$hk = if ($HomeKeyService) { 1 } else { 0 }\n$ik = if ($InputKeyService) { 1 } else { 0 }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"upstream cwd=$(Split-Path -Leaf (Get-Location).Path) TV_HOST=$TvHost SKIP_BUILD=$env:SKIP_BUILD STOCK_LAUNCHER=$StockLauncher homekey=$hk inputkey=$ik\"\nexit 7\n",
       "vendor/cleanyourtv/tools/venv/pyvenv.cfg": "home = /usr/bin\n",
-      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n"
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
     },
     "tv": {
       "state": "device",
@@ -2222,9 +2629,16 @@
     "files": {
       "vendor/cleanyourtv/launcher/build-and-install.sh": "#!/usr/bin/env bash\n: > ran.txt\nhk=0; [ -n \"${HOME_KEY_SERVICE:-}\" ] && hk=1\nik=0; [ -n \"${INPUT_KEY_SERVICE:-}\" ] && ik=1\necho \"upstream cwd=$(basename \"$(pwd)\") TV_HOST=$TV_HOST SKIP_BUILD=$SKIP_BUILD STOCK_LAUNCHER=$STOCK_LAUNCHER homekey=$hk inputkey=$ik\" >> \"$FAKE_BIN_LOG\"\nexit 7\n",
       "vendor/cleanyourtv/launcher/build-and-install.ps1": "param([string]$TvHost, [string]$StockLauncher, [switch]$HomeKeyService, [switch]$InputKeyService)\nSet-Content -LiteralPath ran.txt -Value \"\"\n$hk = if ($HomeKeyService) { 1 } else { 0 }\n$ik = if ($InputKeyService) { 1 } else { 0 }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"upstream cwd=$(Split-Path -Leaf (Get-Location).Path) TV_HOST=$TvHost SKIP_BUILD=$env:SKIP_BUILD STOCK_LAUNCHER=$StockLauncher homekey=$hk inputkey=$ik\"\nexit 7\n",
-      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "",
+      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "PK\u0003\u0004 fake apk\n",
       "vendor/cleanyourtv/tools/venv/pyvenv.cfg": "home = /usr/bin\n",
-      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n"
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
     },
     "tv": {
       "state": "offline"
@@ -2246,9 +2660,16 @@
     "files": {
       "vendor/cleanyourtv/launcher/build-and-install.sh": "#!/usr/bin/env bash\n: > ran.txt\nhk=0; [ -n \"${HOME_KEY_SERVICE:-}\" ] && hk=1\nik=0; [ -n \"${INPUT_KEY_SERVICE:-}\" ] && ik=1\necho \"upstream cwd=$(basename \"$(pwd)\") TV_HOST=$TV_HOST SKIP_BUILD=$SKIP_BUILD STOCK_LAUNCHER=$STOCK_LAUNCHER homekey=$hk inputkey=$ik\" >> \"$FAKE_BIN_LOG\"\nexit 7\n",
       "vendor/cleanyourtv/launcher/build-and-install.ps1": "param([string]$TvHost, [string]$StockLauncher, [switch]$HomeKeyService, [switch]$InputKeyService)\nSet-Content -LiteralPath ran.txt -Value \"\"\n$hk = if ($HomeKeyService) { 1 } else { 0 }\n$ik = if ($InputKeyService) { 1 } else { 0 }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"upstream cwd=$(Split-Path -Leaf (Get-Location).Path) TV_HOST=$TvHost SKIP_BUILD=$env:SKIP_BUILD STOCK_LAUNCHER=$StockLauncher homekey=$hk inputkey=$ik\"\nexit 7\n",
-      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "",
+      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "PK\u0003\u0004 fake apk\n",
       "vendor/cleanyourtv/tools/venv/pyvenv.cfg": "home = /usr/bin\n",
-      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n"
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
     },
     "tv": {
       "state": "unauthorized"
@@ -2270,9 +2691,16 @@
     "files": {
       "vendor/cleanyourtv/launcher/build-and-install.sh": "#!/usr/bin/env bash\n: > ran.txt\nhk=0; [ -n \"${HOME_KEY_SERVICE:-}\" ] && hk=1\nik=0; [ -n \"${INPUT_KEY_SERVICE:-}\" ] && ik=1\necho \"upstream cwd=$(basename \"$(pwd)\") TV_HOST=$TV_HOST SKIP_BUILD=$SKIP_BUILD STOCK_LAUNCHER=$STOCK_LAUNCHER homekey=$hk inputkey=$ik\" >> \"$FAKE_BIN_LOG\"\nexit 0\n",
       "vendor/cleanyourtv/launcher/build-and-install.ps1": "param([string]$TvHost, [string]$StockLauncher, [switch]$HomeKeyService, [switch]$InputKeyService)\nSet-Content -LiteralPath ran.txt -Value \"\"\n$hk = if ($HomeKeyService) { 1 } else { 0 }\n$ik = if ($InputKeyService) { 1 } else { 0 }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"upstream cwd=$(Split-Path -Leaf (Get-Location).Path) TV_HOST=$TvHost SKIP_BUILD=$env:SKIP_BUILD STOCK_LAUNCHER=$StockLauncher homekey=$hk inputkey=$ik\"\nexit 0\n",
-      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "",
+      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "PK\u0003\u0004 fake apk\n",
       "vendor/cleanyourtv/tools/venv/pyvenv.cfg": "home = /usr/bin\n",
-      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n"
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
     },
     "tv": {
       "state": "device",
@@ -2310,9 +2738,16 @@
     "files": {
       "vendor/cleanyourtv/launcher/build-and-install.sh": "#!/usr/bin/env bash\n: > ran.txt\nhk=0; [ -n \"${HOME_KEY_SERVICE:-}\" ] && hk=1\nik=0; [ -n \"${INPUT_KEY_SERVICE:-}\" ] && ik=1\necho \"upstream cwd=$(basename \"$(pwd)\") TV_HOST=$TV_HOST SKIP_BUILD=$SKIP_BUILD STOCK_LAUNCHER=$STOCK_LAUNCHER homekey=$hk inputkey=$ik\" >> \"$FAKE_BIN_LOG\"\nexit 0\n",
       "vendor/cleanyourtv/launcher/build-and-install.ps1": "param([string]$TvHost, [string]$StockLauncher, [switch]$HomeKeyService, [switch]$InputKeyService)\nSet-Content -LiteralPath ran.txt -Value \"\"\n$hk = if ($HomeKeyService) { 1 } else { 0 }\n$ik = if ($InputKeyService) { 1 } else { 0 }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"upstream cwd=$(Split-Path -Leaf (Get-Location).Path) TV_HOST=$TvHost SKIP_BUILD=$env:SKIP_BUILD STOCK_LAUNCHER=$StockLauncher homekey=$hk inputkey=$ik\"\nexit 0\n",
-      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "",
+      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "PK\u0003\u0004 fake apk\n",
       "vendor/cleanyourtv/tools/venv/pyvenv.cfg": "home = /usr/bin\n",
       "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n",
       "backups/2026-11-19_100000/installed-by-us.txt": "com.gathin.tvhome\n"
     },
     "tv": {
@@ -2339,9 +2774,16 @@
     "files": {
       "vendor/cleanyourtv/launcher/build-and-install.sh": "#!/usr/bin/env bash\n: > ran.txt\nhk=0; [ -n \"${HOME_KEY_SERVICE:-}\" ] && hk=1\nik=0; [ -n \"${INPUT_KEY_SERVICE:-}\" ] && ik=1\necho \"upstream cwd=$(basename \"$(pwd)\") TV_HOST=$TV_HOST SKIP_BUILD=$SKIP_BUILD STOCK_LAUNCHER=$STOCK_LAUNCHER homekey=$hk inputkey=$ik\" >> \"$FAKE_BIN_LOG\"\nexit 0\n",
       "vendor/cleanyourtv/launcher/build-and-install.ps1": "param([string]$TvHost, [string]$StockLauncher, [switch]$HomeKeyService, [switch]$InputKeyService)\nSet-Content -LiteralPath ran.txt -Value \"\"\n$hk = if ($HomeKeyService) { 1 } else { 0 }\n$ik = if ($InputKeyService) { 1 } else { 0 }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"upstream cwd=$(Split-Path -Leaf (Get-Location).Path) TV_HOST=$TvHost SKIP_BUILD=$env:SKIP_BUILD STOCK_LAUNCHER=$StockLauncher homekey=$hk inputkey=$ik\"\nexit 0\n",
-      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "",
+      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "PK\u0003\u0004 fake apk\n",
       "vendor/cleanyourtv/tools/venv/pyvenv.cfg": "home = /usr/bin\n",
       "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n",
       "backups/2026-11-19_100000/installed-by-us.txt": "a.b.c"
     },
     "tv": {
@@ -2368,9 +2810,16 @@
     "files": {
       "vendor/cleanyourtv/launcher/build-and-install.sh": "#!/usr/bin/env bash\n: > ran.txt\nhk=0; [ -n \"${HOME_KEY_SERVICE:-}\" ] && hk=1\nik=0; [ -n \"${INPUT_KEY_SERVICE:-}\" ] && ik=1\necho \"upstream cwd=$(basename \"$(pwd)\") TV_HOST=$TV_HOST SKIP_BUILD=$SKIP_BUILD STOCK_LAUNCHER=$STOCK_LAUNCHER homekey=$hk inputkey=$ik\" >> \"$FAKE_BIN_LOG\"\nexit 0\n",
       "vendor/cleanyourtv/launcher/build-and-install.ps1": "param([string]$TvHost, [string]$StockLauncher, [switch]$HomeKeyService, [switch]$InputKeyService)\nSet-Content -LiteralPath ran.txt -Value \"\"\n$hk = if ($HomeKeyService) { 1 } else { 0 }\n$ik = if ($InputKeyService) { 1 } else { 0 }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"upstream cwd=$(Split-Path -Leaf (Get-Location).Path) TV_HOST=$TvHost SKIP_BUILD=$env:SKIP_BUILD STOCK_LAUNCHER=$StockLauncher homekey=$hk inputkey=$ik\"\nexit 0\n",
-      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "",
+      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "PK\u0003\u0004 fake apk\n",
       "vendor/cleanyourtv/tools/venv/pyvenv.cfg": "home = /usr/bin\n",
       "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n",
       "backups/2026-11-19_100000/home-state.txt": "stock_package=x.y.z\nstock_component=x.y.z/.Main\nours=com.gathin.tvhome\n"
     },
     "tv": {
@@ -2397,9 +2846,16 @@
     "files": {
       "vendor/cleanyourtv/launcher/build-and-install.sh": "#!/usr/bin/env bash\n: > ran.txt\nhk=0; [ -n \"${HOME_KEY_SERVICE:-}\" ] && hk=1\nik=0; [ -n \"${INPUT_KEY_SERVICE:-}\" ] && ik=1\necho \"upstream cwd=$(basename \"$(pwd)\") TV_HOST=$TV_HOST SKIP_BUILD=$SKIP_BUILD STOCK_LAUNCHER=$STOCK_LAUNCHER homekey=$hk inputkey=$ik\" >> \"$FAKE_BIN_LOG\"\nexit 0\n",
       "vendor/cleanyourtv/launcher/build-and-install.ps1": "param([string]$TvHost, [string]$StockLauncher, [switch]$HomeKeyService, [switch]$InputKeyService)\nSet-Content -LiteralPath ran.txt -Value \"\"\n$hk = if ($HomeKeyService) { 1 } else { 0 }\n$ik = if ($InputKeyService) { 1 } else { 0 }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"upstream cwd=$(Split-Path -Leaf (Get-Location).Path) TV_HOST=$TvHost SKIP_BUILD=$env:SKIP_BUILD STOCK_LAUNCHER=$StockLauncher homekey=$hk inputkey=$ik\"\nexit 0\n",
-      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "",
+      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "PK\u0003\u0004 fake apk\n",
       "vendor/cleanyourtv/tools/venv/pyvenv.cfg": "home = /usr/bin\n",
       "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n",
       "backups/2026-11-19_100000/home-state.txt": "stock_package=x.y.z\nstock_component=x.y.z/.Main\nours=com.gathin.tvhome\n"
     },
     "tv": {
@@ -2429,9 +2885,16 @@
     "files": {
       "vendor/cleanyourtv/launcher/build-and-install.sh": "#!/usr/bin/env bash\n: > ran.txt\nhk=0; [ -n \"${HOME_KEY_SERVICE:-}\" ] && hk=1\nik=0; [ -n \"${INPUT_KEY_SERVICE:-}\" ] && ik=1\necho \"upstream cwd=$(basename \"$(pwd)\") TV_HOST=$TV_HOST SKIP_BUILD=$SKIP_BUILD STOCK_LAUNCHER=$STOCK_LAUNCHER homekey=$hk inputkey=$ik\" >> \"$FAKE_BIN_LOG\"\nexit 0\n",
       "vendor/cleanyourtv/launcher/build-and-install.ps1": "param([string]$TvHost, [string]$StockLauncher, [switch]$HomeKeyService, [switch]$InputKeyService)\nSet-Content -LiteralPath ran.txt -Value \"\"\n$hk = if ($HomeKeyService) { 1 } else { 0 }\n$ik = if ($InputKeyService) { 1 } else { 0 }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"upstream cwd=$(Split-Path -Leaf (Get-Location).Path) TV_HOST=$TvHost SKIP_BUILD=$env:SKIP_BUILD STOCK_LAUNCHER=$StockLauncher homekey=$hk inputkey=$ik\"\nexit 0\n",
-      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "",
+      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "PK\u0003\u0004 fake apk\n",
       "vendor/cleanyourtv/tools/venv/pyvenv.cfg": "home = /usr/bin\n",
-      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n"
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
     },
     "tv": {
       "state": "device",
@@ -2459,10 +2922,24 @@
     "files": {
       "vendor/cleanyourtv/launcher/build-and-install.sh": "#!/usr/bin/env bash\n: > ran.txt\nhk=0; [ -n \"${HOME_KEY_SERVICE:-}\" ] && hk=1\nik=0; [ -n \"${INPUT_KEY_SERVICE:-}\" ] && ik=1\necho \"upstream cwd=$(basename \"$(pwd)\") TV_HOST=$TV_HOST SKIP_BUILD=$SKIP_BUILD STOCK_LAUNCHER=$STOCK_LAUNCHER homekey=$hk inputkey=$ik\" >> \"$FAKE_BIN_LOG\"\nexit 0\n",
       "vendor/cleanyourtv/launcher/build-and-install.ps1": "param([string]$TvHost, [string]$StockLauncher, [switch]$HomeKeyService, [switch]$InputKeyService)\nSet-Content -LiteralPath ran.txt -Value \"\"\n$hk = if ($HomeKeyService) { 1 } else { 0 }\n$ik = if ($InputKeyService) { 1 } else { 0 }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"upstream cwd=$(Split-Path -Leaf (Get-Location).Path) TV_HOST=$TvHost SKIP_BUILD=$env:SKIP_BUILD STOCK_LAUNCHER=$StockLauncher homekey=$hk inputkey=$ik\"\nexit 0\n",
-      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "",
+      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "PK\u0003\u0004 fake apk\n",
       "vendor/cleanyourtv/tools/venv/pyvenv.cfg": "home = /usr/bin\n",
       "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n",
       "backups/2026-11-18_090000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n",
+      "backups/2026-11-18_090000/packages-disabled.txt": "",
+      "backups/2026-11-18_090000/getprop.txt": "",
+      "backups/2026-11-18_090000/settings-global.txt": "",
+      "backups/2026-11-18_090000/settings-secure.txt": "",
+      "backups/2026-11-18_090000/settings-system.txt": "",
+      "backups/2026-11-18_090000/home-activity.txt": "",
+      "backups/2026-11-18_090000/tv-id.txt": "adb:192.168.1.50:5555\n",
       "backups/2026-11-18_090000/home-state.txt": "stock_package=x.y.z\nstock_component=x.y.z/.Main\nours=com.gathin.tvhome\n"
     },
     "tv": {
@@ -2492,9 +2969,16 @@
     "files": {
       "vendor/cleanyourtv/launcher/build-and-install.sh": "#!/usr/bin/env bash\n: > ran.txt\nhk=0; [ -n \"${HOME_KEY_SERVICE:-}\" ] && hk=1\nik=0; [ -n \"${INPUT_KEY_SERVICE:-}\" ] && ik=1\necho \"upstream cwd=$(basename \"$(pwd)\") TV_HOST=$TV_HOST SKIP_BUILD=$SKIP_BUILD STOCK_LAUNCHER=$STOCK_LAUNCHER homekey=$hk inputkey=$ik\" >> \"$FAKE_BIN_LOG\"\nexit 0\n",
       "vendor/cleanyourtv/launcher/build-and-install.ps1": "param([string]$TvHost, [string]$StockLauncher, [switch]$HomeKeyService, [switch]$InputKeyService)\nSet-Content -LiteralPath ran.txt -Value \"\"\n$hk = if ($HomeKeyService) { 1 } else { 0 }\n$ik = if ($InputKeyService) { 1 } else { 0 }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"upstream cwd=$(Split-Path -Leaf (Get-Location).Path) TV_HOST=$TvHost SKIP_BUILD=$env:SKIP_BUILD STOCK_LAUNCHER=$StockLauncher homekey=$hk inputkey=$ik\"\nexit 0\n",
-      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "",
+      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "PK\u0003\u0004 fake apk\n",
       "vendor/cleanyourtv/tools/venv/pyvenv.cfg": "home = /usr/bin\n",
-      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n"
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
     },
     "tv": {
       "state": "device",
@@ -2521,9 +3005,16 @@
     "files": {
       "vendor/cleanyourtv/launcher/build-and-install.sh": "#!/usr/bin/env bash\n: > ran.txt\nhk=0; [ -n \"${HOME_KEY_SERVICE:-}\" ] && hk=1\nik=0; [ -n \"${INPUT_KEY_SERVICE:-}\" ] && ik=1\necho \"upstream cwd=$(basename \"$(pwd)\") TV_HOST=$TV_HOST SKIP_BUILD=$SKIP_BUILD STOCK_LAUNCHER=$STOCK_LAUNCHER homekey=$hk inputkey=$ik\" >> \"$FAKE_BIN_LOG\"\nexit 0\n",
       "vendor/cleanyourtv/launcher/build-and-install.ps1": "param([string]$TvHost, [string]$StockLauncher, [switch]$HomeKeyService, [switch]$InputKeyService)\nSet-Content -LiteralPath ran.txt -Value \"\"\n$hk = if ($HomeKeyService) { 1 } else { 0 }\n$ik = if ($InputKeyService) { 1 } else { 0 }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"upstream cwd=$(Split-Path -Leaf (Get-Location).Path) TV_HOST=$TvHost SKIP_BUILD=$env:SKIP_BUILD STOCK_LAUNCHER=$StockLauncher homekey=$hk inputkey=$ik\"\nexit 0\n",
-      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "",
+      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "PK\u0003\u0004 fake apk\n",
       "vendor/cleanyourtv/tools/venv/pyvenv.cfg": "home = /usr/bin\n",
-      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n"
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
     },
     "tv": {
       "state": "device",
@@ -2550,9 +3041,16 @@
     "files": {
       "vendor/cleanyourtv/launcher/build-and-install.sh": "#!/usr/bin/env bash\n: > ran.txt\nhk=0; [ -n \"${HOME_KEY_SERVICE:-}\" ] && hk=1\nik=0; [ -n \"${INPUT_KEY_SERVICE:-}\" ] && ik=1\necho \"upstream cwd=$(basename \"$(pwd)\") TV_HOST=$TV_HOST SKIP_BUILD=$SKIP_BUILD STOCK_LAUNCHER=$STOCK_LAUNCHER homekey=$hk inputkey=$ik\" >> \"$FAKE_BIN_LOG\"\nexit 0\n",
       "vendor/cleanyourtv/launcher/build-and-install.ps1": "param([string]$TvHost, [string]$StockLauncher, [switch]$HomeKeyService, [switch]$InputKeyService)\nSet-Content -LiteralPath ran.txt -Value \"\"\n$hk = if ($HomeKeyService) { 1 } else { 0 }\n$ik = if ($InputKeyService) { 1 } else { 0 }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"upstream cwd=$(Split-Path -Leaf (Get-Location).Path) TV_HOST=$TvHost SKIP_BUILD=$env:SKIP_BUILD STOCK_LAUNCHER=$StockLauncher homekey=$hk inputkey=$ik\"\nexit 0\n",
-      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "",
+      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "PK\u0003\u0004 fake apk\n",
       "vendor/cleanyourtv/tools/venv/pyvenv.cfg": "home = /usr/bin\n",
-      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n"
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
     },
     "tv": {
       "state": "device",
@@ -2581,9 +3079,16 @@
     "files": {
       "vendor/cleanyourtv/launcher/build-and-install.sh": "#!/usr/bin/env bash\n: > ran.txt\nhk=0; [ -n \"${HOME_KEY_SERVICE:-}\" ] && hk=1\nik=0; [ -n \"${INPUT_KEY_SERVICE:-}\" ] && ik=1\necho \"upstream cwd=$(basename \"$(pwd)\") TV_HOST=$TV_HOST SKIP_BUILD=$SKIP_BUILD STOCK_LAUNCHER=$STOCK_LAUNCHER homekey=$hk inputkey=$ik\" >> \"$FAKE_BIN_LOG\"\nexit 0\n",
       "vendor/cleanyourtv/launcher/build-and-install.ps1": "param([string]$TvHost, [string]$StockLauncher, [switch]$HomeKeyService, [switch]$InputKeyService)\nSet-Content -LiteralPath ran.txt -Value \"\"\n$hk = if ($HomeKeyService) { 1 } else { 0 }\n$ik = if ($InputKeyService) { 1 } else { 0 }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"upstream cwd=$(Split-Path -Leaf (Get-Location).Path) TV_HOST=$TvHost SKIP_BUILD=$env:SKIP_BUILD STOCK_LAUNCHER=$StockLauncher homekey=$hk inputkey=$ik\"\nexit 0\n",
-      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "",
+      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "PK\u0003\u0004 fake apk\n",
       "vendor/cleanyourtv/tools/venv/pyvenv.cfg": "home = /usr/bin\n",
-      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n"
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
     },
     "tv": {
       "state": "device",
@@ -2612,9 +3117,16 @@
     "files": {
       "vendor/cleanyourtv/launcher/build-and-install.sh": "#!/usr/bin/env bash\n: > ran.txt\nhk=0; [ -n \"${HOME_KEY_SERVICE:-}\" ] && hk=1\nik=0; [ -n \"${INPUT_KEY_SERVICE:-}\" ] && ik=1\necho \"upstream cwd=$(basename \"$(pwd)\") TV_HOST=$TV_HOST SKIP_BUILD=$SKIP_BUILD STOCK_LAUNCHER=$STOCK_LAUNCHER homekey=$hk inputkey=$ik\" >> \"$FAKE_BIN_LOG\"\nexit 0\n",
       "vendor/cleanyourtv/launcher/build-and-install.ps1": "param([string]$TvHost, [string]$StockLauncher, [switch]$HomeKeyService, [switch]$InputKeyService)\nSet-Content -LiteralPath ran.txt -Value \"\"\n$hk = if ($HomeKeyService) { 1 } else { 0 }\n$ik = if ($InputKeyService) { 1 } else { 0 }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"upstream cwd=$(Split-Path -Leaf (Get-Location).Path) TV_HOST=$TvHost SKIP_BUILD=$env:SKIP_BUILD STOCK_LAUNCHER=$StockLauncher homekey=$hk inputkey=$ik\"\nexit 0\n",
-      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "",
+      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "PK\u0003\u0004 fake apk\n",
       "vendor/cleanyourtv/tools/venv/pyvenv.cfg": "home = /usr/bin\n",
-      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n"
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
     },
     "tv": {
       "state": "device",
@@ -2643,9 +3155,16 @@
     "files": {
       "vendor/cleanyourtv/launcher/build-and-install.sh": "#!/usr/bin/env bash\n: > ran.txt\nhk=0; [ -n \"${HOME_KEY_SERVICE:-}\" ] && hk=1\nik=0; [ -n \"${INPUT_KEY_SERVICE:-}\" ] && ik=1\necho \"upstream cwd=$(basename \"$(pwd)\") TV_HOST=$TV_HOST SKIP_BUILD=$SKIP_BUILD STOCK_LAUNCHER=$STOCK_LAUNCHER homekey=$hk inputkey=$ik\" >> \"$FAKE_BIN_LOG\"\nexit 0\n",
       "vendor/cleanyourtv/launcher/build-and-install.ps1": "param([string]$TvHost, [string]$StockLauncher, [switch]$HomeKeyService, [switch]$InputKeyService)\nSet-Content -LiteralPath ran.txt -Value \"\"\n$hk = if ($HomeKeyService) { 1 } else { 0 }\n$ik = if ($InputKeyService) { 1 } else { 0 }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"upstream cwd=$(Split-Path -Leaf (Get-Location).Path) TV_HOST=$TvHost SKIP_BUILD=$env:SKIP_BUILD STOCK_LAUNCHER=$StockLauncher homekey=$hk inputkey=$ik\"\nexit 0\n",
-      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "",
+      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "PK\u0003\u0004 fake apk\n",
       "vendor/cleanyourtv/tools/venv/pyvenv.cfg": "home = /usr/bin\n",
-      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n"
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
     },
     "tv": {
       "state": "device",
@@ -2674,9 +3193,16 @@
     "files": {
       "vendor/cleanyourtv/launcher/build-and-install.sh": "#!/usr/bin/env bash\n: > ran.txt\nhk=0; [ -n \"${HOME_KEY_SERVICE:-}\" ] && hk=1\nik=0; [ -n \"${INPUT_KEY_SERVICE:-}\" ] && ik=1\necho \"upstream cwd=$(basename \"$(pwd)\") TV_HOST=$TV_HOST SKIP_BUILD=$SKIP_BUILD STOCK_LAUNCHER=$STOCK_LAUNCHER homekey=$hk inputkey=$ik\" >> \"$FAKE_BIN_LOG\"\nexit 7\n",
       "vendor/cleanyourtv/launcher/build-and-install.ps1": "param([string]$TvHost, [string]$StockLauncher, [switch]$HomeKeyService, [switch]$InputKeyService)\nSet-Content -LiteralPath ran.txt -Value \"\"\n$hk = if ($HomeKeyService) { 1 } else { 0 }\n$ik = if ($InputKeyService) { 1 } else { 0 }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"upstream cwd=$(Split-Path -Leaf (Get-Location).Path) TV_HOST=$TvHost SKIP_BUILD=$env:SKIP_BUILD STOCK_LAUNCHER=$StockLauncher homekey=$hk inputkey=$ik\"\nexit 7\n",
-      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "",
+      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "PK\u0003\u0004 fake apk\n",
       "vendor/cleanyourtv/tools/venv/pyvenv.cfg": "home = /usr/bin\n",
-      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n"
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
     },
     "tv": {
       "state": "device",
@@ -2708,9 +3234,16 @@
     "files": {
       "vendor/cleanyourtv/launcher/build-and-install.sh": "#!/usr/bin/env bash\n: > ran.txt\nhk=0; [ -n \"${HOME_KEY_SERVICE:-}\" ] && hk=1\nik=0; [ -n \"${INPUT_KEY_SERVICE:-}\" ] && ik=1\necho \"upstream cwd=$(basename \"$(pwd)\") TV_HOST=$TV_HOST SKIP_BUILD=$SKIP_BUILD STOCK_LAUNCHER=$STOCK_LAUNCHER homekey=$hk inputkey=$ik\" >> \"$FAKE_BIN_LOG\"\nexit 7\n",
       "vendor/cleanyourtv/launcher/build-and-install.ps1": "param([string]$TvHost, [string]$StockLauncher, [switch]$HomeKeyService, [switch]$InputKeyService)\nSet-Content -LiteralPath ran.txt -Value \"\"\n$hk = if ($HomeKeyService) { 1 } else { 0 }\n$ik = if ($InputKeyService) { 1 } else { 0 }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"upstream cwd=$(Split-Path -Leaf (Get-Location).Path) TV_HOST=$TvHost SKIP_BUILD=$env:SKIP_BUILD STOCK_LAUNCHER=$StockLauncher homekey=$hk inputkey=$ik\"\nexit 7\n",
-      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "",
+      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "PK\u0003\u0004 fake apk\n",
       "vendor/cleanyourtv/tools/venv/pyvenv.cfg": "home = /usr/bin\n",
-      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n"
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
     },
     "tv": {
       "state": "device",
@@ -2744,9 +3277,16 @@
     "files": {
       "vendor/cleanyourtv/launcher/build-and-install.sh": "#!/usr/bin/env bash\n: > ran.txt\nhk=0; [ -n \"${HOME_KEY_SERVICE:-}\" ] && hk=1\nik=0; [ -n \"${INPUT_KEY_SERVICE:-}\" ] && ik=1\necho \"upstream cwd=$(basename \"$(pwd)\") TV_HOST=$TV_HOST SKIP_BUILD=$SKIP_BUILD STOCK_LAUNCHER=$STOCK_LAUNCHER homekey=$hk inputkey=$ik\" >> \"$FAKE_BIN_LOG\"\nexit 7\n",
       "vendor/cleanyourtv/launcher/build-and-install.ps1": "param([string]$TvHost, [string]$StockLauncher, [switch]$HomeKeyService, [switch]$InputKeyService)\nSet-Content -LiteralPath ran.txt -Value \"\"\n$hk = if ($HomeKeyService) { 1 } else { 0 }\n$ik = if ($InputKeyService) { 1 } else { 0 }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"upstream cwd=$(Split-Path -Leaf (Get-Location).Path) TV_HOST=$TvHost SKIP_BUILD=$env:SKIP_BUILD STOCK_LAUNCHER=$StockLauncher homekey=$hk inputkey=$ik\"\nexit 7\n",
-      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "",
+      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "PK\u0003\u0004 fake apk\n",
       "vendor/cleanyourtv/tools/venv/pyvenv.cfg": "home = /usr/bin\n",
       "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n",
       "backups/2026-11-19_100000/installed-by-us.txt": "a.b.c\ncom.gathin.tvhome\n"
     },
     "tv": {
@@ -2781,9 +3321,16 @@
     "files": {
       "vendor/cleanyourtv/launcher/build-and-install.sh": "#!/usr/bin/env bash\n: > ran.txt\nhk=0; [ -n \"${HOME_KEY_SERVICE:-}\" ] && hk=1\nik=0; [ -n \"${INPUT_KEY_SERVICE:-}\" ] && ik=1\necho \"upstream cwd=$(basename \"$(pwd)\") TV_HOST=$TV_HOST SKIP_BUILD=$SKIP_BUILD STOCK_LAUNCHER=$STOCK_LAUNCHER homekey=$hk inputkey=$ik\" >> \"$FAKE_BIN_LOG\"\nexit 7\n",
       "vendor/cleanyourtv/launcher/build-and-install.ps1": "param([string]$TvHost, [string]$StockLauncher, [switch]$HomeKeyService, [switch]$InputKeyService)\nSet-Content -LiteralPath ran.txt -Value \"\"\n$hk = if ($HomeKeyService) { 1 } else { 0 }\n$ik = if ($InputKeyService) { 1 } else { 0 }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"upstream cwd=$(Split-Path -Leaf (Get-Location).Path) TV_HOST=$TvHost SKIP_BUILD=$env:SKIP_BUILD STOCK_LAUNCHER=$StockLauncher homekey=$hk inputkey=$ik\"\nexit 7\n",
-      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "",
+      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "PK\u0003\u0004 fake apk\n",
       "vendor/cleanyourtv/tools/venv/pyvenv.cfg": "home = /usr/bin\n",
-      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n"
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
     },
     "tv": {
       "state": "device",
@@ -2818,9 +3365,16 @@
     "files": {
       "vendor/cleanyourtv/launcher/build-and-install.sh": "#!/usr/bin/env bash\n: > ran.txt\nhk=0; [ -n \"${HOME_KEY_SERVICE:-}\" ] && hk=1\nik=0; [ -n \"${INPUT_KEY_SERVICE:-}\" ] && ik=1\necho \"upstream cwd=$(basename \"$(pwd)\") TV_HOST=$TV_HOST SKIP_BUILD=$SKIP_BUILD STOCK_LAUNCHER=$STOCK_LAUNCHER homekey=$hk inputkey=$ik\" >> \"$FAKE_BIN_LOG\"\nexit 0\n",
       "vendor/cleanyourtv/launcher/build-and-install.ps1": "param([string]$TvHost, [string]$StockLauncher, [switch]$HomeKeyService, [switch]$InputKeyService)\nSet-Content -LiteralPath ran.txt -Value \"\"\n$hk = if ($HomeKeyService) { 1 } else { 0 }\n$ik = if ($InputKeyService) { 1 } else { 0 }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"upstream cwd=$(Split-Path -Leaf (Get-Location).Path) TV_HOST=$TvHost SKIP_BUILD=$env:SKIP_BUILD STOCK_LAUNCHER=$StockLauncher homekey=$hk inputkey=$ik\"\nexit 0\n",
-      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "",
+      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "PK\u0003\u0004 fake apk\n",
       "vendor/cleanyourtv/tools/venv/pyvenv.cfg": "home = /usr/bin\n",
-      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n"
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
     },
     "tv": {
       "state": "device",
@@ -2847,10 +3401,24 @@
     "files": {
       "vendor/cleanyourtv/launcher/build-and-install.sh": "#!/usr/bin/env bash\n: > ran.txt\nhk=0; [ -n \"${HOME_KEY_SERVICE:-}\" ] && hk=1\nik=0; [ -n \"${INPUT_KEY_SERVICE:-}\" ] && ik=1\necho \"upstream cwd=$(basename \"$(pwd)\") TV_HOST=$TV_HOST SKIP_BUILD=$SKIP_BUILD STOCK_LAUNCHER=$STOCK_LAUNCHER homekey=$hk inputkey=$ik\" >> \"$FAKE_BIN_LOG\"\nexit 0\n",
       "vendor/cleanyourtv/launcher/build-and-install.ps1": "param([string]$TvHost, [string]$StockLauncher, [switch]$HomeKeyService, [switch]$InputKeyService)\nSet-Content -LiteralPath ran.txt -Value \"\"\n$hk = if ($HomeKeyService) { 1 } else { 0 }\n$ik = if ($InputKeyService) { 1 } else { 0 }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"upstream cwd=$(Split-Path -Leaf (Get-Location).Path) TV_HOST=$TvHost SKIP_BUILD=$env:SKIP_BUILD STOCK_LAUNCHER=$StockLauncher homekey=$hk inputkey=$ik\"\nexit 0\n",
-      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "",
+      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "PK\u0003\u0004 fake apk\n",
       "vendor/cleanyourtv/tools/venv/pyvenv.cfg": "home = /usr/bin\n",
       "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n",
-      "backups/2026-11-18_090000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n"
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n",
+      "backups/2026-11-18_090000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n",
+      "backups/2026-11-18_090000/packages-disabled.txt": "",
+      "backups/2026-11-18_090000/getprop.txt": "",
+      "backups/2026-11-18_090000/settings-global.txt": "",
+      "backups/2026-11-18_090000/settings-secure.txt": "",
+      "backups/2026-11-18_090000/settings-system.txt": "",
+      "backups/2026-11-18_090000/home-activity.txt": "",
+      "backups/2026-11-18_090000/tv-id.txt": "adb:192.168.1.50:5555\n"
     },
     "tv": {
       "state": "device",
@@ -2881,9 +3449,16 @@
     "files": {
       "vendor/cleanyourtv/launcher/build-and-install.sh": "#!/usr/bin/env bash\n: > ran.txt\nhk=0; [ -n \"${HOME_KEY_SERVICE:-}\" ] && hk=1\nik=0; [ -n \"${INPUT_KEY_SERVICE:-}\" ] && ik=1\necho \"upstream cwd=$(basename \"$(pwd)\") TV_HOST=$TV_HOST SKIP_BUILD=$SKIP_BUILD STOCK_LAUNCHER=$STOCK_LAUNCHER homekey=$hk inputkey=$ik\" >> \"$FAKE_BIN_LOG\"\nexit 0\n",
       "vendor/cleanyourtv/launcher/build-and-install.ps1": "param([string]$TvHost, [string]$StockLauncher, [switch]$HomeKeyService, [switch]$InputKeyService)\nSet-Content -LiteralPath ran.txt -Value \"\"\n$hk = if ($HomeKeyService) { 1 } else { 0 }\n$ik = if ($InputKeyService) { 1 } else { 0 }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"upstream cwd=$(Split-Path -Leaf (Get-Location).Path) TV_HOST=$TvHost SKIP_BUILD=$env:SKIP_BUILD STOCK_LAUNCHER=$StockLauncher homekey=$hk inputkey=$ik\"\nexit 0\n",
-      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "",
+      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "PK\u0003\u0004 fake apk\n",
       "vendor/cleanyourtv/tools/venv/pyvenv.cfg": "home = /usr/bin\n",
-      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n"
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:6000\n"
     },
     "tv": {
       "state": "device",
@@ -2913,9 +3488,16 @@
     "files": {
       "vendor/cleanyourtv/launcher/build-and-install.sh": "#!/usr/bin/env bash\necho \"upstream restorekey=${RESTORE_KEY_SERVICES:-unset}\" >> \"$FAKE_BIN_LOG\"\nexit 0\n",
       "vendor/cleanyourtv/launcher/build-and-install.ps1": "param([string]$TvHost, [string]$StockLauncher, [switch]$HomeKeyService, [switch]$InputKeyService, [switch]$RestoreKeyServices)\n$rk = if ($RestoreKeyServices) { 1 } else { 0 }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"upstream restorekey=$rk\"\nexit 0\n",
-      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "",
+      "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "PK\u0003\u0004 fake apk\n",
       "vendor/cleanyourtv/tools/venv/pyvenv.cfg": "home = /usr/bin\n",
-      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n"
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.tvlauncher\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
     },
     "tv": {
       "state": "device",
@@ -2929,6 +3511,1962 @@
       "bin_calls_include": [
         "upstream restorekey=0"
       ]
+    }
+  },
+  {
+    "script": "disable-one",
+    "name": "SC-01 unreadable streaming list fails closed",
+    "args": [
+      "com.netflix.ninja"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
+    },
+    "expect": {
+      "exit": 3,
+      "adb_call_count": {
+        "": 0
+      },
+      "files_absent": [
+        "backups/2026-11-19_100000/disabled-by-us.txt"
+      ]
+    },
+    "chmod": {
+      "config/streaming-apps.txt": "000"
+    }
+  },
+  {
+    "script": "disable-one",
+    "name": "SC-02 UTF-8 BOM before the first pattern still matches",
+    "args": [
+      "com.netflix.ninja"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n",
+      "config/streaming-apps.txt": "\ufeffcom.netflix.*\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
+    },
+    "expect": {
+      "exit": 11,
+      "adb_call_count": {
+        "disable-user": 0
+      }
+    }
+  },
+  {
+    "script": "disable-one",
+    "name": "SC-03 inline # comment after a pattern is stripped",
+    "args": [
+      "com.netflix.ninja"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n",
+      "config/streaming-apps.txt": "# streaming\ncom.netflix.*   # Netflix\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
+    },
+    "expect": {
+      "exit": 11,
+      "adb_call_count": {
+        "disable-user": 0
+      }
+    }
+  },
+  {
+    "script": "disable-one",
+    "name": "SC-04 tab-separated reason after a pattern is stripped",
+    "args": [
+      "com.netflix.ninja"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n",
+      "config/streaming-apps.txt": "com.netflix.*\tNetflix app\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
+    },
+    "expect": {
+      "exit": 11,
+      "adb_call_count": {
+        "disable-user": 0
+      }
+    }
+  },
+  {
+    "script": "disable-one",
+    "name": "SC-05 CR-only line endings still match",
+    "args": [
+      "com.netflix.ninja"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
+    },
+    "expect": {
+      "exit": 11,
+      "adb_call_count": {
+        "disable-user": 0
+      }
+    },
+    "raw_files": {
+      "config/streaming-apps.txt": "232073747265616d696e670d636f6d2e6469736e65792e2a0d636f6d2e6e6574666c69782e2a0d"
+    }
+  },
+  {
+    "script": "disable-one",
+    "name": "SC-06 UTF-16 list with BOM fails closed",
+    "args": [
+      "com.netflix.ninja"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
+    },
+    "expect": {
+      "exit": 3,
+      "adb_call_count": {
+        "": 0
+      },
+      "stderr_contains": "UTF-16"
+    },
+    "raw_files": {
+      "config/streaming-apps.txt": "fffe63006f006d002e006e006500740066006c00690078002e002a000a00"
+    }
+  },
+  {
+    "script": "disable-one",
+    "name": "SC-06 UTF-16 list without BOM (NUL bytes) fails closed",
+    "args": [
+      "com.netflix.ninja"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
+    },
+    "expect": {
+      "exit": 3,
+      "adb_call_count": {
+        "": 0
+      }
+    },
+    "raw_files": {
+      "config/streaming-apps.txt": "63006f006d002e006e006500740066006c00690078002e002a000a00"
+    }
+  },
+  {
+    "script": "disable-one",
+    "name": "SC-07 empty protected list fails closed",
+    "args": [
+      "com.tcl.ad.service"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n",
+      "config/protected-packages.txt": ""
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
+    },
+    "expect": {
+      "exit": 3,
+      "adb_call_count": {
+        "": 0
+      },
+      "stderr_contains": "no patterns"
+    }
+  },
+  {
+    "script": "disable-one",
+    "name": "SC-07 comments-only forbidden list fails closed",
+    "args": [
+      "com.tcl.ad.service"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n",
+      "config/forbidden-packages.txt": "# nothing here\n\n   # still nothing\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
+    },
+    "expect": {
+      "exit": 3,
+      "adb_call_count": {
+        "": 0
+      }
+    }
+  },
+  {
+    "script": "disable-one",
+    "name": "SC-08 com.google.android.katniss is protected",
+    "args": [
+      "com.google.android.katniss"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
+    },
+    "expect": {
+      "exit": 10,
+      "adb_call_count": {
+        "": 0
+      }
+    }
+  },
+  {
+    "script": "disable-one",
+    "name": "SC-08 com.google.android.gms.persistent is protected",
+    "args": [
+      "com.google.android.gms.persistent"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
+    },
+    "expect": {
+      "exit": 10,
+      "adb_call_count": {
+        "": 0
+      }
+    }
+  },
+  {
+    "script": "disable-one",
+    "name": "SC-08 com.android.inputdevices is protected",
+    "args": [
+      "com.android.inputdevices"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
+    },
+    "expect": {
+      "exit": 10,
+      "adb_call_count": {
+        "": 0
+      }
+    }
+  },
+  {
+    "script": "disable-one",
+    "name": "SC-08 com.tcl.tv is protected",
+    "args": [
+      "com.tcl.tv"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
+    },
+    "expect": {
+      "exit": 10,
+      "adb_call_count": {
+        "": 0
+      }
+    }
+  },
+  {
+    "script": "disable-one",
+    "name": "SC-08 com.tcl.xian.StartandroidService is protected",
+    "args": [
+      "com.tcl.xian.StartandroidService"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
+    },
+    "expect": {
+      "exit": 10,
+      "adb_call_count": {
+        "": 0
+      }
+    }
+  },
+  {
+    "script": "disable-one",
+    "name": "SC-10 the current Home app stays on",
+    "args": [
+      "com.example.launcher"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\npackage:com.example.launcher\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja",
+        "com.example.launcher"
+      ],
+      "home": "com.example.launcher/.Main"
+    },
+    "expect": {
+      "exit": 10,
+      "adb_call_count": {
+        "disable-user": 0
+      },
+      "stderr_contains": "com.example.launcher is the TV's current Home app, so it stays on",
+      "files_absent": [
+        "backups/2026-11-19_100000/disabled-by-us.txt"
+      ]
+    }
+  },
+  {
+    "script": "disable-one",
+    "name": "SC-10 an unreadable Home answer changes nothing",
+    "args": [
+      "com.tcl.ad.service"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ],
+      "home": "No activity found"
+    },
+    "expect": {
+      "exit": 20,
+      "adb_call_count": {
+        "disable-user": 0
+      },
+      "stderr_contains": "didn't say which app is its Home screen"
+    }
+  },
+  {
+    "script": "disable-one",
+    "name": "SC-11 MU-03 junk read-back after the change: logged first, may be off, never 'Nothing was changed'",
+    "args": [
+      "com.tcl.ad.service"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity",
+      "junk_after_change": true
+    },
+    "expect": {
+      "exit": 20,
+      "adb_call_count": {
+        "disable-user": 1
+      },
+      "stderr_contains": "MAY be off",
+      "stderr_excludes": [
+        "Nothing was changed"
+      ],
+      "files_match": {
+        "backups/2026-11-19_100000/disabled-by-us.txt": "com\\.tcl\\.ad\\.service\\t\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z\\n"
+      }
+    }
+  },
+  {
+    "script": "disable-one",
+    "name": "IN-09 SC-12 TV drops right after pm disable-user: logged, exit 20, restore turns it back on",
+    "args": [
+      "com.tcl.ad.service"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity",
+      "offline_after": 6
+    },
+    "expect": {
+      "exit": 20,
+      "adb_call_count": {
+        "disable-user": 1
+      },
+      "stderr_contains": "It is in the undo list",
+      "stderr_excludes": [
+        "Nothing was changed"
+      ],
+      "files_match": {
+        "backups/2026-11-19_100000/disabled-by-us.txt": "com\\.tcl\\.ad\\.service\\t\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z\\n"
+      }
+    },
+    "then": [
+      {
+        "script": "restore",
+        "args": [
+          "--packages-only"
+        ],
+        "tv_update": {
+          "state": "device",
+          "offline_after": null
+        },
+        "expect": {
+          "exit": 0,
+          "adb_calls_include": [
+            "pm enable com.tcl.ad.service"
+          ],
+          "stdout_contains": [
+            "Turned com.tcl.ad.service back on"
+          ],
+          "files_match": {
+            "backups/2026-11-19_100000/restored.txt": "com\\.tcl\\.ad\\.service\\t\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z\\n"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "script": "disable-one",
+    "name": "SC-13 MU-02 pm list packages -d fails before the change: nothing sent",
+    "args": [
+      "com.tcl.ad.service"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity",
+      "fail_list_disabled": true
+    },
+    "expect": {
+      "exit": 20,
+      "adb_call_count": {
+        "disable-user": 0
+      },
+      "stderr_contains": "didn't answer",
+      "files_absent": [
+        "backups/2026-11-19_100000/disabled-by-us.txt"
+      ]
+    }
+  },
+  {
+    "script": "disable-one",
+    "name": "SC-13 junk instead of the disabled list before the change: nothing sent",
+    "args": [
+      "com.tcl.ad.service"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity",
+      "list_junk": true
+    },
+    "expect": {
+      "exit": 20,
+      "adb_call_count": {
+        "disable-user": 0
+      },
+      "files_absent": [
+        "backups/2026-11-19_100000/disabled-by-us.txt"
+      ]
+    }
+  },
+  {
+    "script": "disable-one",
+    "name": "SC-14 a refused change keeps other runs' records in the undo log",
+    "args": [
+      "com.tcl.ad.service"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n",
+      "backups/2026-11-19_100000/disabled-by-us.txt": "com.other.app\t2026-11-19T10:01:00Z\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity",
+      "refuse": [
+        "com.tcl.ad.service"
+      ]
+    },
+    "expect": {
+      "exit": 20,
+      "stderr_contains": "Nothing was changed",
+      "files_match": {
+        "backups/2026-11-19_100000/disabled-by-us.txt": "com\\.other\\.app\\t2026-11-19T10:01:00Z\\n"
+      }
+    }
+  },
+  {
+    "script": "disable-one",
+    "name": "SC-14 a change appends to an existing log (even one with no final newline)",
+    "args": [
+      "com.tcl.ad.service"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n",
+      "backups/2026-11-19_100000/disabled-by-us.txt": "com.other.app\t2026-11-19T10:01:00Z"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
+    },
+    "expect": {
+      "exit": 0,
+      "files_match": {
+        "backups/2026-11-19_100000/disabled-by-us.txt": "com\\.other\\.app\\t2026-11-19T10:01:00Z\\ncom\\.tcl\\.ad\\.service\\t\\S+\\n"
+      }
+    }
+  },
+  {
+    "script": "disable-one",
+    "name": "SC-15 installed-by-us.txt outside a real backup folder is ignored",
+    "args": [
+      "com.tcl.evil"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n",
+      "backups/junk/installed-by-us.txt": "com.tcl.evil\n",
+      "backups/2026-11-19_110000.partial/installed-by-us.txt": "com.tcl.evil\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja",
+        "com.tcl.evil"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
+    },
+    "expect": {
+      "exit": 14,
+      "adb_call_count": {
+        "disable-user": 0
+      }
+    }
+  },
+  {
+    "script": "disable-one",
+    "name": "SC-16 PA-02 unreadable packages-all.txt fails closed",
+    "args": [
+      "com.tcl.ad.service"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
+    },
+    "expect": {
+      "exit": 3,
+      "adb_call_count": {
+        "": 0
+      }
+    },
+    "chmod": {
+      "backups/2026-11-19_100000/packages-all.txt": "000"
+    }
+  },
+  {
+    "script": "disable-one",
+    "name": "SC-20 backup from a different TV is refused",
+    "args": [
+      "com.tcl.ad.service"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "SERIALA1\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity",
+      "props": {
+        "ro.serialno": "SERIALB2"
+      }
+    },
+    "expect": {
+      "exit": 13,
+      "adb_call_count": {
+        "disable-user": 0
+      },
+      "stderr_contains": "The backup is from a different TV",
+      "files_absent": [
+        "backups/2026-11-19_100000/disabled-by-us.txt"
+      ]
+    }
+  },
+  {
+    "script": "disable-one",
+    "name": "SC-20 backup from this TV (serial number) is accepted",
+    "args": [
+      "com.tcl.ad.service"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "SERIALA1\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity",
+      "props": {
+        "ro.serialno": "SERIALA1"
+      }
+    },
+    "expect": {
+      "exit": 0,
+      "adb_call_count": {
+        "disable-user": 1
+      }
+    }
+  },
+  {
+    "script": "disable-one",
+    "name": "SC-20 ro.boot.serialno is the fallback identity",
+    "args": [
+      "com.tcl.ad.service"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "BOOTSER9\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity",
+      "props": {
+        "ro.boot.serialno": "BOOTSER9"
+      }
+    },
+    "expect": {
+      "exit": 0,
+      "adb_call_count": {
+        "disable-user": 1
+      }
+    }
+  },
+  {
+    "script": "disable-one",
+    "name": "SC-20 backup without a TV identity is refused",
+    "args": [
+      "com.tcl.ad.service"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": ""
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
+    },
+    "expect": {
+      "exit": 13,
+      "adb_call_count": {
+        "disable-user": 0
+      },
+      "stderr_contains": "doesn't say which TV"
+    }
+  },
+  {
+    "script": "restore",
+    "name": "SC-20 restore refuses a backup from a different TV",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "SERIALA1\n",
+      "backups/2026-11-19_100000/disabled-by-us.txt": "com.tcl.ad.service\t2026-11-19T10:05:00Z\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity",
+      "props": {
+        "ro.serialno": "SERIALB2"
+      },
+      "disabled": [
+        "com.tcl.ad.service"
+      ]
+    },
+    "expect": {
+      "exit": 13,
+      "adb_call_count": {
+        "pm enable": 0
+      },
+      "stderr_contains": "The backup is from a different TV"
+    }
+  },
+  {
+    "script": "backup",
+    "name": "SC-20 backup records the TV identity",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity",
+      "props": {
+        "ro.serialno": "SERIALA1"
+      }
+    },
+    "expect": {
+      "exit": 0,
+      "files_match": {
+        "backups/*/tv-id.txt": "SERIALA1\\n"
+      }
+    }
+  },
+  {
+    "script": "backup",
+    "name": "SC-21 error text instead of a package list keeps no backup",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity",
+      "list_junk": true
+    },
+    "expect": {
+      "exit": 20,
+      "files_absent": [
+        "backups/*"
+      ]
+    }
+  },
+  {
+    "script": "disable-one",
+    "name": "SC-22 a backup folder missing its getprop and settings files is not a backup",
+    "args": [
+      "com.tcl.ad.service"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
+    },
+    "expect": {
+      "exit": 13,
+      "adb_call_count": {
+        "disable-user": 0
+      }
+    }
+  },
+  {
+    "script": "disable-one",
+    "name": "SC-22 a backup whose packages-all.txt has no package: lines is not a backup",
+    "args": [
+      "com.tcl.ad.service"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "Error: could not access the Package Manager.\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
+    },
+    "expect": {
+      "exit": 13,
+      "adb_call_count": {
+        "disable-user": 0
+      }
+    }
+  },
+  {
+    "script": "disable-one",
+    "name": "SC-23 future-dated or impossible backup folders are ignored",
+    "args": [
+      "com.tcl.evil"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n",
+      "backups/9999-99-99_999999/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\npackage:com.tcl.evil\n",
+      "backups/9999-99-99_999999/packages-disabled.txt": "",
+      "backups/9999-99-99_999999/getprop.txt": "",
+      "backups/9999-99-99_999999/settings-global.txt": "",
+      "backups/9999-99-99_999999/settings-secure.txt": "",
+      "backups/9999-99-99_999999/settings-system.txt": "",
+      "backups/9999-99-99_999999/home-activity.txt": "",
+      "backups/9999-99-99_999999/tv-id.txt": "adb:192.168.1.50:5555\n",
+      "backups/9999-12-31_235959/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\npackage:com.tcl.evil\n",
+      "backups/9999-12-31_235959/packages-disabled.txt": "",
+      "backups/9999-12-31_235959/getprop.txt": "",
+      "backups/9999-12-31_235959/settings-global.txt": "",
+      "backups/9999-12-31_235959/settings-secure.txt": "",
+      "backups/9999-12-31_235959/settings-system.txt": "",
+      "backups/9999-12-31_235959/home-activity.txt": "",
+      "backups/9999-12-31_235959/tv-id.txt": "adb:192.168.1.50:5555\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja",
+        "com.tcl.evil"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
+    },
+    "expect": {
+      "exit": 14,
+      "adb_call_count": {
+        "disable-user": 0
+      }
+    }
+  },
+  {
+    "script": "backup",
+    "name": "SC-24 backup folder not writable is setup missing",
+    "args": [],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/keep": ""
+    },
+    "chmod": {
+      "backups": "555"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
+    },
+    "expect": {
+      "exit": 3
+    }
+  },
+  {
+    "script": "restore",
+    "name": "SC-30 unreadable undo log fails closed",
+    "args": [
+      "--packages-only"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:d.e.f\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n",
+      "backups/2026-11-19_100000/disabled-by-us.txt": "a.b.c\t2026-11-19T10:05:00Z\nd.e.f\t2026-11-19T10:06:00Z\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "a.b.c",
+        "d.e.f"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity",
+      "disabled": [
+        "a.b.c",
+        "d.e.f"
+      ]
+    },
+    "expect": {
+      "exit": 3,
+      "adb_call_count": {
+        "pm enable": 0
+      }
+    },
+    "chmod": {
+      "backups/2026-11-19_100000/disabled-by-us.txt": "000"
+    }
+  },
+  {
+    "script": "restore",
+    "name": "PA-01 unreadable home-state.txt fails closed",
+    "args": [
+      "--home-only"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:d.e.f\npackage:com.google.android.apps.tv.launcherx\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n",
+      "backups/2026-11-19_100000/home-state.txt": "stock_package=com.google.android.apps.tv.launcherx\nstock_component=com.google.android.apps.tv.launcherx/.MainActivity\nours=com.gathin.tvhome\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "a.b.c",
+        "d.e.f",
+        "com.google.android.apps.tv.launcherx",
+        "com.gathin.tvhome"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity",
+      "disabled": [
+        "com.google.android.apps.tv.launcherx"
+      ]
+    },
+    "expect": {
+      "exit": 3,
+      "adb_call_count": {
+        "pm enable": 0,
+        "disable-user": 0
+      }
+    },
+    "chmod": {
+      "backups/2026-11-19_100000/home-state.txt": "000"
+    }
+  },
+  {
+    "script": "restore",
+    "name": "SC-31 refused enable with an untrustworthy read-back: 20, not recorded",
+    "args": [
+      "--packages-only"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:d.e.f\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n",
+      "backups/2026-11-19_100000/disabled-by-us.txt": "a.b.c\t2026-11-19T10:05:00Z\nd.e.f\t2026-11-19T10:06:00Z\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "a.b.c",
+        "d.e.f"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity",
+      "disabled": [
+        "a.b.c",
+        "d.e.f"
+      ],
+      "refuse": [
+        "a.b.c"
+      ],
+      "junk_after_change": true
+    },
+    "expect": {
+      "exit": 20,
+      "stdout_excludes": [
+        "already on"
+      ],
+      "files_absent": [
+        "backups/2026-11-19_100000/restored.txt"
+      ]
+    }
+  },
+  {
+    "script": "restore",
+    "name": "SC-32 home-only when the stock launcher is no longer installed: ours stays on",
+    "args": [
+      "--home-only"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:d.e.f\npackage:com.google.android.apps.tv.launcherx\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n",
+      "backups/2026-11-19_100000/home-state.txt": "stock_package=com.google.android.apps.tv.launcherx\nstock_component=com.google.android.apps.tv.launcherx/.MainActivity\nours=com.gathin.tvhome\n",
+      "backups/2026-11-19_100000/installed-by-us.txt": "com.gathin.tvhome\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "a.b.c",
+        "d.e.f",
+        "com.gathin.tvhome"
+      ],
+      "home": "com.gathin.tvhome/.MainActivity"
+    },
+    "expect": {
+      "exit": 20,
+      "adb_call_count": {
+        "disable-user": 0,
+        "set-home-activity": 0,
+        "pm enable": 0
+      },
+      "stderr_contains": "is no longer installed on the TV, so our launcher stays on"
+    }
+  },
+  {
+    "script": "restore",
+    "name": "SC-33 restored.txt not writable: TV restore completes, exit 3",
+    "args": [
+      "--packages-only"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:d.e.f\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n",
+      "backups/2026-11-19_100000/disabled-by-us.txt": "a.b.c\t2026-11-19T10:05:00Z\nd.e.f\t2026-11-19T10:06:00Z\n",
+      "backups/2026-11-19_100000/restored.txt": "x.y.z\t2026-11-19T09:00:00Z\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "a.b.c",
+        "d.e.f"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity",
+      "disabled": [
+        "a.b.c",
+        "d.e.f"
+      ]
+    },
+    "expect": {
+      "exit": 3,
+      "adb_calls_include": [
+        "pm enable a.b.c",
+        "pm enable d.e.f"
+      ],
+      "stderr_contains": "could not be written"
+    },
+    "chmod": {
+      "backups/2026-11-19_100000/restored.txt": "444"
+    }
+  },
+  {
+    "script": "restore",
+    "name": "SC-34 TV goes offline right after pm enable: 21",
+    "args": [
+      "--packages-only"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:d.e.f\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n",
+      "backups/2026-11-19_100000/disabled-by-us.txt": "a.b.c\t2026-11-19T10:05:00Z\nd.e.f\t2026-11-19T10:06:00Z\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "a.b.c",
+        "d.e.f"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity",
+      "disabled": [
+        "a.b.c",
+        "d.e.f"
+      ],
+      "offline_after": 5
+    },
+    "expect": {
+      "exit": 21,
+      "stderr_contains": "Can't reach the TV"
+    }
+  },
+  {
+    "script": "restore",
+    "name": "SC-35 a logged app that is no longer installed is not counted",
+    "args": [
+      "--packages-only"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:d.e.f\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n",
+      "backups/2026-11-19_100000/disabled-by-us.txt": "x.y.z\t2026-11-19T10:05:00Z\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "a.b.c",
+        "d.e.f"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
+    },
+    "expect": {
+      "exit": 0,
+      "stdout_contains": [
+        "x.y.z is no longer installed",
+        "No apps needed turning back on."
+      ],
+      "files_absent": [
+        "backups/2026-11-19_100000/restored.txt"
+      ]
+    }
+  },
+  {
+    "script": "restore",
+    "name": "SC-35 a logged app that is on already is reported already on",
+    "args": [
+      "--packages-only"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:d.e.f\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n",
+      "backups/2026-11-19_100000/disabled-by-us.txt": "a.b.c\t2026-11-19T10:05:00Z\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "a.b.c",
+        "d.e.f"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
+    },
+    "expect": {
+      "exit": 0,
+      "stdout_contains": [
+        "a.b.c was already on."
+      ],
+      "adb_call_count": {
+        "pm enable": 0
+      }
+    }
+  },
+  {
+    "script": "restore",
+    "name": "PF-02 restore uses oldest home-state",
+    "args": [
+      "--home-only"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:d.e.f\npackage:com.google.android.apps.tv.launcherx\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n",
+      "backups/2026-11-18_090000/packages-all.txt": "package:a.b.c\npackage:d.e.f\npackage:com.google.android.apps.tv.launcherx\n",
+      "backups/2026-11-18_090000/packages-disabled.txt": "",
+      "backups/2026-11-18_090000/getprop.txt": "",
+      "backups/2026-11-18_090000/settings-global.txt": "",
+      "backups/2026-11-18_090000/settings-secure.txt": "",
+      "backups/2026-11-18_090000/settings-system.txt": "",
+      "backups/2026-11-18_090000/home-activity.txt": "",
+      "backups/2026-11-18_090000/tv-id.txt": "adb:192.168.1.50:5555\n",
+      "backups/2026-11-18_090000/home-state.txt": "stock_package=com.google.android.apps.tv.launcherx\nstock_component=com.google.android.apps.tv.launcherx/.MainActivity\nours=com.gathin.tvhome\n",
+      "backups/2026-11-19_100000/home-state.txt": "stock_package=com.gathin.tvhome\nstock_component=com.gathin.tvhome/.MainActivity\nours=com.gathin.tvhome\n",
+      "backups/2026-11-18_090000/installed-by-us.txt": "com.gathin.tvhome\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "a.b.c",
+        "d.e.f",
+        "com.google.android.apps.tv.launcherx",
+        "com.gathin.tvhome"
+      ],
+      "home": "com.gathin.tvhome/.MainActivity",
+      "disabled": [
+        "com.google.android.apps.tv.launcherx"
+      ]
+    },
+    "expect": {
+      "exit": 0,
+      "stdout_contains": [
+        "using the oldest record",
+        "(com.google.android.apps.tv.launcherx) is back as the Home screen."
+      ],
+      "adb_calls_include": [
+        "pm enable com.google.android.apps.tv.launcherx",
+        "disable-user --user 0 com.gathin.tvhome"
+      ],
+      "adb_call_count": {
+        "pm enable com.gathin.tvhome": 0
+      }
+    }
+  },
+  {
+    "script": "restore",
+    "name": "PA-03 stderr noise from adb never breaks the Home read-back",
+    "args": [
+      "--home-only"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:d.e.f\npackage:com.google.android.apps.tv.launcherx\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n",
+      "backups/2026-11-19_100000/home-state.txt": "stock_package=com.google.android.apps.tv.launcherx\nstock_component=com.google.android.apps.tv.launcherx/.MainActivity\nours=com.gathin.tvhome\n",
+      "backups/2026-11-19_100000/installed-by-us.txt": "com.gathin.tvhome\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "a.b.c",
+        "d.e.f",
+        "com.google.android.apps.tv.launcherx",
+        "com.gathin.tvhome"
+      ],
+      "home": "com.gathin.tvhome/.MainActivity",
+      "disabled": [
+        "com.google.android.apps.tv.launcherx"
+      ],
+      "stderr_noise": "WARNING: linker: libfoo.so has text relocations"
+    },
+    "expect": {
+      "exit": 0,
+      "stdout_contains": [
+        "is back as the Home screen."
+      ],
+      "adb_call_count": {
+        "disable-user": 1
+      }
+    }
+  },
+  {
+    "script": "disable-one",
+    "name": "PA-03 stderr noise from adb never breaks disable-one",
+    "args": [
+      "com.tcl.ad.service"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity",
+      "stderr_noise": "WARNING: linker: libfoo.so has text relocations"
+    },
+    "expect": {
+      "exit": 0,
+      "adb_call_count": {
+        "disable-user": 1
+      }
+    }
+  },
+  {
+    "script": "connect",
+    "name": "SC-40 TV_IP '10.0.0.9:5555' is refused",
+    "args": [],
+    "env": {
+      "TV_IP": "10.0.0.9:5555"
+    },
+    "tv": {
+      "state": "device"
+    },
+    "expect": {
+      "exit": 3,
+      "adb_call_count": {
+        "": 0
+      },
+      "stderr_contains": "TV_IP doesn't look like an address"
+    }
+  },
+  {
+    "script": "connect",
+    "name": "SC-40 TV_IP '   ' is refused",
+    "args": [],
+    "env": {
+      "TV_IP": "   "
+    },
+    "tv": {
+      "state": "device"
+    },
+    "expect": {
+      "exit": 3,
+      "adb_call_count": {
+        "": 0
+      },
+      "stderr_contains": "TV_IP doesn't look like an address"
+    }
+  },
+  {
+    "script": "connect",
+    "name": "SC-40 TV_IP '10.0.0 9' is refused",
+    "args": [],
+    "env": {
+      "TV_IP": "10.0.0 9"
+    },
+    "tv": {
+      "state": "device"
+    },
+    "expect": {
+      "exit": 3,
+      "adb_call_count": {
+        "": 0
+      },
+      "stderr_contains": "TV_IP doesn't look like an address"
+    }
+  },
+  {
+    "script": "connect",
+    "name": "SC-40 TV_IP '10.0.0.9;id' is refused",
+    "args": [],
+    "env": {
+      "TV_IP": "10.0.0.9;id"
+    },
+    "tv": {
+      "state": "device"
+    },
+    "expect": {
+      "exit": 3,
+      "adb_call_count": {
+        "": 0
+      },
+      "stderr_contains": "TV_IP doesn't look like an address"
+    }
+  },
+  {
+    "script": "connect",
+    "name": "SC-40 TV_IP 'fe80::1' is refused",
+    "args": [],
+    "env": {
+      "TV_IP": "fe80::1"
+    },
+    "tv": {
+      "state": "device"
+    },
+    "expect": {
+      "exit": 3,
+      "adb_call_count": {
+        "": 0
+      },
+      "stderr_contains": "TV_IP doesn't look like an address"
+    }
+  },
+  {
+    "script": "connect",
+    "name": "SC-40 TV_ADB_PORT abc is refused",
+    "args": [],
+    "env": {
+      "TV_IP": "10.0.0.9",
+      "TV_ADB_PORT": "abc"
+    },
+    "tv": {
+      "state": "device"
+    },
+    "expect": {
+      "exit": 3,
+      "adb_call_count": {
+        "": 0
+      },
+      "stderr_contains": "TV_ADB_PORT doesn't look like a port"
+    }
+  },
+  {
+    "script": "connect",
+    "name": "SC-40 bracketed IPv6 and host names are fine",
+    "args": [],
+    "env": {
+      "TV_IP": "[fe80::1]"
+    },
+    "tv": {
+      "state": "device"
+    },
+    "expect": {
+      "exit": 0,
+      "adb_calls_include": [
+        "connect [fe80::1]:5555"
+      ]
+    }
+  },
+  {
+    "script": "connect",
+    "name": "SC-41 quoted .env value with a trailing comment",
+    "args": [],
+    "env": {
+      "TV_IP": null
+    },
+    "tv": {
+      "state": "device"
+    },
+    "expect": {
+      "exit": 0,
+      "adb_calls_include": [
+        "connect 10.0.0.9:5555"
+      ]
+    },
+    "files": {
+      ".env": "TV_IP=\"10.0.0.9\" # my tv\n"
+    }
+  },
+  {
+    "script": "connect",
+    "name": "SC-41 unquoted .env value with a trailing comment",
+    "args": [],
+    "env": {
+      "TV_IP": null
+    },
+    "tv": {
+      "state": "device"
+    },
+    "expect": {
+      "exit": 0,
+      "adb_calls_include": [
+        "connect 10.0.0.9:6000"
+      ]
+    },
+    "files": {
+      ".env": "TV_IP=10.0.0.9   # my tv\nTV_ADB_PORT=6000\t# port\n"
     }
   }
 ]

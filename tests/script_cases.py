@@ -5,6 +5,10 @@ implementation whose shell is not installed is skipped (reported as skipped, nev
 silently passed). With zero cases the module defines no tests and passes.
 
 Case schema (see the plan): script, name, args, env (null = unset), files, tv, bin, expect.
+Extras: raw_files {path: hex bytes} for exact bytes (UTF-16, NUL, CR-only); chmod {path: "000"} applied
+after files are written (POSIX only: such a case is skipped on Windows, where chmod can't hide a file);
+then [{script, args, tv_update, expect}] runs more scripts in the same repo and TV state afterwards
+(tv_update is merged into the fake TV's state first; each step's adb log starts empty).
 """
 import json
 import os
@@ -20,6 +24,8 @@ HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 FAKE_ADB = HERE / "fake_adb.py"
 CASES_FILE = HERE / "refusal-cases.json"
+# Extra case files (same format), one per area, so separate areas can add cases without touching one file.
+EXTRA_CASES = sorted(HERE.glob("cases-*.json"))
 IS_WINDOWS = os.name == "nt"
 TIMEOUT_SECS = 60
 CONFIG_ENV = ("TV_IP", "TV_ADB_PORT", "TV_BACKUP_DIR", "ADB")  # never inherited from the dev's shell
@@ -112,7 +118,8 @@ def _path_without(path, names, farm_root):
 
 
 def run_case(case, impl_name, ext, argv_prefix, tmp):
-    """Run one case; returns (CompletedProcess, adb_lines, bin_lines, repo_dir)."""
+    """Run one case; returns (CompletedProcess, adb_lines, bin_lines, repo_dir, run_next).
+    run_next(step) runs one `then` step in the same repo and fake TV and returns the first four again."""
     tmp = Path(tmp)
     repo = tmp / "tv repo"
     repo.mkdir()
@@ -130,6 +137,12 @@ def run_case(case, impl_name, ext, argv_prefix, tmp):
         target.write_text(text, encoding="utf-8", newline="\n")
         if rel.endswith(".sh"):
             target.chmod(target.stat().st_mode | 0o111)
+    for rel, hexbytes in case.get("raw_files", {}).items():
+        target = repo / rel
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(bytes.fromhex(hexbytes))
+    for rel, mode in case.get("chmod", {}).items():
+        os.chmod(repo / rel, int(mode, 8))
 
     bindir = tmp / "fake bin" / "shims"  # a space in the path catches unquoted $ADB
     bindir.mkdir(parents=True)
@@ -158,7 +171,21 @@ def run_case(case, impl_name, ext, argv_prefix, tmp):
     script = repo / "scripts" / (case["script"] + ext)
     proc = subprocess.run(argv_prefix + [str(script)] + list(case.get("args", [])), cwd=repo, env=env,
                           capture_output=True, text=True, timeout=TIMEOUT_SECS)
-    return proc, read_lines(adb_log), read_lines(bin_log), repo
+    result = (proc, read_lines(adb_log), read_lines(bin_log), repo)
+
+    def run_next(step):
+        """A follow-up step: same repo, same fake TV (with tv_update merged in), fresh adb log."""
+        state = json.loads(state_file.read_text())
+        state.update(step.get("tv_update", {}))
+        state_file.write_text(json.dumps(state))
+        adb_log.write_text("")
+        bin_log.write_text("")
+        nxt = repo / "scripts" / (step["script"] + ext)
+        p = subprocess.run(argv_prefix + [str(nxt)] + list(step.get("args", [])), cwd=repo, env=env,
+                           capture_output=True, text=True, timeout=TIMEOUT_SECS)
+        return p, read_lines(adb_log), read_lines(bin_log), repo
+
+    return result + (run_next,)
 
 
 def _matches(repo, rel):
@@ -219,7 +246,10 @@ def check_expect(test, expect, proc, adb_lines, bin_lines, repo):
 
 
 def load_cases():
-    return json.loads(CASES_FILE.read_text(encoding="utf-8"))
+    cases = json.loads(CASES_FILE.read_text(encoding="utf-8"))
+    for extra in EXTRA_CASES:
+        cases += json.loads(extra.read_text(encoding="utf-8"))
+    return cases
 
 
 class ScriptCases(unittest.TestCase):
@@ -232,9 +262,22 @@ def _make_test(case, impl_name):
         require_shell(impl_name, argv_prefix)
         if argv_prefix is None:
             self.skipTest(f"{impl_name} is not installed")
+        if case.get("chmod") and IS_WINDOWS:
+            self.skipTest("chmod can't make a file unreadable on Windows")
+        if case.get("chmod") and hasattr(os, "geteuid") and os.geteuid() == 0:
+            self.skipTest("root can read any file, so chmod cases can't run as root")
         with tempfile.TemporaryDirectory() as tmp:
-            proc, adb_lines, bin_lines, repo = run_case(case, impl_name, ext, argv_prefix, tmp)
-            check_expect(self, case["expect"], proc, adb_lines, bin_lines, repo)
+            try:
+                proc, adb_lines, bin_lines, repo, run_next = run_case(case, impl_name, ext, argv_prefix, tmp)
+                check_expect(self, case["expect"], proc, adb_lines, bin_lines, repo)
+                for step in case.get("then", []):
+                    check_expect(self, step["expect"], *run_next(step))
+            finally:
+                for rel in case.get("chmod", {}):  # let the temp folder be deleted
+                    try:
+                        os.chmod(Path(tmp) / "tv repo" / rel, 0o755)
+                    except OSError:
+                        pass
     return test
 
 

@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 # Backs up the TV's package lists, properties and settings to TV_BACKUP_DIR/<YYYY-MM-DD_HHMMSS>/.
-# Read-only on the TV. Prints the backup folder as the last stdout line.
-# Exit: 0 done, 2 bad arguments, 3 setup missing, 20 TV refused / empty result, 21 unreachable, 22 unauthorized.
+# Read-only on the TV. Prints the backup folder as the last stdout line. Also records which TV it is
+# (tv-id.txt) so disable-one and restore never use one TV's backup on another.
+# Exit: 0 done, 2 bad arguments, 3 setup missing or the backup folder can't be written,
+#       20 TV refused / empty or error result (no folder kept), 21 unreachable, 22 unauthorized.
 . "$(dirname "$0")/lib/tv-env.sh"
 
 if [ "$#" -gt 0 ]; then
@@ -32,7 +34,11 @@ if [ -e "$final" ] || [ -e "$partial" ]; then
   done_ok=1   # do not delete a folder that is not ours
   exit 20
 fi
-mkdir -p "$partial" || exit 20
+if ! mkdir -p "$partial" 2>/dev/null; then
+  echo "Can't create the backup folder $partial. Check TV_BACKUP_DIR and its permissions." >&2
+  done_ok=1   # nothing of ours to clean up
+  exit 3
+fi
 
 # capture <file> <cmd...>: run on the TV, raw output into the partial folder.
 capture() {
@@ -51,12 +57,39 @@ capture settings-system.txt settings list system
 capture home-activity.txt cmd package resolve-activity --brief -a android.intent.action.MAIN -c android.intent.category.HOME
 capture packages-all.txt pm list packages   # last: its presence marks a complete capture
 
-if [ ! -s "$partial/packages-all.txt" ]; then
-  echo "The TV returned an empty package list; no backup was kept." >&2
+# list_ok <file> <need_one>: every non-empty line is a package: line (and, with need_one=1, there is one).
+list_ok() {
+  local content
+  content="$(cat "$1")" || return 1
+  tv_list_state "$content" "-"
+  [ "$?" -eq 2 ] && return 1
+  if [ "$2" -eq 1 ]; then
+    LC_ALL=C grep -q '^[[:space:]]*package:' "$1" || return 1
+  fi
+  return 0
+}
+if ! list_ok "$partial/packages-all.txt" 1; then
+  echo "The TV returned an empty package list or an error message instead of one; no backup was kept." >&2
+  exit 20
+fi
+if ! list_ok "$partial/packages-disabled.txt" 0; then
+  echo "The TV returned an error message instead of its list of switched-off apps; no backup was kept." >&2
   exit 20
 fi
 
-mv "$partial" "$final" || exit 20
+if ! tv_identity; then
+  echo "The TV didn't say which TV it is; no backup was kept." >&2
+  exit 20
+fi
+if ! printf '%s\n' "$TV_ID" > "$partial/tv-id.txt"; then
+  echo "Can't write $partial/tv-id.txt; no backup was kept." >&2
+  exit 3
+fi
+
+if ! mv "$partial" "$final"; then
+  echo "Can't finish the backup folder $final." >&2
+  exit 3
+fi
 done_ok=1
 echo "Backup saved"
 printf '%s\n' "$final"

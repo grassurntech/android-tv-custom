@@ -4,14 +4,20 @@
 # Before installing it records what Home is now in home-state.txt (stock_package=, stock_component=, ours=) and,
 # after a good install, lists our package in installed-by-us.txt, both in the newest backup folder (the one
 # disable-one and restore read). An existing home-state.txt is never overwritten: the stock values must survive.
+# If ANY backup already has a home-state.txt (a second session), Home is not read or recorded again: by then it
+# may already be our launcher, and the first record is the original stock launcher.
 # If upstream fails, it still asks the TV whether our package got installed and, if so, lists it, so restore
-# can always switch it off; upstream's exit code is passed up either way.
-# Optional, only when set in the environment: HOME_KEY_SERVICE=1, INPUT_KEY_SERVICE=1 (passed to upstream).
-# RESTORE_KEY_SERVICES is not supported in v1: -RestoreKeyServices is never passed. Upstream gets -TvHost <TV_IP>:<TV_ADB_PORT>.
-# Exit: 0 installed, 2 bad arguments, 3 setup missing (TV_IP, vendor or its venv not fetched, Home already ours
-#       with no recorded stock launcher, or Home is not a real launcher: the chooser `android`, setupwraith,
-#       RecoveryActivity or FallbackHome), 13 no usable backup, 20 Home could not be read, 21 unreachable,
-#       22 unauthorized; otherwise upstream's own exit code.
+# can always switch it off; if the TV can't answer (filtered and unfiltered package lists both fail) it lists it
+# anyway, with a warning. Upstream's exit code is passed up either way.
+# Optional, only when set in the environment: HOME_KEY_SERVICE and INPUT_KEY_SERVICE, each 0 or 1 (anything else
+# is exit 2); 1 passes -HomeKeyService / -InputKeyService, 0 or unset passes nothing. RESTORE_KEY_SERVICES is not
+# supported in v1: the child always gets RESTORE_KEY_SERVICES=0 and -RestoreKeyServices is never passed.
+# Upstream gets -TvHost <TV_IP>:<TV_ADB_PORT>.
+# Exit: 0 installed, 2 bad arguments or a key-service switch that isn't 0/1, 3 setup missing (TV_IP, vendor or
+#       its venv not fetched, APK missing or empty, Home already ours with no recorded stock launcher, Home
+#       ambiguous, or Home isn't a normal launcher: the chooser, a setup/provisioning/recovery screen,
+#       FallbackHome, or a protected or forbidden package), 13 no usable backup, 20 Home could not be read,
+#       21 unreachable, 22 unauthorized; otherwise upstream's own exit code.
 Set-StrictMode -Version 2
 $ErrorActionPreference = 'Stop'
 
@@ -21,6 +27,14 @@ if ($args.Count -gt 0) {
 }
 Import-Module (Join-Path $PSScriptRoot 'lib/TvEnv.psm1') -Force
 Import-TvEnv
+# Checked after Import-TvEnv, which may set them from the owner's settings file.
+foreach ($var in @('HOME_KEY_SERVICE', 'INPUT_KEY_SERVICE')) {
+    $val = [Environment]::GetEnvironmentVariable($var)
+    if (-not [string]::IsNullOrEmpty($val) -and $val -cne '0' -and $val -cne '1') {
+        [Console]::Error.WriteLine("$var must be 0 or 1 (it is '$val'). Nothing was changed.")
+        exit 2
+    }
+}
 
 $ours = 'com.gathin.tvhome'
 $pkgRe = '^[A-Za-z][A-Za-z0-9_]*(\.[A-Za-z0-9_]+)+\z'
@@ -41,8 +55,9 @@ if (-not (Test-Path -LiteralPath $upstream -PathType Leaf) -or
     [Console]::Error.WriteLine('cleanyourtv is not fetched yet (or its Python environment is missing). Run scripts/fetch-tools.ps1 first.')
     exit 3
 }
-if (-not (Test-Path -LiteralPath (Join-Path $launcher 'app/build/outputs/apk/release/app-release.apk') -PathType Leaf)) {
-    [Console]::Error.WriteLine('The launcher is not built yet. Run scripts/build-launcher.ps1 first.')
+$apk = Join-Path $launcher 'app/build/outputs/apk/release/app-release.apk'
+if (-not (Test-Path -LiteralPath $apk -PathType Leaf) -or (Get-Item -LiteralPath $apk).Length -le 0) {
+    [Console]::Error.WriteLine('The launcher is not built yet (no APK, or an empty one). Run scripts/build-launcher.ps1 first.')
     exit 3
 }
 
@@ -56,20 +71,47 @@ switch ($rc) {
 
 # Is there a home-state.txt already (in the newest backup, or in any older one)?
 $state = Join-Path $backup 'home-state.txt'
-$haveAny = $false
+$recorded = ''
 foreach ($folder in @(Get-TvBackups)) {
-    if (Test-Path -LiteralPath (Join-Path $folder 'home-state.txt') -PathType Leaf) { $haveAny = $true; break }
+    # newest first: the last hit is the oldest record
+    $f = Join-Path $folder 'home-state.txt'
+    if (Test-Path -LiteralPath $f -PathType Leaf) { $recorded = $f }
+}
+
+# Test-NotALauncher <component>: true if Home is something that must never be recorded as the launcher to restore to.
+function Test-NotALauncher([string]$Comp) {
+    $low = $Comp.ToLowerInvariant()
+    $lowPkg = $low
+    if ($low.Contains('/')) { $lowPkg = $low.Substring(0, $low.IndexOf('/')) }
+    if ($lowPkg -ceq 'android') { return $true }
+    foreach ($w in @('setupwizard', 'provision', 'initsetup', 'setupwraith')) {
+        if ($lowPkg.Contains($w)) { return $true }
+    }
+    foreach ($w in @('recoveryactivity', 'fallbackhome', 'resolveractivity', 'chooser')) {
+        if ($low.Contains($w)) { return $true }
+    }
+    if (-not $Comp.Contains('/')) { return $false }
+    $pkg = $Comp.Substring(0, $Comp.IndexOf('/'))
+    if (Test-TvMatches $pkg (Join-Path $global:REPO_ROOT 'config/protected-packages.txt')) { return $true }
+    if (Test-TvMatches $pkg (Join-Path $global:REPO_ROOT 'config/forbidden-packages.txt')) { return $true }
+    return $false
 }
 
 if (Test-Path -LiteralPath $state -PathType Leaf) {
-    Write-Host "Keeping the Home screen record already in $state"
+    Write-Output "Keeping the Home screen record already in $state"
+} elseif ($recorded) {
+    Write-Output "The original Home screen is already recorded in $recorded, so the current Home is not recorded again."
 } else {
     $lines = @(Invoke-TvShell cmd package resolve-activity --brief -a android.intent.action.MAIN -c android.intent.category.HOME 2>$null)
     $shellRc = $LASTEXITCODE
     $comp = ''
+    $nComp = 0
     foreach ($l in $lines) {
         $t = ([string]$l).Trim()
-        if ($t.Length -gt 0) { $comp = $t }
+        if ($t.Length -gt 0) {
+            $comp = $t
+            if ($t -cmatch $compRe) { $nComp++ }
+        }
     }
     $stock = ''
     if ($comp.Contains('/')) { $stock = $comp.Substring(0, $comp.IndexOf('/')) }
@@ -77,12 +119,13 @@ if (Test-Path -LiteralPath $state -PathType Leaf) {
         [Console]::Error.WriteLine('The TV did not say which launcher is the Home screen. Nothing was changed. Stopping.')
         exit 20
     }
+    if ($nComp -gt 1) {
+        [Console]::Error.WriteLine("The TV named more than one Home screen, so it isn't clear which launcher to restore to. Nothing was changed. Stopping.")
+        exit 3
+    }
     # Never record something that is not a real launcher as the one to restore to.
-    $low = $comp.ToLowerInvariant()
-    $lowPkg = $low
-    if ($low.Contains('/')) { $lowPkg = $low.Substring(0, $low.IndexOf('/')) }
-    if ($lowPkg -ceq 'android' -or $lowPkg.Contains('setupwraith') -or $low.Contains('recoveryactivity') -or $low.Contains('fallbackhome')) {
-        [Console]::Error.WriteLine("Home is not a real launcher right now ($comp): it is Android's chooser, the setup wizard or a recovery screen. Nothing was changed. Stopping.")
+    if (Test-NotALauncher $comp) {
+        [Console]::Error.WriteLine("Home isn't a normal launcher right now ($comp), so it is not a real launcher to restore to: it is Android's chooser, a setup, provisioning or recovery screen, or a system app. Nothing was changed. Stopping.")
         exit 3
     }
     if ($comp -cnotmatch $compRe -or $stock -cnotmatch $pkgRe) {
@@ -90,12 +133,8 @@ if (Test-Path -LiteralPath $state -PathType Leaf) {
         exit 20
     }
     if ($stock -ceq $ours) {
-        if ($haveAny) {
-            Write-Host 'Home is already our launcher; the original one is recorded in an earlier backup.'
-        } else {
-            [Console]::Error.WriteLine('Home is already our launcher and no original launcher was recorded, so there is nothing to restore to. Nothing was changed. Stopping.')
-            exit 3
-        }
+        [Console]::Error.WriteLine('Home is already our launcher and no original launcher was recorded, so there is nothing to restore to. Nothing was changed. Stopping.')
+        exit 3
     } else {
         $tmp = "$state.tmp"
         try {
@@ -106,13 +145,15 @@ if (Test-Path -LiteralPath $state -PathType Leaf) {
             [Console]::Error.WriteLine("Can't write $state. Nothing was changed. Stopping.")
             exit 3
         }
-        Write-Host "Recorded the current Home screen ($comp) in $state"
+        Write-Output "Recorded the current Home screen ($comp) in $state"
     }
 }
 
 # Native call: relax 'Stop' so upstream's stderr and non-zero exit pass through instead of throwing.
 $ErrorActionPreference = 'Continue'
 $env:SKIP_BUILD = '1'
+# RESTORE_KEY_SERVICES is unsupported in v1: force it off for the child, whatever the owner's environment says.
+$env:RESTORE_KEY_SERVICES = '0'
 # TV_HOST is IP:port (upstream's tools/tv.py accepts that form), so a custom TV_ADB_PORT reaches the TV.
 $env:TV_HOST = $global:SERIAL
 $shell = (Get-Process -Id $PID).Path
@@ -149,26 +190,34 @@ function Save-Ours {
         [System.IO.File]::AppendAllText($mine, "$prefix$ours`n", $utf8)
     }
 }
-# Test-TvHasOurs: true if the TV lists our package (exact line), false if not or if it could not answer.
-function Test-TvHasOurs {
+# Get-TvHasOurs: 0 if the TV lists our package (exact line), 1 if not, 2 if it could not answer (the filtered
+# list failed, and so did the unfiltered one).
+function Get-TvHasOurs {
     $ErrorActionPreference = 'Continue'
     $lines = @(Invoke-TvShell pm list packages $ours 2>$null)
-    if ($LASTEXITCODE -ne 0) { return $false }
-    foreach ($l in $lines) {
-        if (([string]$l).Trim() -ceq "package:$ours") { return $true }
+    if ($LASTEXITCODE -ne 0) {
+        $lines = @(Invoke-TvShell pm list packages 2>$null)
+        if ($LASTEXITCODE -ne 0) { return 2 }
     }
-    return $false
+    foreach ($l in $lines) {
+        if (([string]$l).Trim() -ceq "package:$ours") { return 0 }
+    }
+    return 1
 }
 
 if ($rc -ne 0) {
     [Console]::Error.WriteLine("The launcher install failed (exit $rc).")
-    if (Test-TvHasOurs) {
+    $has = Get-TvHasOurs
+    if ($has -eq 0) {
         Save-Ours
         [Console]::Error.WriteLine("Our launcher ($ours) is on the TV anyway, so it is listed in $mine and restore can switch it off.")
+    } elseif ($has -eq 2) {
+        Save-Ours
+        [Console]::Error.WriteLine("Warning: the TV could not say whether our launcher ($ours) got installed. It is listed in $mine anyway, so restore will try to switch it off.")
     }
     exit $rc
 }
 
 Save-Ours
-Write-Host "Our launcher is installed. Follow PROMPT.md Phase 6 for the next step."
+Write-Output "Our launcher is installed. Follow PROMPT.md Phase 6 for the next step."
 exit 0

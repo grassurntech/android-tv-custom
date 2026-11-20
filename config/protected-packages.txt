@@ -1,5 +1,7 @@
 # Packages that must NEVER be disabled. Anything that makes it a TV, or keeps it usable.
-# One glob pattern per line (fnmatch). Matching is case-insensitive.
+# One glob pattern per line (fnmatch). Matching is case-insensitive. A line starting with # is a comment;
+# the scripts also ignore anything after a space, tab or # on a pattern line, but keep reasons on their own
+# comment line above the pattern so every reader of this file sees the bare pattern.
 # Used by .claude/hooks/tv-safety.py, and must be used by any product script that disables packages.
 # Seed list: verify on a real device with `dumpsys package <name>` and add TCL-specific names as found.
 
@@ -21,6 +23,8 @@ com.android.webview
 com.google.android.webview
 com.android.keychain
 com.android.location*
+# Input device manager: keyboards, remotes and game controllers stop working without it
+com.android.inputdevices
 *setupwizard*
 *setupwraith*
 
@@ -32,11 +36,17 @@ com.android.tv.settings
 # ── Play Store & Play Services ──────────────────────────────────
 com.android.vending
 com.google.android.gms
+# Play Services sub-packages (e.g. com.google.android.gms.persistent)
+com.google.android.gms.*
 com.google.android.gsf
 com.google.android.gsf.*
 
 # ── HDMI inputs & tuner ─────────────────────────────────────────
 com.android.tv
+# TCL Live TV (the tuner app)
+com.tcl.tv
+# TCL system service that starts the TV's own services at boot
+com.tcl.xian.StartandroidService
 *tvinput*
 *tv.input*
 *hdmi*
@@ -46,6 +56,8 @@ com.android.tv
 *cec*
 
 # ── Remote & Bluetooth pairing ──────────────────────────────────
+# Google Assistant / voice search from the remote's microphone button
+com.google.android.katniss
 com.android.bluetooth
 *bluetooth*
 *remote*
