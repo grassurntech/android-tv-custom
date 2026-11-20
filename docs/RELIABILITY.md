@@ -20,5 +20,6 @@ There is no service to monitor. Reliability means the TV never ends up unusable.
 | 13 / 14 | No backup, or a backup from a different TV / package not in backup | Refused, nothing changed |
 | 20 | TV refused, didn't answer, or didn't confirm the change | Refused: nothing changed, no retry. Didn't confirm: the package is already in the undo log; stop and offer `restore` |
 | 21 / 22 | TV unreachable / debugging not allowed | `connect` once, then stop |
+| 21 (causes) | Seen on the first TCL session: the TV's IP isn't on its network screen, or `.env` points to another device; on macOS, Local Network privacy blocks the downloaded `adb` ("No route to host") while `ping`/`nc` still work | Diagnose once (PROMPT Phase 2, step 6): find the TV by its Cast name; owner allows the app in Local Network, or starts `adb` from Terminal |
 | 23 | `connect --check-off` only: debugging is still on | Owner turns off Network debugging; never press Allow |
 | 30 | Upstream download doesn't match the pinned commit | Deleted, nothing used |

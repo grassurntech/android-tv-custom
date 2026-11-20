@@ -30,7 +30,7 @@ On Google TV, the "Continue watching" and recommendation rows belong to the old 
 ## Tested on
 | TV | Android / Google TV | Status | Date |
 |---|---|---|---|
-| TCL (model to be confirmed in the first on-TV session) | To be confirmed | In testing | 2026-11-19 |
+| TCL, R51MT05 platform (Settings shows no model name on this firmware) | Google TV, Android 11 | In testing: connected and backed up | 2026-11-20 |
 
 Works on Android TV and Google TV sets. It does not work on Samsung, LG, Roku or Fire TV. Rows are added by pull requests from the ["Tested on my TV" issue form](https://github.com/grassurntech/android-tv-custom/issues/new?template=tested-on-my-tv.yml), so if it worked (or didn't) on yours, please tell us.
 
@@ -81,6 +81,16 @@ Leave Docker open while your AI tool works. The first build takes about 10 minut
 4. When your AI tool connects, an **"Allow debugging?"** box appears on the TV. Select **Allow**.
 
 Your AI tool switches debugging off again when it's finished, so your TV doesn't stay open on the network.
+
+### If your AI tool can't reach the TV
+- **You can't find the TV's IP address.** In Settings → Network & Internet, select the Wi-Fi network you're connected to (the name, not the switch), or try Settings → System → About → Status. You need the address with four numbers and dots, like `192.168.1.23` or `10.0.0.23`. An address starting with `fe80:` is a different kind and won't work. Still nothing? Look for the TV under "connected devices" in your router's app, or ask your AI tool to find it: on a Mac or Linux it can look up the TV by the name it uses for casting.
+- **There's only "USB debugging", no "Network debugging".** On many Google TV sets (TCL included), USB debugging also opens the network connection. After switching it on, restart the TV from Settings → System → Restart. Pressing the remote's power button only puts it to sleep.
+- **Mac: the AI tool says "No route to host".** macOS is blocking it from your home network. Open System Settings → Privacy & Security → Local Network, switch your AI app on, then quit it fully (Cmd+Q) and reopen it. If it still fails, open the Terminal app and run these two lines from this project's folder, then leave Terminal open while your AI tool works:
+  ```bash
+  tools/platform-tools/adb kill-server
+  tools/platform-tools/adb connect <your TV's IP>:5555
+  ```
+  Allow Terminal if macOS asks, and select **Allow** on the TV.
 
 ## Undo it
 One command puts your TV back as it was. Turn debugging back on first (see [Turn on developer mode](#turn-on-developer-mode-on-your-tv)), open a terminal in this project's folder, then run:

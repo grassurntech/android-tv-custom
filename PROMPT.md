@@ -226,9 +226,17 @@ Its "no longer installed" lines for apps and "Backups disagree … using the old
    - **Say:** "On the TV, open Settings → System → About. Scroll to 'Android TV OS build' (or just 'Build') and
      press OK on it 7 times, until it says you're a developer."
    - **Say:** "Go back to Settings → System → Developer options. Turn on USB debugging, and also Network
-     debugging or ADB debugging if you see it."
-   - **Say:** "Now open Settings → Network & Internet, choose your Wi-Fi, and tell me the IP address. It looks
-     like 192.168.1.23."
+     debugging or ADB debugging if you see it. If there's only USB debugging, that's fine: please restart the TV
+     from Settings → System → Restart, then check USB debugging is still on."
+   - **Say:** "Now open Settings → Network & Internet, select the Wi-Fi network you're connected to (the name,
+     not the switch), and tell me the IP address. It's four numbers with dots, like 192.168.1.23."
+   - If the owner can't find it, or only sees an address starting with `fe80:`, **Say:** "That one starts with
+     fe80, which is a different kind. Try Settings → System → About → Status, or your router's app under
+     connected devices." If that fails too, on a Mac or Linux find the TV by its casting name instead. Mac:
+     `dns-sd -B _googlecast._tcp local.` for a few seconds, then `dns-sd -L "<name>" _googlecast._tcp local.`
+     for its host name, then `dns-sd -G v4 <host name>` for the IP. Linux: `avahi-browse -rt _googlecast._tcp`.
+     Stop each one after a few seconds. Read back the IP and ask the owner to confirm it's this TV (another TV
+     or Chromecast in the home shows up the same way). Never search for or quote a serial number.
 4. Set up `.env` without opening it. Check only whether it exists (`test -e .env`, on Windows `Test-Path .env`).
    - If it doesn't exist, offer two ways and let the owner pick. Either they copy `.env.example` to `.env` and
      change the `TV_IP=` line to their IP themselves, or you create it once from `.env.example` with only that
@@ -239,8 +247,21 @@ Its "no longer installed" lines for apps and "Backups disagree … using the old
 5. **Say:** "Keep looking at the TV. A box saying 'Allow debugging?' will appear. Tick 'Always allow from this
    computer' and choose Allow." Then run `connect`. Expect 22 the first time. After the owner allows it, run it
    once more.
-6. If it keeps saying 21 and Developer options only offers "Wireless debugging" with a pairing code, stop.
-   **Say:** "This TV uses a newer kind of connection that this version doesn't handle yet. Nothing was changed."
+6. If it says 21 even after the owner's yes (row 21), find out why once before you stop. These checks only
+   read and never touch the TV's settings:
+   - **Wrong IP.** Mac/Linux: `ping -c 2 <ip>` and `nc -z -G 3 <ip> 5555` (Linux: `nc -z -w 3 <ip> 5555`). If
+     the address answers ping but the port is closed, it may be another device: find the TV by its casting
+     name (step 3) and compare. If the IP differs, the owner fixes the `TV_IP=` line themselves (Rule 6).
+   - **Mac blocks adb.** If the port is open but `adb connect <ip>:<port>` says "No route to host", macOS is
+     blocking this app from the home network. **Say:** "Your Mac is blocking me from your home network. Open
+     System Settings → Privacy & Security → Local Network, switch me on, then quit me fully with Cmd+Q and
+     reopen me." If it still says "No route to host" after that, **Say:** "Please open the Terminal app, go to
+     this project's folder, and run `tools/platform-tools/adb kill-server`, then
+     `tools/platform-tools/adb connect <ip>:<port>`. Allow Terminal if your Mac asks, choose Allow on the TV,
+     and leave Terminal open while we work." From then on, never run `adb kill-server` yourself: that would
+     stop the connection the owner's Terminal started.
+   - If Developer options only offers "Wireless debugging" with a pairing code, stop. **Say:** "This TV uses a
+     newer kind of connection that this version doesn't handle yet. Nothing was changed."
 
 **End of phase:** **Say:** "We're connected. Next I'll find out exactly which TV this is. That only reads
 information." Wait for yes.
