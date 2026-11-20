@@ -86,6 +86,11 @@ com.tcl.initsetup
 com.tcl.partnercustomizer
 com.tcl.android.webview
 com.tcl.versionUpdateApp
+# TCL system-uid services checked with dumpsys (2026-11-20): remote virtual-key and menu help, the Quick Panel
+# (picture/sound/inputs pop-up), and Safety Guard (permissions, uninstall service, memory manager)
+com.tcl.keyhelp
+com.tcl.suspension
+com.tcl.guard
 # Chromecast built-in (casting from phones)
 com.google.android.apps.mediashell
 *tvinput*

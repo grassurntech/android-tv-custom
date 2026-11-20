@@ -19,7 +19,7 @@
 | SC-07 | C | List file empty, or with no pattern lines | exit 3 | PASS (sh) | SC-07 (empty, comments only) |
 | SC-08 | M | `com.google.android.katniss`, `com.google.android.gms.*` sub-packages, `com.android.inputdevices`, `com.tcl.tv` (Live TV), `com.tcl.xian.StartandroidService` | refused as protected | PASS (sh) | SC-08 (five cases) |
 | SC-09 | — | Case variants (`COM.NETFLIX.NINJA`), CRLF lists, missing list, list is a directory, list is a `/dev/null` symlink | 11 / match / 3 / 3 / 3 | PASS | `tests/script_cases.py` |
-| SC-44 | H | Real TCL Google TV 11 (R51MT05) names from the first on-TV session: remote Bluetooth service `com.tcl.tcl_bt_rcu_service`, `com.tcl.autopair`, `com.tcl.system.server`, `com.tvos`, Chromecast built-in, an `overlay.modules` part; streaming `com.graymatrix.did` (ZEE5), `com.tubitv`, `com.esaba.downloader` | 10 for the first six, 11 for the last three | PASS (sh) 2026-11-20 | SC-44 (nine cases) |
+| SC-44 | H | Real TCL Google TV 11 (R51MT05) names from the first on-TV session: remote Bluetooth service `com.tcl.tcl_bt_rcu_service`, `com.tcl.autopair`, `com.tcl.system.server`, `com.tvos`, Chromecast built-in, an `overlay.modules` part, `com.tcl.keyhelp`, `com.tcl.suspension`, `com.tcl.guard`; streaming `com.graymatrix.did` (ZEE5), `com.tubitv`, `com.esaba.downloader` | 10 for the nine protected, 11 for the three streaming | PASS (sh) 2026-11-20 | SC-44 (twelve cases) |
 
 ## disable-one
 

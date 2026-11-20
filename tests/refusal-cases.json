@@ -5783,5 +5783,110 @@
         "": 0
       }
     }
+  },
+  {
+    "script": "disable-one",
+    "name": "SC-44 com.tcl.keyhelp is protected",
+    "args": [
+      "com.tcl.keyhelp"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
+    },
+    "expect": {
+      "exit": 10,
+      "adb_call_count": {
+        "": 0
+      }
+    }
+  },
+  {
+    "script": "disable-one",
+    "name": "SC-44 com.tcl.suspension is protected",
+    "args": [
+      "com.tcl.suspension"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
+    },
+    "expect": {
+      "exit": 10,
+      "adb_call_count": {
+        "": 0
+      }
+    }
+  },
+  {
+    "script": "disable-one",
+    "name": "SC-44 com.tcl.guard is protected",
+    "args": [
+      "com.tcl.guard"
+    ],
+    "env": {
+      "TV_IP": "192.168.1.50"
+    },
+    "files": {
+      "backups/2026-11-19_100000/packages-all.txt": "package:com.tcl.ad.service\npackage:com.android.systemui\npackage:com.netflix.ninja\n",
+      "backups/2026-11-19_100000/packages-disabled.txt": "",
+      "backups/2026-11-19_100000/getprop.txt": "",
+      "backups/2026-11-19_100000/settings-global.txt": "",
+      "backups/2026-11-19_100000/settings-secure.txt": "",
+      "backups/2026-11-19_100000/settings-system.txt": "",
+      "backups/2026-11-19_100000/home-activity.txt": "",
+      "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n"
+    },
+    "tv": {
+      "state": "device",
+      "packages": [
+        "com.tcl.ad.service",
+        "com.android.systemui",
+        "com.netflix.ninja"
+      ],
+      "home": "com.google.android.tvlauncher/.MainActivity"
+    },
+    "expect": {
+      "exit": 10,
+      "adb_call_count": {
+        "": 0
+      }
+    }
   }
 ]
