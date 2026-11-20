@@ -6,7 +6,7 @@
 
 | Item | Impact | Owner | Target fix |
 |---|---|---|---|
-| `config/protected-packages.txt` and `forbidden-packages.txt` are seed lists from standard Android names, not yet verified on a real TCL TV | A TCL-specific core package could go unprotected, or a factory app could go unlisted | Maintainers | First on-device session: run `pm list packages` and `dumpsys package`, add the TCL names |
+| The safety lists are verified on one TCL set only (Google TV 11, R51MT05, 2026-11-20; SC-44). Other TCL platforms and brands may use different system package names | A TCL or vendor core package on another model could go unprotected | Maintainers | Each new model: compare its package list with the lists before any disable, and add names via the "Tested on my TV" form |
 | `config/junk-packages.txt` is empty, so end-to-end tests use an invented junk set (IN-10) | E2E can't prove the real TCL clean-up list | Maintainers | First on-device session: seed it from `pm list packages` |
 | Every `.ps1` change from the 2026-11-19 QA fix round was written without PowerShell installed | Windows behaviour is unproven until CI runs | Maintainers | Green Windows and Ubuntu (pwsh) CI before merge |
 | `disable-one` takes back its own undo-log line on a refusal by rewriting the log; a second run appending at that exact moment could lose its line (SC-14 edge) | Rare lost undo record if two runs overlap | Maintainers | Lock file around the log, or keep refusals as a separate "refused" line |

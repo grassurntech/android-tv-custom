@@ -22,4 +22,18 @@ com.spotify.*
 tv.twitch.*
 com.sonyliv*
 com.zee5*
+# ZEE5's real Android TV package name
+com.graymatrix.did
 com.primevideo*
+# Seen on a TCL Google TV 11 (2026-11-20)
+ca.bellmedia.cravetv*
+ca.cbc.android.cbctv*
+com.dazn*
+com.discovery.*
+com.tubitv*
+com.google.android.videos
+com.mxtech.videoplayer.*
+# Apps owners commonly install themselves (downloader, browser, IPTV player): theirs to remove, not ours
+com.esaba.downloader
+com.tvwebbrowser.*
+com.mvas.stb.emu.*

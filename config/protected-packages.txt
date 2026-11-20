@@ -27,6 +27,36 @@ com.android.location*
 com.android.inputdevices
 *setupwizard*
 *setupwraith*
+# Android system parts seen on a TCL Google TV 11 (2026-11-20). Plumbing for apps, networking, backups and
+# updates: none is a clean-up target, so keep them out of reach.
+com.android.tethering.*
+com.android.localtransport
+com.android.proxyhandler
+com.android.pacprocessor
+com.android.captiveportallogin
+com.android.hotspot2.osulogin
+com.android.certinstaller
+com.android.se
+com.android.statementservice
+com.android.vpndialogs
+com.android.companiondevicemanager
+com.android.backupconfirm
+com.android.sharedstoragebackup
+com.android.wallpaperbackup
+com.android.dynsystem
+com.android.cts.ctsshim
+com.android.cts.priv.ctsshim
+com.google.android.ext.services
+com.google.android.ext.shared
+com.google.android.modulemetadata
+com.google.android.overlay.modules.*
+com.google.android.onetimeinitializer
+com.google.android.partnersetup
+com.google.android.sss.authbridge
+com.google.android.tv.frameworkpackagestubs
+# Accessibility: screen reader and text-to-speech
+com.google.android.marvin.talkback
+com.google.android.tts
 
 # ── Settings ────────────────────────────────────────────────────
 com.android.settings
@@ -47,6 +77,17 @@ com.android.tv
 com.tcl.tv
 # TCL system service that starts the TV's own services at boot
 com.tcl.xian.StartandroidService
+# TCL platform packages seen on a TCL Google TV 11, R51MT05 (2026-11-20): system server, the TV OS layer,
+# config store, first-run setup, region/partner customisation, TCL's web view and firmware updates
+com.tcl.system.server
+com.tvos
+com.tcl.providers.config
+com.tcl.initsetup
+com.tcl.partnercustomizer
+com.tcl.android.webview
+com.tcl.versionUpdateApp
+# Chromecast built-in (casting from phones)
+com.google.android.apps.mediashell
 *tvinput*
 *tv.input*
 *hdmi*
@@ -61,8 +102,10 @@ com.google.android.katniss
 com.android.bluetooth
 *bluetooth*
 *remote*
-*.rcu*
-*pairing*
+# Remote-control services: matches com.tcl.tcl_bt_rcu_service (underscore, so the old *.rcu* missed it)
+*rcu*
+# Pairing services: matches com.tcl.autopair as well as *pairing*
+*pair*
 
 # ── On-screen keyboard ──────────────────────────────────────────
 *inputmethod*

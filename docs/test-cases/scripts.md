@@ -2,7 +2,7 @@
 
 > **Purpose:** Unit and adversarial cases for `connect`, `backup`, `disable-one`, `restore` and `scripts/lib/tv-env`. Each runs against `tests/fake_adb.py` with a fresh repo copy and backup. Expected behaviour is the same for `.sh` and `.ps1` unless a row says otherwise.
 >
-> **Last updated:** 2026-11-19
+> **Last updated:** 2026-11-20
 >
 > **Result column:** "PASS (sh)" means the bash run passed locally; the same JSON case runs the `.ps1` in CI (Windows PowerShell 5.1 and pwsh on Ubuntu). pwsh is not installed on the dev machine, so every ps1 result below is unverified until CI runs. Cases that `chmod` a file are skipped on Windows and as root.
 
@@ -19,6 +19,7 @@
 | SC-07 | C | List file empty, or with no pattern lines | exit 3 | PASS (sh) | SC-07 (empty, comments only) |
 | SC-08 | M | `com.google.android.katniss`, `com.google.android.gms.*` sub-packages, `com.android.inputdevices`, `com.tcl.tv` (Live TV), `com.tcl.xian.StartandroidService` | refused as protected | PASS (sh) | SC-08 (five cases) |
 | SC-09 | — | Case variants (`COM.NETFLIX.NINJA`), CRLF lists, missing list, list is a directory, list is a `/dev/null` symlink | 11 / match / 3 / 3 / 3 | PASS | `tests/script_cases.py` |
+| SC-44 | H | Real TCL Google TV 11 (R51MT05) names from the first on-TV session: remote Bluetooth service `com.tcl.tcl_bt_rcu_service`, `com.tcl.autopair`, `com.tcl.system.server`, `com.tvos`, Chromecast built-in, an `overlay.modules` part; streaming `com.graymatrix.did` (ZEE5), `com.tubitv`, `com.esaba.downloader` | 10 for the first six, 11 for the last three | PASS (sh) 2026-11-20 | SC-44 (nine cases) |
 
 ## disable-one
 

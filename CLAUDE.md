@@ -96,4 +96,4 @@ Run this every time a PR is successfully committed and pushed. Do not skip it, a
 ## Status
 
 Project scaffold created 2026-11-18. Repo: `grassurntech/android-tv-custom` (remote `origin` via SSH), default branch `main`. Public, open source.
-v1 implementation (scripts, launcher theme, `PROMPT.md`, visitor docs) is on branch `feat/v1-tv-cleanup`, with a PR open into `main`. Milestones A–B, the prompt and QA round 1 (see `docs/test-cases/`) are done. On-TV testing started 2026-11-20 on a TCL Google TV 11 (R51MT05): connected and backed up; protected-list check is next.
+v1 implementation (scripts, launcher theme, `PROMPT.md`, visitor docs) is on branch `feat/v1-tv-cleanup`, with a PR open into `main`. Milestones A–B, the prompt and QA round 1 (see `docs/test-cases/`) are done. On-TV testing started 2026-11-20 on a TCL Google TV 11 (R51MT05): connected, backed up, and safety lists checked against its 138 packages (SC-44). Next: on-TV refusal checks (Phase 3), then seeding `config/junk-packages.txt`.
