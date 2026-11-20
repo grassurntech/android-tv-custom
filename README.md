@@ -91,6 +91,8 @@ Your AI tool switches debugging off again when it's finished, so your TV doesn't
   tools/platform-tools/adb connect <your TV's IP>:5555
   ```
   Allow Terminal if macOS asks, and select **Allow** on the TV.
+- **Mac: installing the home screen says "No route to host" even from Terminal.** The installer runs on Python, and Python from python.org relaunches itself as its own small app, which macOS blocks separately from Terminal. Switch **Python** on under System Settings → Privacy & Security → Local Network, then run the install and `push-theme` from Terminal (they are the two steps that use cleanyourtv's own connection, so the TV asks to "Allow debugging?" once more).
+- **Google TV: the new home screen installs but Home still opens Google TV.** Some sets (TCL Google TV included) keep Google TV's launcher as Home while it is switched on. Install with `HOME_KEY_SERVICE=1 STOCK_HOME_REDIRECT=1`: Google TV's launcher stays on, and a small helper sends the Home button to your new screen. The setup wizard is never switched off: on these sets it owns the saved Wi-Fi.
 
 ## Undo it
 One command puts your TV back as it was. Turn debugging back on first (see [Turn on developer mode](#turn-on-developer-mode-on-your-tv)), open a terminal in this project's folder, then run:

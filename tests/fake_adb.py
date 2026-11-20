@@ -21,6 +21,9 @@ State keys:
   props             {str: str}  values for `getprop <key>` (a missing key prints an empty line)
   junk_after_change bool  once a `pm disable-user` or `pm enable` has run, act as list_junk
   stderr_noise      str   if set, every shell command also prints this to stderr (exit code unchanged)
+  secure            {str: str}  `settings get/put secure <key>` (a missing key prints "null")
+  ignore_settings   bool  `settings put` exits 0 but changes nothing (firmware that drops the write)
+  appops            [str]  each `cmd appops set ...` and `appops write-settings` call is accepted and logged here
 """
 import json
 import os
@@ -30,7 +33,8 @@ import sys
 DEFAULTS = {"state": "device", "packages": [], "disabled": [], "refuse": [], "home": "", "getprop": "",
             "resolve_home": None, "refuse_home": False, "fail_list_filter": False,
             "fail_list_disabled": False, "list_junk": False, "offline_after": None, "calls": 0,
-            "props": {}, "junk_after_change": False, "stderr_noise": ""}
+            "props": {}, "junk_after_change": False, "stderr_noise": "", "secure": {},
+            "ignore_settings": False, "appops": []}
 
 
 def load():
@@ -131,6 +135,15 @@ def main(argv):
         print(state["props"].get(cmd[1], ""))
     elif cmd[:2] == ["settings", "list"] and len(cmd) == 3 and cmd[2] in ("global", "secure", "system"):
         print(f"fake_{cmd[2]}_setting=1")
+    elif cmd[:3] == ["settings", "get", "secure"] and len(cmd) == 4:
+        print(state["secure"].get(cmd[3], "null"))
+    elif cmd[:3] == ["settings", "put", "secure"] and len(cmd) in (4, 5):
+        if not state["ignore_settings"]:
+            state["secure"][cmd[3]] = cmd[4] if len(cmd) == 5 else ""
+            save(state)
+    elif (cmd[:3] == ["cmd", "appops", "set"] and len(cmd) == 6) or cmd == ["appops", "write-settings"]:
+        state["appops"].append(" ".join(cmd))
+        save(state)
     elif cmd[:3] == ["cmd", "package", "resolve-activity"] and cmd[-1].endswith("HOME"):
         print("priority=0 preferredOrder=0 match=0x108000 specificIndex=-1 isDefault=true")
         print(state["resolve_home"] if state["resolve_home"] is not None else state["home"])

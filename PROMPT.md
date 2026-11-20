@@ -144,8 +144,8 @@ Run every script from the project folder. On a Mac or Linux use the left column.
 `bash scripts/restore.sh --packages-only` only the apps (Windows: add the same option after `restore.ps1`). The photo tool is
 `.venv/bin/python scripts/make_theme.py` (Windows: `.venv\Scripts\python scripts\make_theme.py`).
 
-`install-launcher` reads two optional switches from the environment: `HOME_KEY_SERVICE=1` and
-`INPUT_KEY_SERVICE=1`. On a Mac or Linux, put them in front: `HOME_KEY_SERVICE=1 bash scripts/install-launcher.sh`.
+`install-launcher` reads optional switches from the environment: `HOME_KEY_SERVICE=1`, `INPUT_KEY_SERVICE=1` and
+`STOCK_HOME_REDIRECT=1`. On a Mac or Linux, put them in front: `HOME_KEY_SERVICE=1 bash scripts/install-launcher.sh`.
 On Windows, set `$env:HOME_KEY_SERVICE='1'` in PowerShell, run the usual line, then `Remove-Item Env:HOME_KEY_SERVICE`.
 Android switches these helpers off at every reinstall, so pass every switch that is on, every time you run it.
 On Windows, remove each one you set (`Remove-Item Env:INPUT_KEY_SERVICE` too) right after the run.
@@ -396,9 +396,9 @@ fix is `restore --home-only`, then install again. Never install over the existin
 
 **6.5 Install it.** **Say:** "Watch the TV: a second 'Allow debugging?' box may appear, because cleanyourtv's
 own tool connects with its own key. Tick 'Always allow' and choose Allow again." Run `install-launcher`, with
-`HOME_KEY_SERVICE=1` on the Google TV path and with no switches otherwise. It notes the current Home in
-`home-state.txt` in the backup folder (on a second visit it says the original is already recorded: fine),
-installs our app and tries to make it answer Home. Do the Home check at
+`HOME_KEY_SERVICE=1 STOCK_HOME_REDIRECT=1` on the Google TV path (Home stays Google TV's; the helper sends it to
+ours) and with no switches otherwise. It notes the current Home in `home-state.txt` (a second visit keeps the
+first record: fine), installs our app and tries to make it answer Home. Do the Home check at
 once. On 2, 3, 21 or 22, follow the table once; on any other non-zero code, follow the table and stop. Never
 improvise a fix. On the Google TV path, ask the owner to hold volume up again. If it now moves one step per
 press, **say:** "That's the side effect I mentioned: holding a button no longer repeats. If it bothers you, I

@@ -1,0 +1,15 @@
+{
+  "backups/2026-11-19_100000/getprop.txt": "",
+  "backups/2026-11-19_100000/home-activity.txt": "",
+  "backups/2026-11-19_100000/packages-all.txt": "package:a.b.c\npackage:com.google.android.apps.tv.launcherx\n",
+  "backups/2026-11-19_100000/packages-disabled.txt": "",
+  "backups/2026-11-19_100000/settings-global.txt": "",
+  "backups/2026-11-19_100000/settings-secure.txt": "",
+  "backups/2026-11-19_100000/settings-system.txt": "",
+  "backups/2026-11-19_100000/tv-id.txt": "adb:192.168.1.50:5555\n",
+  "backups/2026-11-19_100000/home-state.txt": "stock_package=com.google.android.apps.tv.launcherx\nstock_component=com.google.android.apps.tv.launcherx/.home.HomeActivity\nours=com.gathin.tvhome\n",
+  "vendor/cleanyourtv/launcher/app/build/outputs/apk/release/app-release.apk": "PK\u0003\u0004 fake apk\n",
+  "vendor/cleanyourtv/launcher/build-and-install.sh": "#!/usr/bin/env bash\n: > ran.txt\nhk=0; [ -n \"${HOME_KEY_SERVICE:-}\" ] && hk=1\necho \"upstream STOCK_LAUNCHER=$STOCK_LAUNCHER homekey=$hk\" >> \"$FAKE_BIN_LOG\"\nexit \"${FAKE_UPSTREAM_EXIT:-1}\"\n",
+  "vendor/cleanyourtv/launcher/build-and-install.ps1": "param([string]$TvHost, [string]$StockLauncher, [switch]$HomeKeyService, [switch]$InputKeyService)\nSet-Content -LiteralPath ran.txt -Value \"\"\n$hk = if ($HomeKeyService) { 1 } else { 0 }\nAdd-Content -LiteralPath $env:FAKE_BIN_LOG -Value \"upstream STOCK_LAUNCHER=$StockLauncher homekey=$hk\"\n$code = if ($env:FAKE_UPSTREAM_EXIT) { [int]$env:FAKE_UPSTREAM_EXIT } else { 1 }\nexit $code\n",
+  "vendor/cleanyourtv/tools/venv/pyvenv.cfg": "home = /usr/bin\n"
+}

@@ -128,7 +128,10 @@ def run_case(case, impl_name, ext, argv_prefix, tmp):
             shutil.copytree(ROOT / d, repo / d)
         else:
             (repo / d).mkdir()
-    for rel, text in case.get("files", {}).items():
+    files = case.get("files", {})
+    if isinstance(files, str) and files.startswith("@"):  # a shared file set: tests/fileset-<name>.json
+        files = json.loads((HERE / f"fileset-{files[1:]}.json").read_text(encoding="utf-8"))
+    for rel, text in files.items():
         target = repo / rel
         if text is None:  # null removes a file copied from the repo (e.g. a config list)
             target.unlink()

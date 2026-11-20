@@ -13,6 +13,15 @@
 # Optional, only when set in the environment: HOME_KEY_SERVICE and INPUT_KEY_SERVICE, each 0 or 1 (anything else
 # is exit 2); 1 is passed to upstream, 0 or unset is not. RESTORE_KEY_SERVICES is not supported in v1: upstream
 # always gets 0. Upstream gets TV_HOST=<TV_IP>:<TV_ADB_PORT>.
+# STOCK_HOME_REDIRECT=1 (needs HOME_KEY_SERVICE=1): Google TV redirect mode, for firmware where the stock launcher
+# keeps Home while it is enabled (set-home-activity says Success and changes nothing). Upstream then stops with 1
+# before it turns its helpers on. Only in that case, and only if our launcher is installed and Home still resolves
+# to the stock launcher recorded in home-state.txt, this script switches on HomeKeyService itself: the TCL
+# AUTO_START app-ops (persisted with appops write-settings), then our service added to the accessibility list
+# (other services kept; an already-listed one is cleared and written back so Android binds it again), then read
+# back. The theme's stock_home_redirect sends the stock home screen to ours. Nothing is ever disabled here, and
+# the setup wizard is never touched. Exit 0 when the read-back lists the helper, 20 if it doesn't (or the current
+# list holds anything but package/component characters, which is never rewritten), upstream's 1 otherwise.
 # Exit: 0 installed, 2 bad arguments or a key-service switch that isn't 0/1, 3 setup missing (TV_IP, vendor or
 #       its venv not fetched, APK missing or empty, Home already ours with no recorded stock launcher, Home
 #       ambiguous, or Home isn't a normal launcher: the chooser, a setup/provisioning/recovery screen,
@@ -39,6 +48,16 @@ for var in HOME_KEY_SERVICE INPUT_KEY_SERVICE; do
   esac
   [ "$val" = "1" ] || unset "$var"   # upstream treats any non-empty value as on
 done
+case "${STOCK_HOME_REDIRECT:-}" in
+  ''|0) REDIRECT=0 ;;
+  1)    REDIRECT=1 ;;
+  *) echo "STOCK_HOME_REDIRECT must be 0 or 1 (it is '$STOCK_HOME_REDIRECT'). Nothing was changed." >&2; exit 2 ;;
+esac
+unset STOCK_HOME_REDIRECT   # ours only: upstream never sees it
+if [ "$REDIRECT" = 1 ] && [ "${HOME_KEY_SERVICE:-}" != 1 ]; then
+  echo "STOCK_HOME_REDIRECT=1 needs HOME_KEY_SERVICE=1 (the helper that sends Home to the new launcher). Nothing was changed." >&2
+  exit 2
+fi
 
 backup="$(tv_latest_backup)"
 if [ -z "$backup" ]; then
@@ -171,6 +190,76 @@ EOT
   return 1
 }
 
+# read_home: prints the component Home resolves to now (the last component line), empty if the TV can't say.
+read_home() {
+  local out line comp=""
+  out="$(tv_shell cmd package resolve-activity --brief -a android.intent.action.MAIN -c android.intent.category.HOME </dev/null)" || return 0
+  while IFS= read -r line; do
+    line="${line%$'\r'}"
+    _tv_trim "$line"
+    [[ "$TV_TRIMMED" =~ $COMP_RE ]] && comp="$TV_TRIMMED"
+  done <<EOT
+$out
+EOT
+  printf '%s' "$comp"
+}
+# read_services: the accessibility service list, trimmed ("null" when none is set).
+read_services() {
+  local out
+  out="$(tv_shell settings get secure enabled_accessibility_services </dev/null)" || return 1
+  out="${out%%$'\n'*}"
+  out="${out%$'\r'}"
+  _tv_trim "$out"
+  printf '%s' "$TV_TRIMMED"
+}
+# redirect_home: STOCK_HOME_REDIRECT=1 after upstream's 1 (see the header). Returns 0, 1 or 20.
+redirect_home() {
+  local hs stock home cur new svc="$OURS/.HomeKeyService"
+  hs="$state"
+  [ -f "$hs" ] || hs="$recorded"
+  stock=""
+  if [ -n "$hs" ] && [ -f "$hs" ]; then
+    stock="$(sed -n 's/^stock_package=//p' "$hs" | tr -d '\r' | head -n 1)"
+  fi
+  if ! [[ "$stock" =~ $PKG_RE ]]; then
+    echo "No recorded original launcher, so redirect mode is not switched on. Home is unchanged." >&2
+    return 1
+  fi
+  home="$(read_home)"
+  if [ "${home%%/*}" != "$stock" ]; then
+    echo "Home is ${home:-unknown}, not the recorded launcher ($stock), so redirect mode is not switched on. Run restore --home-only and stop." >&2
+    return 1
+  fi
+  echo "Home stays on $stock, as Google TV insists. Switching on the Home helper so it sends Home to the new launcher."
+  # TCL firmware only binds an accessibility service of an app allowed to auto-start; other TVs ignore these ops.
+  tv_shell cmd appops set "$OURS" AUTO_START allow </dev/null >/dev/null 2>&1
+  tv_shell cmd appops set "$OURS" APP_AUTO_START allow </dev/null >/dev/null 2>&1
+  tv_shell appops write-settings </dev/null >/dev/null 2>&1
+  cur="$(read_services)" || cur="?"
+  if [ "$cur" != "null" ] && [ -n "$cur" ] && ! [[ "$cur" =~ ^[A-Za-z0-9_.\$/:]+$ ]]; then
+    echo "The TV's accessibility list holds something unexpected, so it is left alone and the Home helper is not switched on. Run restore --home-only and stop." >&2
+    return 20
+  fi
+  case ":$cur:" in
+    *":$svc:"*)   # listed already but maybe not bound: clear it, then write it back
+      new="$cur"
+      tv_shell settings put secure enabled_accessibility_services "''" </dev/null >/dev/null 2>&1
+      tv_shell settings put secure accessibility_enabled 0 </dev/null >/dev/null 2>&1 ;;
+    ":null:"|"::") new="$svc" ;;
+    *)            new="$cur:$svc" ;;
+  esac
+  tv_shell settings put secure enabled_accessibility_services "$new" </dev/null >/dev/null 2>&1
+  tv_shell settings put secure accessibility_enabled 1 </dev/null >/dev/null 2>&1
+  cur="$(read_services)" || cur=""
+  case ":$cur:" in
+    *":$svc:"*)
+      echo "Redirect mode is on: Home stays $stock, and the Home helper sends it to the new launcher. Push the theme next (it holds stock_home_redirect)."
+      return 0 ;;
+  esac
+  echo "The TV did not switch on the Home helper (its list reads '${cur:-nothing}'). Run restore --home-only and stop." >&2
+  return 20
+}
+
 # TV_HOST is IP:port (upstream's tools/tv.py accepts that form), so a custom TV_ADB_PORT reaches the TV.
 # RESTORE_KEY_SERVICES is unsupported in v1 and always 0, as in the .ps1 version (which never passes the switch).
 ( cd "$launcher" && TV_HOST="$SERIAL" SKIP_BUILD=1 STOCK_LAUNCHER=none RESTORE_KEY_SERVICES=0 bash ./build-and-install.sh )
@@ -182,6 +271,10 @@ if [ "$rc" -ne 0 ]; then
   if [ "$has" -eq 0 ]; then
     record_ours
     echo "Our launcher ($OURS) is on the TV anyway, so it is listed in $mine and restore can switch it off." >&2
+    if [ "$rc" -eq 1 ] && [ "$REDIRECT" = 1 ]; then
+      redirect_home
+      exit "$?"
+    fi
   elif [ "$has" -eq 2 ]; then
     record_ours
     echo "Warning: the TV could not say whether our launcher ($OURS) got installed. It is listed in $mine anyway, so restore will try to switch it off." >&2

@@ -13,6 +13,11 @@
 # is exit 2); 1 passes -HomeKeyService / -InputKeyService, 0 or unset passes nothing. RESTORE_KEY_SERVICES is not
 # supported in v1: the child always gets RESTORE_KEY_SERVICES=0 and -RestoreKeyServices is never passed.
 # Upstream gets -TvHost <TV_IP>:<TV_ADB_PORT>.
+# STOCK_HOME_REDIRECT=1 (needs HOME_KEY_SERVICE=1): Google TV redirect mode, the same as install-launcher.sh: after
+# upstream's 1, with our launcher installed and Home still on the stock launcher recorded in home-state.txt, it
+# switches on HomeKeyService itself (TCL AUTO_START app-ops, then the accessibility list, then a read-back). Never
+# disables anything, never touches the setup wizard. Exit 0 when the read-back lists the helper, 20 if it doesn't
+# (or the current list holds anything but package/component characters), upstream's 1 otherwise.
 # Exit: 0 installed, 2 bad arguments or a key-service switch that isn't 0/1, 3 setup missing (TV_IP, vendor or
 #       its venv not fetched, APK missing or empty, Home already ours with no recorded stock launcher, Home
 #       ambiguous, or Home isn't a normal launcher: the chooser, a setup/provisioning/recovery screen,
@@ -34,6 +39,17 @@ foreach ($var in @('HOME_KEY_SERVICE', 'INPUT_KEY_SERVICE')) {
         [Console]::Error.WriteLine("$var must be 0 or 1 (it is '$val'). Nothing was changed.")
         exit 2
     }
+}
+$redirectVal = [Environment]::GetEnvironmentVariable('STOCK_HOME_REDIRECT')
+if (-not [string]::IsNullOrEmpty($redirectVal) -and $redirectVal -cne '0' -and $redirectVal -cne '1') {
+    [Console]::Error.WriteLine("STOCK_HOME_REDIRECT must be 0 or 1 (it is '$redirectVal'). Nothing was changed.")
+    exit 2
+}
+$redirect = $redirectVal -ceq '1'
+[Environment]::SetEnvironmentVariable('STOCK_HOME_REDIRECT', $null)   # ours only: upstream never sees it
+if ($redirect -and [Environment]::GetEnvironmentVariable('HOME_KEY_SERVICE') -cne '1') {
+    [Console]::Error.WriteLine('STOCK_HOME_REDIRECT=1 needs HOME_KEY_SERVICE=1 (the helper that sends Home to the new launcher). Nothing was changed.')
+    exit 2
 }
 
 $ours = 'com.gathin.tvhome'
@@ -205,12 +221,87 @@ function Get-TvHasOurs {
     return 1
 }
 
+# Read-Services: the accessibility service list, trimmed ("null" when none is set); $null if the TV can't answer.
+function Read-Services {
+    $ErrorActionPreference = 'Continue'
+    $lines = @(Invoke-TvShell settings get secure enabled_accessibility_services 2>$null)
+    if ($LASTEXITCODE -ne 0 -or $lines.Count -eq 0) { return $null }
+    return ([string]$lines[0]).Trim()
+}
+# Invoke-Redirect: STOCK_HOME_REDIRECT=1 after upstream's 1 (see the header). Returns 0, 1 or 20.
+function Invoke-Redirect {
+    $ErrorActionPreference = 'Continue'
+    $svc = "$ours/.HomeKeyService"
+    $hs = $state
+    if (-not (Test-Path -LiteralPath $hs -PathType Leaf)) { $hs = $recorded }
+    $stock = ''
+    if ($hs -and (Test-Path -LiteralPath $hs -PathType Leaf)) {
+        foreach ($l in [System.IO.File]::ReadAllLines($hs)) {
+            $t = $l.TrimEnd("`r")
+            if ($t.StartsWith('stock_package=')) { $stock = $t.Substring(14); break }
+        }
+    }
+    if ($stock -cnotmatch $pkgRe) {
+        [Console]::Error.WriteLine('No recorded original launcher, so redirect mode is not switched on. Home is unchanged.')
+        return 1
+    }
+    $homeNow = ''
+    foreach ($l in @(Invoke-TvShell cmd package resolve-activity --brief -a android.intent.action.MAIN -c android.intent.category.HOME 2>$null)) {
+        $t = ([string]$l).Trim()
+        if ($t -cmatch $compRe) { $homeNow = $t }
+    }
+    $homeNowPkg = $homeNow
+    if ($homeNow.Contains('/')) { $homeNowPkg = $homeNow.Substring(0, $homeNow.IndexOf('/')) }
+    if ($homeNowPkg -cne $stock) {
+        $shown = if ($homeNow) { $homeNow } else { 'unknown' }
+        [Console]::Error.WriteLine("Home is $shown, not the recorded launcher ($stock), so redirect mode is not switched on. Run restore --home-only and stop.")
+        return 1
+    }
+    Write-Output "Home stays on $stock, as Google TV insists. Switching on the Home helper so it sends Home to the new launcher."
+    # TCL firmware only binds an accessibility service of an app allowed to auto-start; other TVs ignore these ops.
+    $null = Invoke-TvShell cmd appops set $ours AUTO_START allow 2>$null
+    $null = Invoke-TvShell cmd appops set $ours APP_AUTO_START allow 2>$null
+    $null = Invoke-TvShell appops write-settings 2>$null
+    $cur = Read-Services
+    if ($null -eq $cur) { $cur = '?' }
+    if ($cur -cne 'null' -and $cur.Length -gt 0 -and $cur -cnotmatch '^[A-Za-z0-9_.$/:]+\z') {
+        [Console]::Error.WriteLine("The TV's accessibility list holds something unexpected, so it is left alone and the Home helper is not switched on. Run restore --home-only and stop.")
+        return 20
+    }
+    if ((":$cur:").Contains(":$svc:")) {
+        # listed already but maybe not bound: clear it, then write it back
+        $new = $cur
+        $null = Invoke-TvShell settings put secure enabled_accessibility_services "''" 2>$null
+        $null = Invoke-TvShell settings put secure accessibility_enabled 0 2>$null
+    } elseif ($cur -ceq 'null' -or $cur.Length -eq 0) {
+        $new = $svc
+    } else {
+        $new = "$($cur):$svc"
+    }
+    $null = Invoke-TvShell settings put secure enabled_accessibility_services $new 2>$null
+    $null = Invoke-TvShell settings put secure accessibility_enabled 1 2>$null
+    $cur = Read-Services
+    if ($null -ne $cur -and (":$cur:").Contains(":$svc:")) {
+        Write-Output "Redirect mode is on: Home stays $stock, and the Home helper sends it to the new launcher. Push the theme next (it holds stock_home_redirect)."
+        return 0
+    }
+    $shown = if ($cur) { $cur } else { 'nothing' }
+    [Console]::Error.WriteLine("The TV did not switch on the Home helper (its list reads '$shown'). Run restore --home-only and stop.")
+    return 20
+}
+
 if ($rc -ne 0) {
     [Console]::Error.WriteLine("The launcher install failed (exit $rc).")
     $has = Get-TvHasOurs
     if ($has -eq 0) {
         Save-Ours
         [Console]::Error.WriteLine("Our launcher ($ours) is on the TV anyway, so it is listed in $mine and restore can switch it off.")
+        if ($rc -eq 1 -and $redirect) {
+            $out = @(Invoke-Redirect)
+            $code = $out[-1]
+            if ($out.Count -gt 1) { $out[0..($out.Count - 2)] | ForEach-Object { Write-Output $_ } }
+            exit $code
+        }
     } elseif ($has -eq 2) {
         Save-Ours
         [Console]::Error.WriteLine("Warning: the TV could not say whether our launcher ($ours) got installed. It is listed in $mine anyway, so restore will try to switch it off.")
