@@ -30,7 +30,7 @@ On Google TV, the "Continue watching" and recommendation rows belong to the old 
 ## Tested on
 | TV | Android / Google TV | Status | Date |
 |---|---|---|---|
-| TCL, R51MT05 platform (Settings shows no model name on this firmware) | Google TV, Android 11 | Clean-up works: 16 packages off, kept after reboot (home screen not yet tested) | 2026-11-20 |
+| TCL, R51MT05 platform (Settings shows no model name on this firmware) | Google TV, Android 11 | Works: 16 packages off; new home screen in redirect mode (Google TV's home flashes for a moment, then yours); held volume, app buttons, Input and Settings work; survives restart and standby | 2026-11-20 |
 
 Works on Android TV and Google TV sets. It does not work on Samsung, LG, Roku or Fire TV. Rows are added by pull requests from the ["Tested on my TV" issue form](https://github.com/grassurntech/android-tv-custom/issues/new?template=tested-on-my-tv.yml), so if it worked (or didn't) on yours, please tell us.
 

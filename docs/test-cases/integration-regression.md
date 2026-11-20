@@ -33,6 +33,8 @@ First session 2026-11-20: TCL Google TV 11, R51MT05, software V8-R51MT05-LF1V812
 | OT-02 | `disable-one` on the remote Bluetooth service, Netflix, the factory app and the current Home | 10 / 11 / 12 / 10, nothing sent to the TV | PASS |
 | OT-03 | disable the e-manual, owner check, `restore --packages-only` | off, TV fine, back on, 0 disabled | PASS |
 | OT-04 | the 16 packages in `config/junk-packages.txt`, in four batches, owner check after each, then reboot | all stay disabled; Home, Wi-Fi, tuner, HDMI/AV, volume and remote work | PASS (two reboots) |
+| OT-06 | New home screen on Google TV: `install-launcher` (upstream stops with 1, Home stays launcherx), then `STOCK_HOME_REDIRECT=1 HOME_KEY_SERVICE=1`, theme with `--key-filter false` | Home lands on ours | FAIL with `key_filter: false`: the helper redirected, then Google TV's home came back within 0.5 s; a Home press on Google TV's home stayed there (upstream #2779) |
+| OT-07 | Same, theme with `--key-filter true --consume-volume-keys` | Home lands on ours; held volume ramps; Netflix/YouTube/Prime, Input and Settings work | PASS; after a restart and after standby it lands on ours too (Google TV's home shows for about 2 s at boot, a split second on wake) |
 | OT-05 | Volume keys stopped working in every app after: 7 packages off → reboot → 5 more switched off live | — | NOT REPRODUCED: `restore` brought volume back; the same 12 off with and without a reboot, and all 16 off after a reboot, kept volume working. Watch for it; if it recurs, run `restore` and note the exact order |
 
 ## Regression: every past fix must have a test that fails when it is reverted
