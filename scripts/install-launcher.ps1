@@ -268,7 +268,7 @@ function Invoke-Redirect {
         [Console]::Error.WriteLine("The TV's accessibility list holds something unexpected, so it is left alone and the Home helper is not switched on. Run restore --home-only and stop.")
         return 20
     }
-    if ((":$cur:").Contains(":$svc:")) {
+    if ((":${cur}:").Contains(":${svc}:")) {
         # listed already but maybe not bound: clear it, then write it back
         $new = $cur
         $null = Invoke-TvShell settings put secure enabled_accessibility_services "''" 2>$null
@@ -281,7 +281,7 @@ function Invoke-Redirect {
     $null = Invoke-TvShell settings put secure enabled_accessibility_services $new 2>$null
     $null = Invoke-TvShell settings put secure accessibility_enabled 1 2>$null
     $cur = Read-Services
-    if ($null -ne $cur -and (":$cur:").Contains(":$svc:")) {
+    if ($null -ne $cur -and (":${cur}:").Contains(":${svc}:")) {
         Write-Output "Redirect mode is on: Home stays $stock, and the Home helper sends it to the new launcher. Push the theme next (it holds stock_home_redirect)."
         return 0
     }
