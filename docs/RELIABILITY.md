@@ -21,5 +21,6 @@ There is no service to monitor. Reliability means the TV never ends up unusable.
 | 20 | TV refused, didn't answer, or didn't confirm the change | Refused: nothing changed, no retry. Didn't confirm: the package is already in the undo log; stop and offer `restore` |
 | 21 / 22 | TV unreachable / debugging not allowed | `connect` once, then stop |
 | 21 (causes) | Seen on the first TCL session: the TV's IP isn't on its network screen, or `.env` points to another device; on macOS, Local Network privacy blocks the downloaded `adb` ("No route to host") while `ping`/`nc` still work | Diagnose once (PROMPT Phase 2, step 6): find the TV by its Cast name; owner allows the app in Local Network, or starts `adb` from Terminal |
+| — | Volume keys stopped working once on the first TCL session (OT-05), after a reboot followed by more live disables; not reproduced | `restore --packages-only` brought it back. Ask about volume in every owner check, not only the remote's arrows |
 | 23 | `connect --check-off` only: debugging is still on | Owner turns off Network debugging; never press Allow |
 | 30 | Upstream download doesn't match the pinned commit | Deleted, nothing used |

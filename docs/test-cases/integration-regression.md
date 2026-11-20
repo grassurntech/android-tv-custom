@@ -2,7 +2,7 @@
 
 > **Purpose:** End-to-end runs on a simulated TCL Google TV (fake adb plus docker and upstream shims), checks that every past `fix:` commit is guarded by a test, mutation spot-checks of safety lines, and `.sh` vs `.ps1` parity.
 >
-> **Last updated:** 2026-11-19
+> **Last updated:** 2026-11-20
 
 ## End-to-end (fake TV)
 
@@ -21,7 +21,19 @@ Every flow runs connect → backup → disable-one for each junk package (one pe
 | IN-07 | — | `resolve_home` mismatch (20 with the stay-on warning); `refuse_home` (20, ours disabled, stock on) | as stated | PASS | — |
 | IN-08 | — | `--packages-only` then `--home-only`; two backups; Google TV path with `HOME_KEY_SERVICE=1` | exact | PASS | — |
 | IN-09 | H | TV goes offline right after a `pm disable-user` (same as SC-12) | the package is in the undo log and `restore` turns it back on | PASS (sh) | `refusal-cases.json` "IN-09 SC-12" (two-step case) |
-| IN-10 | M | `config/junk-packages.txt` is empty, so E2E uses an invented junk set | a seeded junk list, or the E2E fixture checked in under `tests/` | DEFERRED: needs real TCL package names from the first on-TV session ([tech-debt-tracker](../exec-plans/tech-debt-tracker.md)) | — |
+| IN-10 | M | `config/junk-packages.txt` is empty, so E2E uses an invented junk set | a seeded junk list, or the E2E fixture checked in under `tests/` | PASS 2026-11-20: seeded with 16 names verified on a real TCL; never overlaps the safety lists | `tests/test_lists.py` |
+
+## On-TV runs (real TV, by hand)
+
+First session 2026-11-20: TCL Google TV 11, R51MT05, software V8-R51MT05-LF1V812, macOS host.
+
+| ID | Case | Expected | Result |
+|---|---|---|---|
+| OT-01 | `connect` → `backup` | connected; backup with 138 packages, 0 already disabled | PASS (after the IP and macOS Local Network fixes in README) |
+| OT-02 | `disable-one` on the remote Bluetooth service, Netflix, the factory app and the current Home | 10 / 11 / 12 / 10, nothing sent to the TV | PASS |
+| OT-03 | disable the e-manual, owner check, `restore --packages-only` | off, TV fine, back on, 0 disabled | PASS |
+| OT-04 | the 16 packages in `config/junk-packages.txt`, in four batches, owner check after each, then reboot | all stay disabled; Home, Wi-Fi, tuner, HDMI/AV, volume and remote work | PASS (two reboots) |
+| OT-05 | Volume keys stopped working in every app after: 7 packages off → reboot → 5 more switched off live | — | NOT REPRODUCED: `restore` brought volume back; the same 12 off with and without a reboot, and all 16 off after a reboot, kept volume working. Watch for it; if it recurs, run `restore` and note the exact order |
 
 ## Regression: every past fix must have a test that fails when it is reverted
 

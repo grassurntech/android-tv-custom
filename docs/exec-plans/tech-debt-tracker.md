@@ -7,7 +7,7 @@
 | Item | Impact | Owner | Target fix |
 |---|---|---|---|
 | The safety lists are verified on one TCL set only (Google TV 11, R51MT05, 2026-11-20; SC-44). Other TCL platforms and brands may use different system package names | A TCL or vendor core package on another model could go unprotected | Maintainers | Each new model: compare its package list with the lists before any disable, and add names via the "Tested on my TV" form |
-| `config/junk-packages.txt` is empty, so end-to-end tests use an invented junk set (IN-10) | E2E can't prove the real TCL clean-up list | Maintainers | First on-device session: seed it from `pm list packages` |
+| Volume keys stopped once after a reboot plus more live disables on the first TCL session (OT-05); not reproduced, cause unknown | A rare state where the owner loses volume until `restore` | Maintainers | If it recurs: record the exact order and `logcat -b events -d`, then bisect with reboots |
 | Every `.ps1` change from the 2026-11-19 QA fix round was written without PowerShell installed | Windows behaviour is unproven until CI runs | Maintainers | Green Windows and Ubuntu (pwsh) CI before merge |
 | `disable-one` takes back its own undo-log line on a refusal by rewriting the log; a second run appending at that exact moment could lose its line (SC-14 edge) | Rare lost undo record if two runs overlap | Maintainers | Lock file around the log, or keep refusals as a separate "refused" line |
 | ps1 backup-dir warning handles letter case but not symlinks (SC-42) | A symlinked backup dir inside the repo isn't warned about on Windows | Maintainers | Resolve the link target in `TvEnv.psm1` |

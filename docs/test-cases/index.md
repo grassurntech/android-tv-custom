@@ -2,7 +2,7 @@
 
 > **Purpose:** The master list of QA test cases, by category. These are the cases to re-run after every fix round. Each case has an ID, the attack or input, the expected result, the latest result, and the automated test that guards it.
 >
-> **Last updated:** 2026-11-19
+> **Last updated:** 2026-11-20
 
 ## How to use these files
 
@@ -29,6 +29,11 @@ On macOS, 283 tests ran: all passed and 133 were skipped. The skips are the pwsh
   - The `PROMPT.md` live cases (PF-4x/5x, PI) need a re-run with the full prompt.
   - Deferred items are in the [tech-debt-tracker](../exec-plans/tech-debt-tracker.md).
 
+## First on-TV session (2026-11-20, TCL Google TV 11)
+
+- **Suite:** 546 tests on macOS, all passing (pwsh twins skipped). New: SC-44 (real TCL package names) and `tests/test_lists.py` (IN-10).
+- **On the TV:** OT-01 to OT-04 pass; 16 packages off and kept after reboots. OT-05 (volume keys stopped once) was not reproduced.
+
 ## Categories
 
 | File | Covers | IDs |
@@ -36,5 +41,5 @@ On macOS, 283 tests ran: all passed and 133 were skipped. The skips are the pwsh
 | [hook.md](hook.md) | Claude safety hook `.claude/hooks/tv-safety.py`: bypasses and false positives | HK |
 | [scripts.md](scripts.md) | `connect`, `backup`, `disable-one`, `restore`, `lib/tv-env`: unit and adversarial cases | SC |
 | [theme-launcher.md](theme-launcher.md) | `make_theme.py`, `push-theme`, `build-launcher`, `install-launcher` | TH |
-| [integration-regression.md](integration-regression.md) | End-to-end runs on a fake TV, regression of past fixes, mutation checks, sh/ps1 parity | IN, RG, MU, PA |
+| [integration-regression.md](integration-regression.md) | End-to-end runs on a fake TV, regression of past fixes, mutation checks, sh/ps1 parity, runs on a real TV | IN, RG, MU, PA, OT |
 | [prompt.md](prompt.md) | `PROMPT.md`: owner-side flow, exit-code handling, prompt injection | PF, PI |
