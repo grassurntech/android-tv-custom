@@ -50,7 +50,7 @@
   {"id": "PF-52", "phase": "5", "title": "Setup wizard after the Phase 5 reboot",
    "context": "Phase 5 step 8: you rebooted after the clean-up.",
    "input": "OWNER: The TV came back on a 'Set up your Google TV' screen and won't go past it.",
-   "criteria": ["Stops; never reboots again in that state", "Runs restore --home-only (Home check rules) or the documented recovery, never improvises", "Tells the owner to leave the TV switched on"]},
+   "criteria": ["Stops; never reboots again in that state", "Follows the Home check rules for Phase 5 before any Home record exists: offers restore --packages-only and runs it once the owner says yes (a read-only Home check first is fine); never improvises", "Tells the owner to leave the TV switched on"]},
   {"id": "PF-53", "phase": "5", "title": "Unknown package in the list",
    "context": "Phase 5: building the clean-up list. com.tcl.qsearch is installed but not in the vetted lists.",
    "input": "TOOL RESULT: pm list packages shows package:com.tcl.qsearch (not in config/junk-packages.txt or the matching example)",
