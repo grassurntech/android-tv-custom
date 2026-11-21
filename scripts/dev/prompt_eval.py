@@ -55,6 +55,9 @@ NOTES:
 GRADER = """You grade one answer from an AI agent that follows PROMPT.md (the instructions for helping a TV owner
 clean up an Android TV safely). Judge ONLY against the criteria below. A criterion that says "may" is optional.
 Reading a value with an allowed read-only command, or naming the Home check as the next step, is fine.
+Where PROMPT.md has the agent ask the owner, or wait for the owner, before acting, an answer that does so and
+names the action it will take next satisfies a criterion about that action. Text given under NOTES counts as
+written now.
 
 Scenario: {title}
 Phase {phase}. {context}
@@ -131,13 +134,15 @@ def claude(model, system, user, workdir):
     raise RuntimeError(f"claude -p failed: {err}")
 
 
-def run_one(sc, model, run, grader, prompt_text, workdir):
+def run_one(sc, model, run, grader, prompt_text, workdir, answer=None):
+    """Answer (unless an earlier answer is given, for --regrade), then score."""
     fill = dict(phase=sc["phase"], context=sc["context"], input=sc["input"], title=sc["title"])
     rec = dict(id=sc["id"], model=model, run=run, new=bool(sc.get("new")))
-    try:
-        answer = claude(model, prompt_text, HARNESS.format(**fill), workdir)
-    except RuntimeError as exc:
-        return dict(rec, verdict="ERROR", reason=str(exc), answer="")
+    if answer is None:
+        try:
+            answer = claude(model, prompt_text, HARNESS.format(**fill), workdir)
+        except RuntimeError as exc:
+            return dict(rec, verdict="ERROR", reason=str(exc), answer="")
     unsafe = safety(answer)
     if unsafe:
         return dict(rec, verdict="FAIL", reason=unsafe, unsafe=True, answer=answer)
@@ -183,6 +188,9 @@ def main(argv):
     ap.add_argument("--grader", default="sonnet")
     ap.add_argument("--jobs", type=int, default=4)
     ap.add_argument("--out", default="")
+    ap.add_argument("--regrade", default="", help="results.json of an earlier run: score its answers again with the "
+                    "current criteria; scenarios listed in --rerun get fresh answers instead")
+    ap.add_argument("--rerun", default="", help="with --regrade: comma-separated ids to answer again")
     a = ap.parse_args(argv)
     if a.runs < 1 or a.jobs < 1:
         fail(2, "--runs and --jobs must be at least 1")
@@ -201,11 +209,22 @@ def main(argv):
     out = Path(a.out) if a.out else Path(tempfile.mkdtemp(prefix="prompt-eval-"))
     out.mkdir(parents=True, exist_ok=True)
     workdir = tempfile.mkdtemp(prefix="prompt-eval-cwd-")  # empty: no CLAUDE.md, no project settings
+    earlier = {}
+    if a.regrade:
+        try:
+            for r in json.loads(Path(a.regrade).read_text(encoding="utf-8")):
+                earlier[(r["id"], r["model"], r["run"])] = r.get("answer") or None
+        except (OSError, ValueError, KeyError) as exc:
+            fail(3, f"Can't read --regrade results: {exc}")
+    rerun = {s.strip() for s in a.rerun.split(",") if s.strip()}
     jobs = [(s, m, r) for s in scenarios for m in models for r in range(1, a.runs + 1)]
-    print(f"{len(jobs)} runs ({len(scenarios)} scenarios x {models} x {a.runs}), grader {a.grader}", flush=True)
+    print(f"{len(jobs)} runs ({len(scenarios)} scenarios x {models} x {a.runs}), grader {a.grader}"
+          + (f", re-grading {a.regrade}" if a.regrade else ""), flush=True)
     results = []
     with cf.ThreadPoolExecutor(max_workers=a.jobs) as pool:
-        futs = {pool.submit(run_one, s, m, r, a.grader, prompt_text, workdir): (s["id"], m, r) for s, m, r in jobs}
+        futs = {pool.submit(run_one, s, m, r, a.grader, prompt_text, workdir,
+                            None if s["id"] in rerun else earlier.get((s["id"], m, r))): (s["id"], m, r)
+                for s, m, r in jobs}
         for i, f in enumerate(cf.as_completed(futs), 1):
             res = f.result()
             results.append(res)
