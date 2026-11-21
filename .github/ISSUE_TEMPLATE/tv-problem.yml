@@ -1,0 +1,51 @@
+name: My TV did something unexpected
+description: Something went wrong, or looked wrong, while running the prompt.
+labels: ["tv-problem"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Please don't paste your IP address, serial number, photos or backup files.
+        Leave them out of everything below, including logs and `SUMMARY.md`. If the TV is stuck, leave it switched on and don't unplug it.
+  - type: input
+    id: model
+    attributes:
+      label: TV brand and model
+      placeholder: "e.g. TCL 55-inch (from the back label or Settings → System → About)"
+    validations:
+      required: true
+  - type: input
+    id: android
+    attributes:
+      label: Android version
+      placeholder: "e.g. Android 11"
+    validations:
+      required: true
+  - type: dropdown
+    id: google_tv
+    attributes:
+      label: Is it Google TV?
+      options: ["Yes (Google TV)", "No (older Android TV)", "Not sure"]
+    validations:
+      required: true
+  - type: dropdown
+    id: computer
+    attributes:
+      label: Your computer's operating system
+      options: ["Mac", "Windows", "Linux"]
+    validations:
+      required: true
+  - type: input
+    id: step
+    attributes:
+      label: Which step were you on?
+      placeholder: "e.g. Phase 6, installing the home screen"
+    validations:
+      required: true
+  - type: textarea
+    id: what_happened
+    attributes:
+      label: What happened?
+      description: What you saw on the TV and in the AI tool, in your own words. Include any exit code the script gave.
+    validations:
+      required: true

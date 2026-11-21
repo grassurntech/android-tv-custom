@@ -44,3 +44,8 @@ Thumbs.db
 # ── Logs ───────────────────────────────────────────────────────
 *.log
 logs/
+
+# ── Fetched/built locally, never committed ────────────────────
+/vendor/
+/tools/platform-tools/
+/.venv/

@@ -1,0 +1,36 @@
+# Packages the cleanup is allowed to disable (ads, trackers, bloat).
+# One package name per line, each followed by a `# reason` comment.
+# Never list anything protected, streaming or forbidden (tests/test_lists.py checks this).
+#
+# Verified 2026-11-20 on a TCL Google TV 11 (R51MT05, software V8-R51MT05-LF1V812): disabled one at a time in
+# four batches with an owner check after each (volume, remote, playback, Input key, Settings), then rebooted;
+# all stayed disabled, Home, Wi-Fi, the tuner and HDMI/AV inputs kept working. Most names also appear in
+# vendor/cleanyourtv/examples/tcl-g03-google-tv (same platform). Lines marked "our check" were not in that list:
+# we read their dumpsys before adding them.
+#
+# Not here on purpose (same TV): com.tcl.gallery and com.tcl.ui_mediaCenter hold TV_INPUT_HARDWARE on this
+# firmware; com.tcl.usercenter caused reboots on waking from standby on a sister model.
+
+# ---- Tracking and analytics ----
+com.tcl.bi                                  # TCL BI analytics
+com.google.android.feedback                 # crash / feedback reporting
+
+# ---- Ads, promos and recommendation rows ----
+com.tcl.dashboard                           # TCL promo dashboard
+com.tcl.messagebox                          # TCL promo messages
+com.tcl.esticker                            # sticker overlay
+com.tcl.waterfall.overseas                  # TCL web-video recommendation portal
+com.tcl.tv.plus                             # TCL TV+, front-end of the recommendation portal (our check)
+android.autoinstalls.config.google.gtvpai   # silently installs partner apps
+
+# ---- Preloaded extras ----
+com.tcl.ocean.instructions                  # e-manual
+org.chromium.webview_shell                  # WebView test browser
+com.google.android.syncadapters.calendar    # calendar sync, no calendar on a TV
+com.google.android.play.games               # Play Games
+com.android.camera2                         # camera app, no camera (our check)
+com.android.messaging                       # SMS app (our check)
+
+# ---- Owner's choice: free TCL channels (antenna/cable and HDMI are unaffected) ----
+com.tcl.channelplus                         # TCL Live FAST channels in the channel guide
+com.tcl.tv.tclchannel                       # TCL Channel promo content (our check)

@@ -1,3 +1,0 @@
-# design-system-reference-llms
-
-_Paste the vendor-provided llms.txt reference here. External reference material — update only when the upstream source changes._

@@ -1,5 +1,7 @@
 # Packages that must NEVER be disabled. Anything that makes it a TV, or keeps it usable.
-# One glob pattern per line (fnmatch). Matching is case-insensitive.
+# One glob pattern per line (fnmatch). Matching is case-insensitive. A line starting with # is a comment;
+# the scripts also ignore anything after a space, tab or # on a pattern line, but keep reasons on their own
+# comment line above the pattern so every reader of this file sees the bare pattern.
 # Used by .claude/hooks/tv-safety.py, and must be used by any product script that disables packages.
 # Seed list: verify on a real device with `dumpsys package <name>` and add TCL-specific names as found.
 
@@ -21,8 +23,40 @@ com.android.webview
 com.google.android.webview
 com.android.keychain
 com.android.location*
+# Input device manager: keyboards, remotes and game controllers stop working without it
+com.android.inputdevices
 *setupwizard*
 *setupwraith*
+# Android system parts seen on a TCL Google TV 11 (2026-11-20). Plumbing for apps, networking, backups and
+# updates: none is a clean-up target, so keep them out of reach.
+com.android.tethering.*
+com.android.localtransport
+com.android.proxyhandler
+com.android.pacprocessor
+com.android.captiveportallogin
+com.android.hotspot2.osulogin
+com.android.certinstaller
+com.android.se
+com.android.statementservice
+com.android.vpndialogs
+com.android.companiondevicemanager
+com.android.backupconfirm
+com.android.sharedstoragebackup
+com.android.wallpaperbackup
+com.android.dynsystem
+com.android.cts.ctsshim
+com.android.cts.priv.ctsshim
+com.google.android.ext.services
+com.google.android.ext.shared
+com.google.android.modulemetadata
+com.google.android.overlay.modules.*
+com.google.android.onetimeinitializer
+com.google.android.partnersetup
+com.google.android.sss.authbridge
+com.google.android.tv.frameworkpackagestubs
+# Accessibility: screen reader and text-to-speech
+com.google.android.marvin.talkback
+com.google.android.tts
 
 # ── Settings ────────────────────────────────────────────────────
 com.android.settings
@@ -32,11 +66,33 @@ com.android.tv.settings
 # ── Play Store & Play Services ──────────────────────────────────
 com.android.vending
 com.google.android.gms
+# Play Services sub-packages (e.g. com.google.android.gms.persistent)
+com.google.android.gms.*
 com.google.android.gsf
 com.google.android.gsf.*
 
 # ── HDMI inputs & tuner ─────────────────────────────────────────
 com.android.tv
+# TCL Live TV (the tuner app)
+com.tcl.tv
+# TCL system service that starts the TV's own services at boot
+com.tcl.xian.StartandroidService
+# TCL platform packages seen on a TCL Google TV 11, R51MT05 (2026-11-20): system server, the TV OS layer,
+# config store, first-run setup, region/partner customisation, TCL's web view and firmware updates
+com.tcl.system.server
+com.tvos
+com.tcl.providers.config
+com.tcl.initsetup
+com.tcl.partnercustomizer
+com.tcl.android.webview
+com.tcl.versionUpdateApp
+# TCL system-uid services checked with dumpsys (2026-11-20): remote virtual-key and menu help, the Quick Panel
+# (picture/sound/inputs pop-up), and Safety Guard (permissions, uninstall service, memory manager)
+com.tcl.keyhelp
+com.tcl.suspension
+com.tcl.guard
+# Chromecast built-in (casting from phones)
+com.google.android.apps.mediashell
 *tvinput*
 *tv.input*
 *hdmi*
@@ -46,11 +102,15 @@ com.android.tv
 *cec*
 
 # ── Remote & Bluetooth pairing ──────────────────────────────────
+# Google Assistant / voice search from the remote's microphone button
+com.google.android.katniss
 com.android.bluetooth
 *bluetooth*
 *remote*
-*.rcu*
-*pairing*
+# Remote-control services: matches com.tcl.tcl_bt_rcu_service (underscore, so the old *.rcu* missed it)
+*rcu*
+# Pairing services: matches com.tcl.autopair as well as *pairing*
+*pair*
 
 # ── On-screen keyboard ──────────────────────────────────────────
 *inputmethod*

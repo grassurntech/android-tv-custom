@@ -2,6 +2,8 @@
 
 > **Purpose:** Catalog of product specs with status. Add one line per spec.
 >
-> **Last updated:** 2026-11-18
+> **Last updated:** 2026-11-19
 
-_TBD — fill in as the project takes shape._
+| Spec | Status |
+|---|---|
+| [new-user-onboarding.md](new-user-onboarding.md) — the prompt's run from the owner's point of view | accepted |

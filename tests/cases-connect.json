@@ -1,0 +1,34 @@
+[
+  {
+    "script": "connect",
+    "name": "PF-01b check-off: TV still answers and trusts us means still ON (23)",
+    "args": ["--check-off"],
+    "env": {"TV_IP": "192.168.1.50"},
+    "tv": {"state": "device"},
+    "expect": {"exit": 23, "stderr_contains": "Debugging is still ON"}
+  },
+  {
+    "script": "connect",
+    "name": "PF-01b check-off: TV answers but no longer trusts us is still ON (23), never Allow",
+    "args": ["--check-off"],
+    "env": {"TV_IP": "192.168.1.50"},
+    "tv": {"state": "unauthorized"},
+    "expect": {"exit": 23, "stderr_contains": "Do not press Allow"}
+  },
+  {
+    "script": "connect",
+    "name": "PF-01b check-off: TV no longer answers means OFF (0)",
+    "args": ["--check-off"],
+    "env": {"TV_IP": "192.168.1.50"},
+    "tv": {"state": "offline"},
+    "expect": {"exit": 0, "stdout_contains": "Debugging is OFF"}
+  },
+  {
+    "script": "connect",
+    "name": "PF-01b check-off: unknown argument is exit 2",
+    "args": ["--check"],
+    "env": {"TV_IP": "192.168.1.50"},
+    "tv": {"state": "device"},
+    "expect": {"exit": 2}
+  }
+]

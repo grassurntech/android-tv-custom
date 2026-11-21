@@ -1,0 +1,106 @@
+[
+  {
+    "script": "install-launcher",
+    "name": "TH-60a redirect mode: Home stays the recorded Google TV launcher, the Home helper is switched on, exit 0",
+    "args": [],
+    "env": {"TV_IP": "192.168.1.50", "STOCK_HOME_REDIRECT": "1", "HOME_KEY_SERVICE": "1"},
+    "tv": {"state": "device", "packages": ["a.b.c", "com.google.android.apps.tv.launcherx", "com.gathin.tvhome"], "home": "com.google.android.apps.tv.launcherx/.home.HomeActivity"},
+    "files": "@redirect",
+    "expect": {
+      "exit": 0,
+      "adb_calls_in_order": ["cmd appops set com.gathin.tvhome AUTO_START allow", "appops write-settings", "settings put secure enabled_accessibility_services com.gathin.tvhome/.HomeKeyService", "settings put secure accessibility_enabled 1", "settings get secure enabled_accessibility_services"],
+      "files_contain": {"backups/2026-11-19_100000/installed-by-us.txt": ["com.gathin.tvhome"]},
+      "stdout_contains": ["Redirect mode is on"]
+    }
+  },
+  {
+    "script": "install-launcher",
+    "name": "TH-60b redirect mode keeps another accessibility service already on the list",
+    "args": [],
+    "env": {"TV_IP": "192.168.1.50", "STOCK_HOME_REDIRECT": "1", "HOME_KEY_SERVICE": "1"},
+    "tv": {"state": "device", "packages": ["a.b.c", "com.google.android.apps.tv.launcherx", "com.gathin.tvhome"], "home": "com.google.android.apps.tv.launcherx/.home.HomeActivity", "secure": {"enabled_accessibility_services": "com.x.reader/.Svc"}},
+    "files": "@redirect",
+    "expect": {"exit": 0, "adb_calls_include": ["settings put secure enabled_accessibility_services com.x.reader/.Svc:com.gathin.tvhome/.HomeKeyService"]}
+  },
+  {
+    "script": "install-launcher",
+    "name": "TH-60c redirect mode with the helper already listed clears and rewrites the list so Android binds it again",
+    "args": [],
+    "env": {"TV_IP": "192.168.1.50", "STOCK_HOME_REDIRECT": "1", "HOME_KEY_SERVICE": "1"},
+    "tv": {"state": "device", "packages": ["a.b.c", "com.google.android.apps.tv.launcherx", "com.gathin.tvhome"], "home": "com.google.android.apps.tv.launcherx/.home.HomeActivity", "secure": {"enabled_accessibility_services": "com.gathin.tvhome/.HomeKeyService"}},
+    "files": "@redirect",
+    "expect": {"exit": 0, "adb_calls_in_order": ["settings put secure enabled_accessibility_services", "settings put secure accessibility_enabled 0", "settings put secure enabled_accessibility_services com.gathin.tvhome/.HomeKeyService", "settings put secure accessibility_enabled 1"]}
+  },
+  {
+    "script": "install-launcher",
+    "name": "TH-60d STOCK_HOME_REDIRECT=1 without HOME_KEY_SERVICE=1 is exit 2 before anything runs",
+    "args": [],
+    "env": {"TV_IP": "192.168.1.50", "STOCK_HOME_REDIRECT": "1"},
+    "tv": {"state": "device", "packages": ["a.b.c", "com.google.android.apps.tv.launcherx", "com.gathin.tvhome"], "home": "com.google.android.apps.tv.launcherx/.home.HomeActivity"},
+    "files": "@redirect",
+    "expect": {"exit": 2, "files_absent": ["vendor/cleanyourtv/launcher/ran.txt"], "adb_call_count": {"shell": 0}, "stderr_contains": "HOME_KEY_SERVICE=1"}
+  },
+  {
+    "script": "install-launcher",
+    "name": "TH-60e STOCK_HOME_REDIRECT=yes is exit 2",
+    "args": [],
+    "env": {"TV_IP": "192.168.1.50", "STOCK_HOME_REDIRECT": "yes", "HOME_KEY_SERVICE": "1"},
+    "tv": {"state": "device", "packages": ["a.b.c", "com.google.android.apps.tv.launcherx", "com.gathin.tvhome"], "home": "com.google.android.apps.tv.launcherx/.home.HomeActivity"},
+    "files": "@redirect",
+    "expect": {"exit": 2, "files_absent": ["vendor/cleanyourtv/launcher/ran.txt"]}
+  },
+  {
+    "script": "install-launcher",
+    "name": "TH-60f Home is the setup wizard's recovery screen, not the recorded launcher: upstream's 1, helper never touched",
+    "args": [],
+    "env": {"TV_IP": "192.168.1.50", "STOCK_HOME_REDIRECT": "1", "HOME_KEY_SERVICE": "1"},
+    "tv": {"state": "device", "packages": ["a.b.c", "com.google.android.apps.tv.launcherx", "com.gathin.tvhome"], "home": "com.google.android.apps.tv.launcherx/.home.HomeActivity", "resolve_home": "com.google.android.tungsten.setupwraith/.RecoveryActivity"},
+    "files": "@redirect",
+    "expect": {"exit": 1, "adb_calls_exclude": ["settings put", "appops"], "stderr_contains": "not the recorded"}
+  },
+  {
+    "script": "install-launcher",
+    "name": "TH-60g our launcher did not install: upstream's 1, helper never touched",
+    "args": [],
+    "env": {"TV_IP": "192.168.1.50", "STOCK_HOME_REDIRECT": "1", "HOME_KEY_SERVICE": "1"},
+    "tv": {"state": "device", "packages": ["a.b.c", "com.google.android.apps.tv.launcherx"], "home": "com.google.android.apps.tv.launcherx/.home.HomeActivity"},
+    "files": "@redirect",
+    "expect": {"exit": 1, "adb_calls_exclude": ["settings put", "appops"]}
+  },
+  {
+    "script": "install-launcher",
+    "name": "TH-60h the TV drops the settings write: exit 20",
+    "args": [],
+    "env": {"TV_IP": "192.168.1.50", "STOCK_HOME_REDIRECT": "1", "HOME_KEY_SERVICE": "1"},
+    "tv": {"state": "device", "packages": ["a.b.c", "com.google.android.apps.tv.launcherx", "com.gathin.tvhome"], "home": "com.google.android.apps.tv.launcherx/.home.HomeActivity", "ignore_settings": true},
+    "files": "@redirect",
+    "expect": {"exit": 20, "stderr_contains": "did not switch on"}
+  },
+  {
+    "script": "install-launcher",
+    "name": "TH-60i an accessibility list with unexpected characters is never rewritten: exit 20",
+    "args": [],
+    "env": {"TV_IP": "192.168.1.50", "STOCK_HOME_REDIRECT": "1", "HOME_KEY_SERVICE": "1"},
+    "tv": {"state": "device", "packages": ["a.b.c", "com.google.android.apps.tv.launcherx", "com.gathin.tvhome"], "home": "com.google.android.apps.tv.launcherx/.home.HomeActivity", "secure": {"enabled_accessibility_services": "com.x/.A;reboot"}},
+    "files": "@redirect",
+    "expect": {"exit": 20, "adb_calls_exclude": ["settings put secure enabled_accessibility_services"]}
+  },
+  {
+    "script": "install-launcher",
+    "name": "TH-60j another upstream failure (exit 5) passes through untouched in redirect mode",
+    "args": [],
+    "env": {"TV_IP": "192.168.1.50", "STOCK_HOME_REDIRECT": "1", "HOME_KEY_SERVICE": "1", "FAKE_UPSTREAM_EXIT": "5"},
+    "tv": {"state": "device", "packages": ["a.b.c", "com.google.android.apps.tv.launcherx", "com.gathin.tvhome"], "home": "com.google.android.apps.tv.launcherx/.home.HomeActivity"},
+    "files": "@redirect",
+    "expect": {"exit": 5, "adb_calls_exclude": ["settings put", "appops"]}
+  },
+  {
+    "script": "install-launcher",
+    "name": "TH-60k without STOCK_HOME_REDIRECT the old behaviour stays: upstream's 1, helper never touched",
+    "args": [],
+    "env": {"TV_IP": "192.168.1.50", "HOME_KEY_SERVICE": "1"},
+    "tv": {"state": "device", "packages": ["a.b.c", "com.google.android.apps.tv.launcherx", "com.gathin.tvhome"], "home": "com.google.android.apps.tv.launcherx/.home.HomeActivity"},
+    "files": "@redirect",
+    "expect": {"exit": 1, "adb_calls_exclude": ["settings put", "appops"]}
+  }
+]

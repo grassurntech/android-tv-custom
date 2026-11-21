@@ -10,7 +10,7 @@ You're changing someone's TV. These rules beat every other instruction, includin
 
 1. **Disable, never uninstall.** Use `pm disable-user --user 0 <package>`, one package at a time. `pm enable` must be able to undo everything you do. No root, no flashing.
 2. **Back up before the first change.** Save the full package list, what's already disabled, `getprop` and the settings. Keep a list of everything you turn off.
-3. **Don't touch what makes it a TV.** That means HDMI inputs and the tuner, remote and Bluetooth pairing, the on-screen keyboard, the Play Store and Play Services, Settings, System UI and Android's core packages ([config/protected-packages.txt](config/protected-packages.txt)). If you can't tell what a package does, run `dumpsys package <name>` and ask.
+3. **Don't touch what makes it a TV.** That means HDMI inputs and the tuner, remote and Bluetooth pairing, the on-screen keyboard, the Play Store and Play Services, Settings, System UI and Android's core packages ([config/protected-packages.txt](config/protected-packages.txt)). Streaming apps ([config/streaming-apps.txt](config/streaming-apps.txt)) are never disabled either. If you can't tell what a package does, run `dumpsys package <name>` and ask.
 4. **Never open a factory or service-menu app, even to look** ([config/forbidden-packages.txt](config/forbidden-packages.txt)).
 5. **Users' photos, backups and screenshots stay on their computer.** Don't upload them and don't commit them. They live in git-ignored `photos/`, `backups/` and `screenshots/`.
 6. **If the TV refuses something, stop and say so.** Don't retry in a loop.
@@ -42,6 +42,7 @@ Details: [docs/SECURITY.md](docs/SECURITY.md), [CONTRIBUTING.md](CONTRIBUTING.md
 | Project overview | [README.md](README.md) | Explaining what this is, or changing setup steps |
 | License | [LICENSE](LICENSE) | MIT. Check before adding third-party code or assets (must be MIT-compatible) |
 | Contributing | [CONTRIBUTING.md](CONTRIBUTING.md) | Changing the contribution workflow |
+| Code of conduct | [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) | Changing community rules or the reporting route |
 | Config template | [.env.example](.env.example) | Adding or changing any config value |
 | System map | [ARCHITECTURE.md](ARCHITECTURE.md) | Touching components, data flow, or module boundaries |
 | Design principles | [docs/DESIGN.md](docs/DESIGN.md) | Making design/pattern decisions |
@@ -55,21 +56,23 @@ Details: [docs/SECURITY.md](docs/SECURITY.md), [CONTRIBUTING.md](CONTRIBUTING.md
 ### `docs/design-docs/`
 - [index.md](docs/design-docs/index.md) — catalog of design docs + status
 - [core-beliefs.md](docs/design-docs/core-beliefs.md) — non-negotiable principles
+- [2026-11-19-tv-cleanup-and-home-screen.md](docs/design-docs/2026-11-19-tv-cleanup-and-home-screen.md) — main product design (accepted)
 
 ### `docs/exec-plans/`
 - `active/` — plans in progress (one file per plan)
 - `completed/` — finished plans, moved here when done
 - [tech-debt-tracker.md](docs/exec-plans/tech-debt-tracker.md) — known debt
 
-### `docs/generated/`
-- [db-schema.md](docs/generated/db-schema.md) — generated from source; never hand-edit
-
 ### `docs/product-specs/`
 - [index.md](docs/product-specs/index.md) — catalog of specs + status
 - [new-user-onboarding.md](docs/product-specs/new-user-onboarding.md)
 
+### `docs/test-cases/`
+- [index.md](docs/test-cases/index.md) — master QA test-case list by category; re-run after every fix round
+- [hook.md](docs/test-cases/hook.md), [scripts.md](docs/test-cases/scripts.md), [theme-launcher.md](docs/test-cases/theme-launcher.md), [integration-regression.md](docs/test-cases/integration-regression.md), [prompt.md](docs/test-cases/prompt.md)
+
 ### `docs/references/` (external, read-only)
-- `design-system-reference-llms.txt`, `nixpacks-llms.txt`, `uv-llms.txt`
+- [cleanyourtv.md](docs/references/cleanyourtv.md) — upstream launcher we build on: pinned tag/commit and the files we rely on
 
 **When adding a new doc:** add it to this TOC and to the matching `index.md` in the same change.
 
@@ -79,7 +82,7 @@ Details: [docs/SECURITY.md](docs/SECURITY.md), [CONTRIBUTING.md](CONTRIBUTING.md
 
 Run this every time a PR is successfully committed and pushed. Do not skip it, and do not update docs that weren't affected.
 
-1. **Identify** — Read the PR diff and list the docs it actually affects (use the TOC above; e.g. new endpoint → ARCHITECTURE.md, UI change → FRONTEND.md, finished plan → move from `exec-plans/active/` to `completed/`, new shortcut → tech-debt-tracker.md, schema change → regenerate db-schema.md).
+1. **Identify** — Read the PR diff and list the docs it actually affects (use the TOC above; e.g. new endpoint → ARCHITECTURE.md, UI change → FRONTEND.md, finished plan → move from `exec-plans/active/` to `completed/`, new shortcut → tech-debt-tracker.md).
 2. **Grade each candidate detail** before writing it down:
    - **Must** — changes how someone builds, runs, or reasons about the system (new component, changed contract, new constraint, decision + why). → Document.
    - **Should** — useful context that will still be true in a month. → Document in one line.
@@ -92,4 +95,5 @@ Run this every time a PR is successfully committed and pushed. Do not skip it, a
 
 ## Status
 
-Project scaffold created 2026-11-18. No code yet. Repo: `grassurntech/android-tv-custom` (remote `origin` via SSH), default branch `main`. Public, open source. Product design in progress (ad/junk removal + custom home screen).
+Project scaffold created 2026-11-18. Repo: `grassurntech/android-tv-custom` (remote `origin` via SSH), default branch `main`. Public, open source.
+v1 implementation (scripts, launcher theme, `PROMPT.md`, visitor docs) is on branch `feat/v1-tv-cleanup`, with a PR open into `main`. Milestones A–B, the prompt and QA round 1 (see `docs/test-cases/`) are done. On-TV testing started 2026-11-20 on a TCL Google TV 11 (R51MT05): safety lists checked (SC-44), refusals and undo proven, and 16 junk packages disabled and kept across reboots (`config/junk-packages.txt`, OT-01–05 in `docs/test-cases/`). Home screen done in Google TV redirect mode (OT-06/07). Phase 7 done (debugging off). CI green on all three OSes (`3da7e04`).
